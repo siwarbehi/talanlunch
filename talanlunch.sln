@@ -5,8 +5,6 @@ VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "talanlunch", "talanlunch\talanlunch.csproj", "{C878C682-DB58-173B-2356-B991B1444875}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "talanlunch.AppHost", "talanlunch.AppHost\talanlunch.AppHost.csproj", "{9F1A1130-E239-4B35-B922-BF5C93729621}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "talanlunch.ServiceDefaults", "talanlunch.ServiceDefaults\talanlunch.ServiceDefaults.csproj", "{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalanLunch.Core", "TalanLunch.core\TalanLunch.Core.csproj", "{03DBA575-6F98-4BA1-9E9B-CC648F6CA2EA}"
@@ -25,10 +23,6 @@ Global
 		{C878C682-DB58-173B-2356-B991B1444875}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C878C682-DB58-173B-2356-B991B1444875}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C878C682-DB58-173B-2356-B991B1444875}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9F1A1130-E239-4B35-B922-BF5C93729621}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9F1A1130-E239-4B35-B922-BF5C93729621}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9F1A1130-E239-4B35-B922-BF5C93729621}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9F1A1130-E239-4B35-B922-BF5C93729621}.Release|Any CPU.Build.0 = Release|Any CPU
 		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Release|Any CPU.ActiveCfg = Release|Any CPU

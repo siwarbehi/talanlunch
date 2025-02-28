@@ -15,7 +15,7 @@ public class Program
         builder.AddServiceDefaults();
 
         // Add services to the container.
-        builder.Services.AddDbContext<TalanLunchDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddDbContext<TalanLunchDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("TalanLunch.Infrastructure")));
         builder.Services.AddControllers();
         builder.Services.AddDbContext<TalanLunchDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
