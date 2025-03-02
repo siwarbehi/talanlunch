@@ -22,6 +22,49 @@ namespace TalanLunch.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("TalanLunch.Core.Domain.Entities.Dish", b =>
+                {
+                    b.Property<int>("DishId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DishId"));
+
+                    b.Property<int>("CurrentRating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DishDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DishName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("DishPhoto")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<decimal>("DishPrice")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<int>("DishQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsSalad")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ReviewCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("DishId");
+
+                    b.ToTable("Dishes");
+                });
+
             modelBuilder.Entity("TalanLunch.Core.Domain.Entities.DishRating", b =>
                 {
                     b.Property<int>("RatingId")
@@ -88,6 +131,39 @@ namespace TalanLunch.Infrastructure.Migrations
                     b.ToTable("MenuDishes");
                 });
 
+            modelBuilder.Entity("TalanLunch.Core.Domain.Entities.Order", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OrderRemark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Paid")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Served")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("TalanLunch.Core.Domain.Entities.OrderDish", b =>
                 {
                     b.Property<int>("OrderId")
@@ -142,82 +218,6 @@ namespace TalanLunch.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("TalanLunch.core.Domain.Entities.Dish", b =>
-                {
-                    b.Property<int>("DishId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DishId"));
-
-                    b.Property<int>("CurrentRating")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DishDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DishName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("DishPhoto")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<decimal>("DishPrice")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<int>("DishQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsSalad")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ReviewCount")
-                        .HasColumnType("int");
-
-                    b.HasKey("DishId");
-
-                    b.ToTable("Dishes");
-                });
-
-            modelBuilder.Entity("TalanLunch.core.Domain.Entities.Order", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("OrderRemark")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Paid")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Served")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrderId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Orders");
-                });
-
             modelBuilder.Entity("TalanLunch.Core.Domain.Entities.DishRating", b =>
                 {
                     b.HasOne("TalanLunch.Core.Domain.Entities.User", "User")
@@ -231,7 +231,7 @@ namespace TalanLunch.Infrastructure.Migrations
 
             modelBuilder.Entity("TalanLunch.Core.Domain.Entities.MenuDish", b =>
                 {
-                    b.HasOne("TalanLunch.core.Domain.Entities.Dish", "Dish")
+                    b.HasOne("TalanLunch.Core.Domain.Entities.Dish", "Dish")
                         .WithMany("MenuDishes")
                         .HasForeignKey("DishId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -248,26 +248,7 @@ namespace TalanLunch.Infrastructure.Migrations
                     b.Navigation("Menu");
                 });
 
-            modelBuilder.Entity("TalanLunch.Core.Domain.Entities.OrderDish", b =>
-                {
-                    b.HasOne("TalanLunch.core.Domain.Entities.Dish", "Dish")
-                        .WithMany("OrderDishes")
-                        .HasForeignKey("DishId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TalanLunch.core.Domain.Entities.Order", "Order")
-                        .WithMany("OrderDishes")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Dish");
-
-                    b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("TalanLunch.core.Domain.Entities.Order", b =>
+            modelBuilder.Entity("TalanLunch.Core.Domain.Entities.Order", b =>
                 {
                     b.HasOne("TalanLunch.Core.Domain.Entities.User", "User")
                         .WithMany("Orders")
@@ -278,9 +259,40 @@ namespace TalanLunch.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("TalanLunch.Core.Domain.Entities.OrderDish", b =>
+                {
+                    b.HasOne("TalanLunch.Core.Domain.Entities.Dish", "Dish")
+                        .WithMany("OrderDishes")
+                        .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TalanLunch.Core.Domain.Entities.Order", "Order")
+                        .WithMany("OrderDishes")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dish");
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("TalanLunch.Core.Domain.Entities.Dish", b =>
+                {
+                    b.Navigation("MenuDishes");
+
+                    b.Navigation("OrderDishes");
+                });
+
             modelBuilder.Entity("TalanLunch.Core.Domain.Entities.Menu", b =>
                 {
                     b.Navigation("MenuDishes");
+                });
+
+            modelBuilder.Entity("TalanLunch.Core.Domain.Entities.Order", b =>
+                {
+                    b.Navigation("OrderDishes");
                 });
 
             modelBuilder.Entity("TalanLunch.Core.Domain.Entities.User", b =>
@@ -288,18 +300,6 @@ namespace TalanLunch.Infrastructure.Migrations
                     b.Navigation("DishRatings");
 
                     b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("TalanLunch.core.Domain.Entities.Dish", b =>
-                {
-                    b.Navigation("MenuDishes");
-
-                    b.Navigation("OrderDishes");
-                });
-
-            modelBuilder.Entity("TalanLunch.core.Domain.Entities.Order", b =>
-                {
-                    b.Navigation("OrderDishes");
                 });
 #pragma warning restore 612, 618
         }

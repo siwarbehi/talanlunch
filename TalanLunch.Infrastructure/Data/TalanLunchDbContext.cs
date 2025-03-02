@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TalanLunch.core.Domain.Entities;
+
 using TalanLunch.Core.Domain.Entities;
 
 namespace TalanLunch.Core.Domain

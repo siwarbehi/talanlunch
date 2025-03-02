@@ -1,5 +1,4 @@
 ﻿
-using TalanLunch.Core.Domain.Entities;
 
 namespace TalanLunch.Core.Domain.Entities
 {

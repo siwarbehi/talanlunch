@@ -1,6 +1,4 @@
-﻿using TalanLunch.core.Domain.Entities;
-using TalanLunch.Core.Domain.Entities;
-
+﻿
 namespace TalanLunch.Core.Domain.Entities
 {
     public class OrderDish

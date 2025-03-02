@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TalanLunch.core.Domain.Entities;
+﻿
+using TalanLunch.Core.Domain.Entities;
 
 namespace TalanLunch.Core.Domain.Entities
 {

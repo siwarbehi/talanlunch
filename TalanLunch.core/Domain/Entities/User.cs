@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TalanLunch.Core.Domain.Enums;
-using TalanLunch.Core.Domain.Entities;
-using TalanLunch.core.Domain.Entities;
+
 
 namespace TalanLunch.Core.Domain.Entities
 {

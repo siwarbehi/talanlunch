@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TalanLunch.core\TalanLunch.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="DTOs\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Mappings\" />
