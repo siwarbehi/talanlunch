@@ -1,4 +1,4 @@
-﻿namespace TalanLunch.Core.Domain.Entities
+﻿namespace TalanLunch.Infrastructure.Models
 {
     public class Menu
     {

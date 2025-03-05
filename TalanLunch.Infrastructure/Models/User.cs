@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TalanLunch.Core.Domain.Enums;
+using TalanLunch.Infrastructure.Enums;
 
 
-namespace TalanLunch.Core.Domain.Entities
+namespace TalanLunch.Infrastructure.Models
 {
     public class User
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TalanLunch.Core.Domain.Entities
+namespace TalanLunch.Infrastructure.Models
 {
     public class Dish
     {

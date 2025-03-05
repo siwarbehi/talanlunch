@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TalanLunch.Core.Domain.Entities;
+using TalanLunch.Infrastructure.Models;
 
 
-namespace TalanLunch.Core.Domain.Entities
+namespace TalanLunch.Infrastructure.Models
 {
     public class Order
     {

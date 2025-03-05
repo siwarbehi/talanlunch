@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "talanlunch", "talanlunch\ta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "talanlunch.ServiceDefaults", "talanlunch.ServiceDefaults\talanlunch.ServiceDefaults.csproj", "{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalanLunch.Core", "TalanLunch.core\TalanLunch.Core.csproj", "{03DBA575-6F98-4BA1-9E9B-CC648F6CA2EA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalanLunch.Application", "TalanLunch.Application\TalanLunch.Application.csproj", "{C203B98D-0A88-42A6-82A6-AE0264E09BFE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalanLunch.Infrastructure", "TalanLunch.Infrastructure\TalanLunch.Infrastructure.csproj", "{96F7D5C7-AC98-4FAC-AE9D-3B02393CEE7D}"
@@ -27,10 +25,6 @@ Global
 		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{03DBA575-6F98-4BA1-9E9B-CC648F6CA2EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{03DBA575-6F98-4BA1-9E9B-CC648F6CA2EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{03DBA575-6F98-4BA1-9E9B-CC648F6CA2EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{03DBA575-6F98-4BA1-9E9B-CC648F6CA2EA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C203B98D-0A88-42A6-82A6-AE0264E09BFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C203B98D-0A88-42A6-82A6-AE0264E09BFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C203B98D-0A88-42A6-82A6-AE0264E09BFE}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Scalar.AspNetCore;
-using TalanLunch.Core.Domain;
+using TalanLunch.Infrastructure.Models;
+using TalanLunch.Infrastructure.Data;
 
 namespace talanlunch;
 
@@ -22,7 +23,6 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-
 
         var app = builder.Build();
 

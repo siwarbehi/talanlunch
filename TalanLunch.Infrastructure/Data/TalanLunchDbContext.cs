@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-using TalanLunch.Core.Domain.Entities;
+using TalanLunch.Infrastructure.Models;
 
-namespace TalanLunch.Core.Domain
+namespace TalanLunch.Infrastructure.Data
 {
     public class TalanLunchDbContext : DbContext
     {
