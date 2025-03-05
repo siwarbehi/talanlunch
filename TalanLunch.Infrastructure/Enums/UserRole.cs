@@ -8,7 +8,7 @@ namespace TalanLunch.Infrastructure.Enums
 {
     public enum UserRole
     {
-        COLLABORATOR,
-        CATERER
+        CATERER,
+        COLLABORATOR
     }
 }
