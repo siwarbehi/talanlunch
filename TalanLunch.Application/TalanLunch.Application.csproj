@@ -13,8 +13,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Domainnn\TalanLunch.Domain.csproj" />
+    <ProjectReference Include="..\TalanLunch.Domain\TalanLunch.Domain.csproj" />
   </ItemGroup>
+
  
 
 </Project>
