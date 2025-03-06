@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalanLunch.Application", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalanLunch.Infrastructure", "TalanLunch.Infrastructure\TalanLunch.Infrastructure.csproj", "{96F7D5C7-AC98-4FAC-AE9D-3B02393CEE7D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalanLunch.Domain", "Domainnn\TalanLunch.Domain.csproj", "{CA716CAA-34B4-45FC-AEA3-7C62F3C4484C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{96F7D5C7-AC98-4FAC-AE9D-3B02393CEE7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96F7D5C7-AC98-4FAC-AE9D-3B02393CEE7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96F7D5C7-AC98-4FAC-AE9D-3B02393CEE7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA716CAA-34B4-45FC-AEA3-7C62F3C4484C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA716CAA-34B4-45FC-AEA3-7C62F3C4484C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA716CAA-34B4-45FC-AEA3-7C62F3C4484C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA716CAA-34B4-45FC-AEA3-7C62F3C4484C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

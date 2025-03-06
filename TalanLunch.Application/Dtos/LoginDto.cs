@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TalanLunch.Infrastructure.Models;
+using TalanLunch.Domain.Entites;
 namespace TalanLunch.Application.DTOs
 {
     public class LoginDto

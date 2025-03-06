@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TalanLunch.Application\TalanLunch.Application.csproj" />
+    <ProjectReference Include="..\TalanLunch.Infrastructure\TalanLunch.Infrastructure.csproj" />
     <ProjectReference Include="..\talanlunch.ServiceDefaults\talanlunch.ServiceDefaults.csproj" />
 	 
 	

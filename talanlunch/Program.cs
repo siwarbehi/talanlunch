@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Scalar.AspNetCore;
-using TalanLunch.Infrastructure.Models;
+using TalanLunch.Domain.Entites;
 using TalanLunch.Infrastructure.Data;
+using TalanLunch.Application.Interfaces;
+using TalanLunch.Infrastructure.Repos;
 
 namespace talanlunch;
 

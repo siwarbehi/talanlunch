@@ -14,9 +14,8 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
-
 	<ItemGroup>
-	  <Folder Include="Repos\" />
+		<ProjectReference Include="..\TalanLunch.Application\TalanLunch.Application.csproj" />
 	</ItemGroup>
-
+	
 </Project>

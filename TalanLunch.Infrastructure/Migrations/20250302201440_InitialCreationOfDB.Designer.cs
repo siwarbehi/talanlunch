@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TalanLunch.Infrastructure.Models;
+using TalanLunch.Domain.Entites;
 using TalanLunch.Infrastructure.Data;
 
 #nullable disable
