@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-using TalanLunch.Domain.Entites;
+using TalanLunch.Domain.Entities;
 
 namespace TalanLunch.Infrastructure.Data
 {

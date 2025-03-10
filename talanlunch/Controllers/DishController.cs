@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TalanLunch.Domain.Entites;
+using TalanLunch.Domain.Entities;
 using TalanLunch.Application.Interfaces;
+using TalanLunch.Application.Dtos;
+using TalanLunch.Application.Services;
 namespace talanlunch.Controllers
 {
     [ApiController]
@@ -16,29 +18,49 @@ namespace talanlunch.Controllers
 
         // POST: api/dish/add
         [HttpPost("add")]
-        public async Task<IActionResult> AddDish([FromBody] Dish newDish)
+        public async Task<IActionResult> AddDish([FromForm] DishDto dishDto)
         {
-            if (newDish == null)
+            if (dishDto == null)
                 return BadRequest("Dish data is null.");
 
-            var createdDish = await _dishService.AddDishAsync(newDish);
-            return CreatedAtAction(nameof(GetDishById), new { id = createdDish.DishId }, createdDish);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var createdDish = await _dishService.AddDishAsync(dishDto);
+                return CreatedAtAction(nameof(GetDishById), new { id = createdDish.DishId }, createdDish);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Une erreur interne est survenue.", error = ex.Message });
+            }
         }
+
+
 
         // PUT: api/dish/update/{id}
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateDish(int id, [FromBody] Dish updatedDish)
+        public async Task<IActionResult> UpdateDish(int id, [FromForm] Dish updatedDish, IFormFile? dishPhoto)
         {
-            if (updatedDish == null || updatedDish.DishId != id)
-                return BadRequest("Dish ID mismatch.");
+            if (updatedDish == null)
+                return BadRequest("Dish data is null.");
 
-            var dish = await _dishService.GetDishByIdAsync(id);
-            if (dish == null)
-                return NotFound($"Dish with ID {id} not found.");
+            // Vérification si le plat existe dans la base de données à l'aide de l'ID
+            var existingDish = await _dishService.GetDishByIdAsync(id);
+            if (existingDish == null)
+                return NotFound($"Dish with id {id} not found.");
 
-            await _dishService.UpdateDishAsync(updatedDish);
-            return NoContent();  // 204 No Content (successful update)
+            // Appel du service pour mettre à jour les informations du plat
+            var updatedDishEntity = await _dishService.UpdateDishAsync(existingDish, updatedDish, dishPhoto);
+
+            return Ok(updatedDishEntity); // Retourner l'entité mise à jour
         }
+
 
         // GET: api/dish/all
         [HttpGet("all")]
@@ -47,28 +69,34 @@ namespace talanlunch.Controllers
             var dishes = await _dishService.GetAllDishesAsync();
             return Ok(dishes);  // 200 OK with the list of dishes
         }
-
+        // GET: api/dish/all-relations
+        [HttpGet("all-relations")]
+        public async Task<ActionResult<IEnumerable<Dish>>> GetAllDishesWithRelations()
+        {
+            var dishes = await _dishService.GetAllDishesWithRelationsAsync();
+            return Ok(dishes);
+        }
         // GET: api/dish/{id}
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDishById(int id)
+        public async Task<ActionResult<Dish>> GetDishById(int id)
         {
             var dish = await _dishService.GetDishByIdAsync(id);
-            if (dish == null)
-                return NotFound($"Dish with ID {id} not found.");
-
-            return Ok(dish);  // 200 OK with the dish details
+            return dish == null ? NotFound() : Ok(dish);
         }
 
         // DELETE: api/dish/delete/{id}
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteDish(int id)
         {
-            var dish = await _dishService.GetDishByIdAsync(id);
-            if (dish == null)
+            try
+            {
+                await _dishService.DeleteDishAsync(id); // Appel à la méthode du service
+                return NoContent(); // 204 No Content (successful deletion)
+            }
+            catch (KeyNotFoundException)
+            {
                 return NotFound($"Dish with ID {id} not found.");
-
-            await _dishService.DeleteDishAsync(id);
-            return NoContent();  // 204 No Content (successful deletion)
+            }
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TalanLunch.Domain.Entites;
+using TalanLunch.Domain.Entities;
 
 namespace TalanLunch.Application.Interfaces
 {
@@ -11,8 +12,10 @@ namespace TalanLunch.Application.Interfaces
     {
         Task<Dish> AddDishAsync(Dish dish);
         Task<IEnumerable<Dish>> GetAllDishesAsync();
+        Task<IEnumerable<Dish>> GetAllDishesWithRelationsAsync();
         Task<Dish> GetDishByIdAsync(int id);
-        Task UpdateDishAsync(Dish dish);
+        Task<Dish> UpdateDishAsync(Dish updatedDish);
+        Task<List<int>> GetExistingDishIdsAsync();
         Task DeleteDishAsync(int id);
        
     }

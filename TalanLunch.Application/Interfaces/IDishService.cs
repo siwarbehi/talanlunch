@@ -3,16 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TalanLunch.Domain.Entites;
+using TalanLunch.Domain.Entities;
+using Microsoft.AspNetCore.Http;
+using TalanLunch.Application.Dtos;
+
+
+
 
 namespace TalanLunch.Application.Interfaces
 {
     public interface IDishService
     {
-        Task<Dish> AddDishAsync(Dish dish);
+        Task<Dish> AddDishAsync(DishDto dishDto);
         Task<IEnumerable<Dish>> GetAllDishesAsync();
+        Task<IEnumerable<Dish>> GetAllDishesWithRelationsAsync();
+        Task<Dish> UpdateDishAsync(Dish existingDish, Dish updatedDish, IFormFile? dishPhoto);
+
         Task<Dish> GetDishByIdAsync(int id);
-        Task UpdateDishAsync(Dish dish);
         Task DeleteDishAsync(int id);
     }
 }

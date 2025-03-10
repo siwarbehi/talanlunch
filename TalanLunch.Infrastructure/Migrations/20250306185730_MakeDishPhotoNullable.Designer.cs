@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TalanLunch.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using TalanLunch.Infrastructure.Data;
 namespace TalanLunch.Infrastructure.Migrations
 {
     [DbContext(typeof(TalanLunchDbContext))]
-    partial class TalanLunchDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250306185730_MakeDishPhotoNullable")]
+    partial class MakeDishPhotoNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,11 +43,11 @@ namespace TalanLunch.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DishPhoto")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("DishPhoto")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<decimal>("DishPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<int>("DishQuantity")
                         .HasColumnType("int");

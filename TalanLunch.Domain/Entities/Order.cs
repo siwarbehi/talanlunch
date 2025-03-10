@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TalanLunch.Domain.Entites;
+using TalanLunch.Domain.Entities;
 
 
-namespace TalanLunch.Domain.Entites
+namespace TalanLunch.Domain.Entities
 {
     public class Order
     {
@@ -16,12 +16,14 @@ namespace TalanLunch.Domain.Entites
 
         public bool Served { get; set; } 
 
-        public string? OrderRemark { get; set; } = string.Empty;
+        public string? OrderRemark { get; set; }
 
         public int UserId { get; set; }
-        public User User { get; set; }
 
-        public ICollection<OrderDish> OrderDishes { get; set; }
+    
+        public required User User { get; set; }
+        [Required]
+        public ICollection<OrderDish> OrderDishes { get; set; } = new List<OrderDish>();
     }
 }
 

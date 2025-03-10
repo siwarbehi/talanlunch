@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TalanLunch.Infrastructure.Data;
-using TalanLunch.Domain.Entites;
+using TalanLunch.Domain.Entities;
 using TalanLunch.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace TalanLunch.Infrastructure.Repos
 {
@@ -26,19 +28,24 @@ namespace TalanLunch.Infrastructure.Repos
             return dish;
         }
 
-      
 
-        public async Task<Dish> GetDishByIdAsync(int id)
+        public async Task<Dish?> GetDishByIdAsync(int id)
         {
-            return await _context.Dishes.FindAsync(id);
+            var dish = await _context.Dishes.FindAsync(id);
+            return dish;
         }
-
-        public async Task UpdateDishAsync(Dish dish)
+        public async Task<Dish> UpdateDishAsync(Dish updatedDish)
         {
-            _context.Dishes.Update(dish);
+            _context.Dishes.Update(updatedDish);
             await _context.SaveChangesAsync();
+            return updatedDish;
         }
-
+        public async Task<List<int>> GetExistingDishIdsAsync()
+        {
+            return await _context.Dishes
+                .Select(d => d.DishId)
+                .ToListAsync();
+        }
         public async Task DeleteDishAsync(int id)
         {
             var dish = await _context.Dishes.FindAsync(id);
@@ -51,6 +58,13 @@ namespace TalanLunch.Infrastructure.Repos
         public async Task<IEnumerable<Dish>> GetAllDishesAsync()
         {
             return await _context.Dishes.ToListAsync();
+        }
+        public async Task<IEnumerable<Dish>> GetAllDishesWithRelationsAsync()
+        {
+            return await _context.Dishes
+                .Include(d => d.MenuDishes)  
+                .Include(d => d.OrderDishes) 
+                .ToListAsync();
         }
     }
 }
