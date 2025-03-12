@@ -12,6 +12,6 @@ namespace TalanLunch.Domain.Entities
         public DateTime MenuDate { get; set; } = DateTime.Now;
 
         [Required]
-        public ICollection<MenuDish> MenuDishes { get; set; } = new List<MenuDish>();
+        public ICollection<MenuDish> MenuDishes { get; set; } = [];
     }
 }

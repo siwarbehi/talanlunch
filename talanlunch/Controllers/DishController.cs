@@ -45,7 +45,7 @@ namespace talanlunch.Controllers
 
         // PUT: api/dish/update/{id}
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateDish(int id, [FromForm] Dish updatedDish, IFormFile? dishPhoto)
+        public async Task<IActionResult> UpdateDish(int id, [FromForm] DishUpdateDto updatedDish, IFormFile? dishPhoto)
         {
             if (updatedDish == null)
                 return BadRequest("Dish data is null.");

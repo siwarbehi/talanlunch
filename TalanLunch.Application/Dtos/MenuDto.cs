@@ -8,11 +8,14 @@ using System.Threading.Tasks;
 namespace TalanLunch.Application.Dtos
 {
 
-        public class MenuDto
-        {
-            [Required(ErrorMessage = "La description du menu est obligatoire.")]
-            public string? MenuDescription { get; set; }
-        }
+    public class MenuDto
+    {
+        public string? MenuDescription { get; set; }
+        public List<int>? DishIds { get; set; } 
 
-    
+        public MenuDto()
+        {
+            DishIds = new List<int>();
+        }
+    }
 }

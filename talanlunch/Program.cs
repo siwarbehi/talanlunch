@@ -27,8 +27,18 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
         builder.Services.AddScoped<IDishRepository, DishRepository>();
         builder.Services.AddScoped<IDishService, DishService>();
+
+        builder.Services.AddScoped<IMenuService, MenuService>();
+        builder.Services.AddScoped<IMenuRepository, MenuRepository>();
+
+        builder.Services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+            options.JsonSerializerOptions.WriteIndented = true;
+        });
 
 
         var app = builder.Build();

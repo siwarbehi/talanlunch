@@ -28,10 +28,10 @@ namespace TalanLunch.Infrastructure.Repos
             return dish;
         }
 
-
-        public async Task<Dish?> GetDishByIdAsync(int id)
+        public async Task<Dish?> GetDishByIdAsync(int dishId)
         {
-            var dish = await _context.Dishes.FindAsync(id);
+            var dish = await _context.Dishes.FindAsync(dishId);
+           
             return dish;
         }
         public async Task<Dish> UpdateDishAsync(Dish updatedDish)
@@ -66,5 +66,6 @@ namespace TalanLunch.Infrastructure.Repos
                 .Include(d => d.OrderDishes) 
                 .ToListAsync();
         }
+
     }
 }

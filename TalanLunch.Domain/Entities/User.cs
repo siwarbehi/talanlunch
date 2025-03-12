@@ -21,7 +21,7 @@ namespace TalanLunch.Domain.Entities
         public string HashedPassword { get; set; } = string.Empty;  
 
        
-        public ICollection<Order> Orders { get; set; } = new List<Order>();
-        public ICollection<DishRating> DishRatings { get; set; } = new List<DishRating>();
+        public ICollection<Order> Orders { get; set; } = [];
+        public ICollection<DishRating> DishRatings { get; set; } = [];
     }
 }

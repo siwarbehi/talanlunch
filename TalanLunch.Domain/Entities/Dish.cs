@@ -13,6 +13,8 @@ namespace TalanLunch.Domain.Entities
         public string DishName { get; set; } = string.Empty;
         public string? DishDescription { get; set; }
         public DateTime OrderDate { get; set; }
+        [Range(0, int.MaxValue, ErrorMessage = "La quantité ne peut pas être négative.")]
+
         [Required]
         public int DishQuantity { get; set; }
         [Required]
@@ -27,9 +29,9 @@ namespace TalanLunch.Domain.Entities
 
 
         [Required]
-        public ICollection<MenuDish> MenuDishes { get; set; } = new List<MenuDish>();
+        public ICollection<MenuDish> MenuDishes { get; set; } = [];
         [Required]
-        public ICollection<OrderDish> OrderDishes { get; set; } = new List<OrderDish>();
+        public ICollection<OrderDish> OrderDishes { get; set; } = [];
 
 
 

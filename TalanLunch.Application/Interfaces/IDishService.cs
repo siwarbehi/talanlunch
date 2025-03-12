@@ -17,9 +17,9 @@ namespace TalanLunch.Application.Interfaces
         Task<Dish> AddDishAsync(DishDto dishDto);
         Task<IEnumerable<Dish>> GetAllDishesAsync();
         Task<IEnumerable<Dish>> GetAllDishesWithRelationsAsync();
-        Task<Dish> UpdateDishAsync(Dish existingDish, Dish updatedDish, IFormFile? dishPhoto);
+        Task<Dish> UpdateDishAsync(Dish existingDish, DishUpdateDto updatedDish, IFormFile? dishPhoto);
 
-        Task<Dish> GetDishByIdAsync(int id);
+        Task<Dish?> GetDishByIdAsync(int id);
         Task DeleteDishAsync(int id);
     }
 }

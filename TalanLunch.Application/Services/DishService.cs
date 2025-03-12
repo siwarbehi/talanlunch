@@ -88,7 +88,7 @@ namespace TalanLunch.Application.Services
             return await _dishRepository.GetAllDishesWithRelationsAsync();
         }
         // Obtenir un plat par ID
-        public async Task<Dish> GetDishByIdAsync(int id)
+        public async Task<Dish?> GetDishByIdAsync(int id)
         {
             return await _dishRepository.GetDishByIdAsync(id);
         }
@@ -97,7 +97,7 @@ namespace TalanLunch.Application.Services
 
 
         // Mise à jour d'un plat avec gestion de la photo et des propriétés
-        public async Task<Dish> UpdateDishAsync(Dish existingDish, Dish updatedDish, IFormFile? dishPhoto)
+        public async Task<Dish> UpdateDishAsync(Dish existingDish, DishUpdateDto updatedDish, IFormFile? dishPhoto)
         {
             // Mettre à jour les propriétés du plat seulement si elles sont spécifiées
             if (!string.IsNullOrEmpty(updatedDish.DishName))
@@ -106,22 +106,22 @@ namespace TalanLunch.Application.Services
             if (!string.IsNullOrEmpty(updatedDish.DishDescription))
                 existingDish.DishDescription = updatedDish.DishDescription;
 
-            if (updatedDish.DishQuantity >= 0)
-                existingDish.DishQuantity = updatedDish.DishQuantity;
+            if (updatedDish.DishQuantity.HasValue && updatedDish.DishQuantity >= 0)
+                existingDish.DishQuantity = updatedDish.DishQuantity.Value;
 
-            if (updatedDish.IsSalad != existingDish.IsSalad)
-                existingDish.IsSalad = updatedDish.IsSalad;
+            if (updatedDish.DishPrice.HasValue && updatedDish.DishPrice >= 0)
+                existingDish.DishPrice = (decimal)updatedDish.DishPrice.Value;
 
-            if (updatedDish.DishPrice >= 0)
-                existingDish.DishPrice = updatedDish.DishPrice;
+            if (updatedDish.IsSalad.HasValue)
+                existingDish.IsSalad = updatedDish.IsSalad.Value;
 
-            // Gestion de la photo du plat si elle est présente
+            // Gestion de la photo du plat
             if (dishPhoto != null && dishPhoto.Length > 0)
             {
                 var fileName = await SaveDishImageAsync(dishPhoto);
                 existingDish.DishPhoto = fileName;
             }
-
+          
             // Mise à jour du plat dans la base de données via le repository
             return await _dishRepository.UpdateDishAsync(existingDish);
         }

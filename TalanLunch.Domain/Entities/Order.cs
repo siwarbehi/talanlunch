@@ -23,7 +23,7 @@ namespace TalanLunch.Domain.Entities
     
         public required User User { get; set; }
         [Required]
-        public ICollection<OrderDish> OrderDishes { get; set; } = new List<OrderDish>();
+        public ICollection<OrderDish> OrderDishes { get; set; } = [];
     }
 }
 
