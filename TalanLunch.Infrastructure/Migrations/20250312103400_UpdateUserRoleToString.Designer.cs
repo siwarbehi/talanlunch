@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TalanLunch.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using TalanLunch.Infrastructure.Data;
 namespace TalanLunch.Infrastructure.Migrations
 {
     [DbContext(typeof(TalanLunchDbContext))]
-    partial class TalanLunchDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250312103400_UpdateUserRoleToString")]
+    partial class UpdateUserRoleToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -188,9 +191,6 @@ namespace TalanLunch.Infrastructure.Migrations
                     b.Property<string>("HashedPassword")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()

@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TalanLunch.Domain.Enums
+namespace TalanLunch.Application.Interfaces
 {
-    public enum UserRole
+    public interface IAdminRepository
     {
-        CATERER,
-        COLLABORATOR,
-        ADMIN
     }
 }
