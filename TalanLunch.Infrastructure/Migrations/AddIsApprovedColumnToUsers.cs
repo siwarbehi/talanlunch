@@ -5,7 +5,7 @@
 namespace TalanLunch.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class ajoutdeisapproved : Migration
+    public partial class AddIsApprovedColumnToUsers : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

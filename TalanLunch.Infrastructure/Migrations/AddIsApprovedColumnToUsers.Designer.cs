@@ -13,7 +13,7 @@ namespace TalanLunch.Infrastructure.Migrations
 {
     [DbContext(typeof(TalanLunchDbContext))]
     [Migration("20250313075148_ajoutdeisapproved")]
-    partial class ajoutdeisapproved
+    partial class AddIsApprovedColumnToUsers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

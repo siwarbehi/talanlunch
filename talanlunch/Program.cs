@@ -42,7 +42,12 @@ namespace TalanLunch
             builder.Services.AddScoped<IMenuRepository, MenuRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+            
 
+
+            
             // Enregistrement du service de mail
             builder.Services.AddTransient<Application.Interfaces.IMailService, TalanMailService>();
 

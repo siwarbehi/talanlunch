@@ -3,8 +3,8 @@ using TalanLunch.Application.Interfaces;
 using TalanLunch.Application.Dtos;
 using System.Threading.Tasks;
 
-namespace TalanLunch.Api.Controllers
-    {
+namespace talanlunch.Controllers
+{
         [Route("api/[controller]")]
         [ApiController]
         public class MailController : ControllerBase

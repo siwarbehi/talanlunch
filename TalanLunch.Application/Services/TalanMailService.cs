@@ -58,19 +58,7 @@ namespace TalanLunch.Application.Services
 
         public MailDataDto CreateMailDataForApproval(User caterer)
         {
-            // Vérification que le prénom n'est pas nul ou vide
-            string firstName = string.IsNullOrEmpty(caterer.FirstName) ? "Cher Traiteur" : caterer.FirstName;
-
-            // Modèle de message avec interpolation de chaîne
-            string emailBody = $@"
-        Bonjour {firstName}, 
-
-        Votre demande d'inscription en tant que traiteur a été approuvée avec succès. 
-        Bienvenue sur notre plateforme.
-
-        Cordialement,
-        L'équipe Talan";
-
+         
             return new MailDataDto
             {
                 EmailToId = caterer.EmailAddress,

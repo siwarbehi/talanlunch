@@ -10,23 +10,32 @@ using TalanLunch.Infrastructure.Data;
 
 namespace TalanLunch.Infrastructure.Repos
 {
-        public class MenuRepository : IMenuRepository
+       public class MenuRepository : IMenuRepository
+{
+    private readonly TalanLunchDbContext _context;
+
+    public MenuRepository(TalanLunchDbContext context)
+    {
+        _context = context;
+    }
+
+        public async Task<Menu> AddMenuAsync(Menu menu)
         {
-            private readonly TalanLunchDbContext _context;
-
-            public MenuRepository(TalanLunchDbContext context)
-            {
-                _context = context;
-            }
-
-            public async Task<Menu> AddMenuAsync(Menu menu)
+            try
             {
                 _context.Menus.Add(menu);
                 await _context.SaveChangesAsync();
                 return menu;
             }
+            catch (Exception ex)
+            {
+                // Log the exception (you can use a logging framework like Serilog or NLog)
+                throw new Exception("An error occurred while adding the menu.", ex);
+            }
+        }
 
-            public async Task<Menu> UpdateMenuAsync(Menu menu)
+
+        public async Task<Menu> UpdateMenuAsync(Menu menu)
             {
                 _context.Menus.Update(menu);
                 await _context.SaveChangesAsync();

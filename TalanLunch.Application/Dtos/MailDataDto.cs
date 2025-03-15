@@ -1,16 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace TalanLunch.Application.Dtos
 {
     public class MailDataDto
     {
-        public string EmailToId { get; set; } // Adresse email du destinataire
-        public string EmailToName { get; set; } // Nom du destinataire
-        public string EmailSubject { get; set; } // Sujet de l'email
-        public string EmailBody { get; set; } // Corps de l'email
+        [Required]
+        [EmailAddress]
+        public string EmailToId { get; set; } = string.Empty;
+
+        [Required]
+        public string EmailToName { get; set; } = string.Empty;
+
+        [Required]
+        public string EmailSubject { get; set; } = string.Empty;
+
+        [Required]
+        public string EmailBody { get; set; } = string.Empty;
     }
 }
