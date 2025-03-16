@@ -33,7 +33,7 @@ namespace TalanLunch.Application.Services
             caterer.IsApproved = true;
 
             // Appeler le service pour mettre à jour le statut du traiteur
-            bool updateSuccess = await _userRepository.UpdateUserAsync(caterer);
+            bool updateSuccess = await _userRepository.ApproveUserAsync(caterer);
 
             if (!updateSuccess)
             {

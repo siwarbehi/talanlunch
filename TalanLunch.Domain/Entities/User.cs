@@ -24,6 +24,8 @@ namespace TalanLunch.Domain.Entities
         public string HashedPassword { get; set; } = string.Empty;
 
         public bool IsApproved { get; set; } = false;
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiryTime { get; set; }
 
 
         public ICollection<Order> Orders { get; set; } = [];

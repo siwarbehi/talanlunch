@@ -21,12 +21,34 @@ namespace TalanLunch.Infrastructure.Repos
             _context = context;
         }
 
+        // Nouvelle méthode pour récupérer un utilisateur par son adresse email
+        public async Task<User?> GetUserByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.EmailAddress == email);
+        }
+
+     
+        public async Task<bool> UserExistsAsync(string email)
+        {
+            return await _context.Users.AnyAsync(u => u.EmailAddress == email);
+        }
+        public async Task AddUserAsync(User user)
+        {
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateUserAsync(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<User?> GetUserByIdAsync(int userId)
         {
             return await _context.Users.FindAsync(userId);
         }
 
-        
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
             return await _context.Users.ToListAsync();
@@ -48,34 +70,41 @@ namespace TalanLunch.Infrastructure.Repos
                 await _context.SaveChangesAsync();
             }
         }
+
         public async Task<List<User>> GetPendingCaterersAsync()
         {
             return await _context.Users
                 .Where(u => u.UserRole == UserRole.CATERER && u.IsApproved == false)
                 .ToListAsync();
         }
+
         public async Task<User?> GetCatererByIdAsync(int id)
         {
             return await _context.Users
                 .FirstOrDefaultAsync(u => u.UserId == id && u.UserRole == UserRole.CATERER && u.IsApproved == false);
         }
+
         // Mettre à jour traiteur (true=IsApproved )
-        public async Task<bool> UpdateUserAsync(User user)
+        public async Task<bool> ApproveUserAsync(User user)
         {
             _context.Users.Update(user);
             return await _context.SaveChangesAsync() > 0;
         }
-        // Récupérer plusieurs traiteurs non approuvees par leurs ID
+
+
+        // Récupérer plusieurs traiteurs non approuvés par leurs ID
         public async Task<List<User>> GetCaterersByIdsAsync(List<int> catererIds)
         {
             return await _context.Users.Where(c => catererIds.Contains(c.UserId) && !c.IsApproved).ToListAsync();
         }
-        // Mettre à jour plusieurs traiteurs  (true=IsApproved )
+
+        // Mettre à jour plusieurs traiteurs (true=IsApproved )
         public async Task<bool> UpdateMultipleCaterersAsync(List<User> caterers)
         {
             _context.Users.UpdateRange(caterers);
             return await _context.SaveChangesAsync() > 0;
         }
+
         public async Task UpdateUserDataAsync(User user)
         {
             // Recherche de l'utilisateur dans la base de données par son ID
@@ -97,5 +126,3 @@ namespace TalanLunch.Infrastructure.Repos
         }
     }
 }
-
-
