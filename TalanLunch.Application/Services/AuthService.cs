@@ -30,7 +30,6 @@ namespace TalanLunch.Application.Services
             _userRepository = userRepository;
             _configuration = configuration;
         }
-
         public async Task<string> RegisterUserAsync(RegisterUserDto registerUserDto, bool isCaterer)
         {
             // Vérifier si l'email existe déjà
@@ -54,11 +53,16 @@ namespace TalanLunch.Application.Services
             // Utilisation de PasswordHasher pour hacher le mot de passe
             var passwordHasher = new PasswordHasher<User>();
             var hashedPassword = passwordHasher.HashPassword(user, registerUserDto.Password); // Hachage du mot de passe
-
             user.HashedPassword = hashedPassword;
 
             // Enregistrement de l'utilisateur dans la base de données
-            await _userRepository.AddUserAsync(user);
+            bool isAdded = await _userRepository.AddUserAsync(user); 
+
+            // Vérifier que l'utilisateur a bien été ajouté
+            if (!isAdded)
+            {
+                return "Une erreur s'est produite lors de l'enregistrement de l'utilisateur. Veuillez réessayer.";
+            }
 
             // Retour d'un message basé sur le rôle de l'utilisateur
             if (isCaterer)
@@ -68,6 +72,7 @@ namespace TalanLunch.Application.Services
 
             return "Inscription réussie.";
         }
+
         public async Task<TokenResponseDto?> LoginAsync(LoginDto request)
         {
             var user = await _userRepository.GetUserByEmailAsync(request.EmailAddress);

@@ -20,7 +20,7 @@ namespace TalanLunch.Application.Interfaces
         Task<bool> UserExistsAsync(string email);
 
         // Ajouter un nouvel utilisateur
-        Task AddUserAsync(User user);
+        Task<bool> AddUserAsync(User user);
 
         // Mettre à jour un utilisateur existant
         Task UpdateUserAsync(User user);

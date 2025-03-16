@@ -32,10 +32,25 @@ namespace TalanLunch.Infrastructure.Repos
         {
             return await _context.Users.AnyAsync(u => u.EmailAddress == email);
         }
-        public async Task AddUserAsync(User user)
+        public async Task<bool> AddUserAsync(User user)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            try
+            {
+                // Ajoute l'utilisateur à la base de données
+                await _context.Users.AddAsync(user);
+
+                // Enregistre les modifications dans la base de données
+                await _context.SaveChangesAsync();
+
+                return true; // Indique que l'ajout a réussi
+            }
+            catch (Exception ex)
+            {
+                // Log l'exception pour le diagnostic si nécessaire
+                // Log.Error(ex, "Une erreur s'est produite lors de l'ajout de l'utilisateur.");
+
+                return false; // Indique qu'une erreur est survenue
+            }
         }
 
         public async Task UpdateUserAsync(User user)

@@ -49,6 +49,8 @@ namespace TalanLunch
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
+
 
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
