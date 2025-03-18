@@ -27,7 +27,8 @@ namespace TalanLunch.Domain.Entities
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiryTime { get; set; }
 
-
+        public string? ResetToken { get; set; }
+        public DateTime? ResetTokenExpiry { get; set; }  
         public ICollection<Order> Orders { get; set; } = [];
         public ICollection<DishRating> DishRatings { get; set; } = [];
     }

@@ -16,8 +16,12 @@ namespace TalanLunch.Application.Interfaces
 
         // Méthode pour rafraîchir les tokens (AccessToken et RefreshToken)
         Task<TokenResponseDto?> RefreshTokensAsync(RefreshTokenRequestDto request);
-
-
         Task<TokenResponseDto?> LoginAsync(LoginDto request);
+        Task<bool> LogoutAsync(string refreshToken);
+        Task<bool> ForgotPasswordAsync(string email);
+        Task<bool> ResetPasswordAsync(string token, string newPassword);
+
+
+
     }
 }

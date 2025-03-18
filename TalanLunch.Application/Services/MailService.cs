@@ -10,11 +10,11 @@ using MimeKit;
 
 namespace TalanLunch.Application.Services
 {
-    public class TalanMailService : IMailService
+    public class MailService : IMailService
     {
         private readonly MailSettings _mailSettings;
 
-        public TalanMailService(IOptions<MailSettings> mailSettings)
+        public MailService(IOptions<MailSettings> mailSettings)
         {
             _mailSettings = mailSettings.Value;  // Récupère les paramètres de configuration
         }
@@ -103,7 +103,7 @@ namespace TalanLunch.Application.Services
                 Votre demande d'inscription en tant que traiteur a été approuvée avec succès. <br/>
                 Bienvenue sur notre plateforme.<br/><br/>
                 <div class='motif'>
-                    Pour toute question, veuillez contacter notre équipe via <a href='https://www.talan.com/global/fr' class='button'>Support</a>.
+                    Pour toute question, veuillez contacter notre équipe via <a href='mailto:talantunsie@gmail.com' class='button'>Support</a>.
                 </div>
                 <br/>Cordialement,<br/>
                 L'équipe Talan
@@ -145,15 +145,112 @@ namespace TalanLunch.Application.Services
 
         public MailDataDto CreateMailDataForApproval(User caterer)
         {
-         
+
             return new MailDataDto
             {
                 EmailToId = caterer.EmailAddress,
                 EmailToName = $"{caterer.FirstName} {caterer.LastName}",
                 EmailSubject = "Confirmation d'Approbation de Traiteur",
-            
+
             };
         }
+        // Méthode pour envoyer un email de réinitialisation de mot de passe
+        public async Task SendPasswordResetEmailAsync(User user, string resetToken)
+        {
+            string resetLink = $"https://votresite.com/reset-password?token={resetToken}";
 
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress(_mailSettings.SenderName, _mailSettings.SenderEmail));
+            message.To.Add(new MailboxAddress($"{user.FirstName} {user.LastName}", user.EmailAddress));
+            message.Subject = "🔒 Réinitialisation de votre mot de passe - Action requise";
+
+            string emailBody = $@"
+        <!DOCTYPE html>
+        <html lang='fr'>
+        <head>
+            <meta charset='UTF-8'>
+            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+            <title>Réinitialisation du mot de passe</title>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    background-color: #f9f9f9;
+                    padding: 20px;
+                    text-align: center;
+                }}
+                .container {{
+                    max-width: 600px;
+                    background: white;
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+                    margin: auto;
+                }}
+                h2 {{
+                    color: #333;
+                }}
+                p {{
+                    font-size: 16px;
+                    color: #555;
+                }}
+                .button {{
+                    display: inline-block;
+                    background: #28a745;
+                    color: white;
+                    padding: 12px 25px;
+                    text-decoration: none;
+                    border-radius: 5px;
+                    font-weight: bold;
+                    margin-top: 20px;
+                }}
+                .footer {{
+                    font-size: 12px;
+                    color: #888;
+                    margin-top: 20px;
+                    border-top: 1px solid #ddd;
+                    padding-top: 10px;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <h2>🔑 Réinitialisation de votre mot de passe</h2>
+                <p>Bonjour {user.FirstName},</p>
+                <p>Nous avons reçu une demande de réinitialisation de votre mot de passe.</p>
+                <p>Si vous êtes à l'origine de cette demande, veuillez cliquer sur le bouton ci-dessous :</p>
+                <p><a class='button' href='{resetLink}'>Réinitialiser mon mot de passe</a></p>
+                <p>Si le bouton ne fonctionne pas, copiez et collez le lien suivant dans votre navigateur :</p>
+                <p><strong>{resetLink}</strong></p>
+                <p>⚠️ Ce lien est valable pendant <strong>60 minutes</strong>. Passé ce délai, vous devrez refaire une demande.</p>
+                <div class='footer'>
+                    <p>Si vous n'avez pas demandé cette réinitialisation, ignorez cet email.</p>
+                    <p>© 2025 Talan. Tous droits réservés.</p>
+                </div>
+            </div>
+        </body>
+        </html>";
+
+            message.Body = new TextPart("html") { Text = emailBody };
+
+            using (var client = new SmtpClient())
+            {
+                try
+                {
+                    client.Connect(_mailSettings.Server, _mailSettings.Port, false);
+                    client.Authenticate(_mailSettings.UserName, _mailSettings.Password);
+                    client.Send(message);
+                    client.Disconnect(true);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Erreur lors de l'envoi de l'e-mail: {ex.Message}");
+                }
+                finally
+                {
+                    await client.DisconnectAsync(true);
+                    client.Dispose();
+                }
+            }
+        }
     }
 }

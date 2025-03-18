@@ -139,5 +139,24 @@ namespace TalanLunch.Infrastructure.Repos
             // Sauvegarde des modifications dans la base de données
             await _context.SaveChangesAsync();
         }
+        // Récupérer l'utilisateur via son RefreshToken
+        public async Task<User?> GetUserByRefreshTokenAsync(string refreshToken)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+        }
+
+        // Supprimer le RefreshToken lors du logout
+        public async Task DeleteRefreshTokenAsync(User user)
+        {
+            user.RefreshToken = null;
+            user.RefreshTokenExpiryTime = null;
+            await _context.SaveChangesAsync();
+        }
+        // Recherche un utilisateur par son token de réinitialisation
+        public async Task<User> GetByResetTokenAsync(string token)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.ResetToken == token); // Cherche un utilisateur avec le token spécifié
+        }
+
     }
 }

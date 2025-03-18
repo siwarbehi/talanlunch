@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "talanlunch", "talanlunch\talanlunch.csproj", "{C878C682-DB58-173B-2356-B991B1444875}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "talanlunch..API", "talanlunch\talanlunch..API.csproj", "{C878C682-DB58-173B-2356-B991B1444875}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "talanlunch.ServiceDefaults", "talanlunch.ServiceDefaults\talanlunch.ServiceDefaults.csproj", "{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}"
 EndProject

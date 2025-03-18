@@ -54,6 +54,49 @@ namespace talanlunch.Controllers
             // Retourne les nouveaux tokens si valides
             return Ok(result);
         }
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout([FromBody] string RefreshToken)
+        {
+            var result = await _authService.LogoutAsync(RefreshToken);
+
+            if (!result)
+            {
+                return BadRequest("Échec de la déconnexion.");
+            }
+
+            return Ok("Déconnexion réussie.");
+        }
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto request)
+        {
+            if (string.IsNullOrEmpty(request.Email))
+            {
+                return BadRequest("L'email est requis.");
+            }
+
+            var result = await _authService.ForgotPasswordAsync(request.Email);
+            if (!result)
+            {
+                return NotFound("Aucun utilisateur trouvé avec cet email.");
+            }
+
+            return Ok("Un e-mail de réinitialisation a été envoyé.");
+        }
+        // POST: api/user/reset-password
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromQuery] string token, [FromBody] string newPassword)
+        {
+            // Appel de la méthode ResetPasswordAsync du service
+            var result = await _authService.ResetPasswordAsync(token, newPassword);
+
+            if (result)
+            {
+                return Ok(new { Message = "Mot de passe réinitialisé avec succès." });
+            }
+
+            return BadRequest(new { Message = "Échec de la réinitialisation du mot de passe. Vérifiez le token ou le mot de passe." });
+        }
+
 
     }
 }

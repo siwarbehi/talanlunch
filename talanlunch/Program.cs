@@ -30,6 +30,17 @@ namespace TalanLunch
             // Ajouter les services par défaut
             builder.AddServiceDefaults();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowReactApp", policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173")  // Autoriser les requêtes venant de ce domaine
+                          .AllowAnyMethod()                    // Permettre toutes les méthodes HTTP (GET, POST, etc.)
+                          .AllowAnyHeader();                   // Permettre tous les en-têtes (headers)
+                });
+            });
+
+
             // Ajouter les services à l'injection de dépendances
             builder.Services.AddControllers();
 
@@ -57,7 +68,7 @@ namespace TalanLunch
 
 
             // Enregistrement du service de mail
-            builder.Services.AddTransient<Application.Interfaces.IMailService, TalanMailService>();
+            builder.Services.AddTransient<Application.Interfaces.IMailService, Application.Services.MailService>();
 
             // Ajouter MailSettings à l'injection de dépendances
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
@@ -95,6 +106,10 @@ namespace TalanLunch
 
             // Création de l'application
             var app = builder.Build();
+
+            // Étape 2 : Appliquer la politique CORS
+
+            app.UseCors("AllowReactApp");
 
 
             // Configure le pipeline HTTP

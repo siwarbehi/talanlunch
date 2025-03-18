@@ -15,21 +15,21 @@ using System.Security.Claims;
 using TalanLunch.Application.Dtos;
 using System.Security.Cryptography;
 
-
-
 namespace TalanLunch.Application.Services
 {
     public class AuthService : IAuthService
     {
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
+        private readonly IMailService _mailService;
 
-
-        public AuthService(IUserRepository userRepository, IConfiguration configuration)
+        public AuthService(IUserRepository userRepository, IConfiguration configuration, IMailService mailService)
         {
             _userRepository = userRepository;
             _configuration = configuration;
+            _mailService = mailService;
         }
+
         public async Task<string> RegisterUserAsync(RegisterUserDto registerUserDto, bool isCaterer)
         {
             // Vérifier si l'email existe déjà
@@ -51,12 +51,11 @@ namespace TalanLunch.Application.Services
             };
 
             // Utilisation de PasswordHasher pour hacher le mot de passe
-            var passwordHasher = new PasswordHasher<User>();
-            var hashedPassword = passwordHasher.HashPassword(user, registerUserDto.Password); // Hachage du mot de passe
+            var hashedPassword = HashPassword(registerUserDto.Password);
             user.HashedPassword = hashedPassword;
 
             // Enregistrement de l'utilisateur dans la base de données
-            bool isAdded = await _userRepository.AddUserAsync(user); 
+            bool isAdded = await _userRepository.AddUserAsync(user);
 
             // Vérifier que l'utilisateur a bien été ajouté
             if (!isAdded)
@@ -71,6 +70,13 @@ namespace TalanLunch.Application.Services
             }
 
             return "Inscription réussie.";
+        }
+
+        // Fonction pour hacher un mot de passe et assigner le mot de passe haché à l'utilisateur
+        public static string HashPassword(string password)
+        {
+            var passwordHasher = new PasswordHasher<User>();
+            return passwordHasher.HashPassword(null, password);  // Le paramètre 'null' est suffisant
         }
 
         public async Task<TokenResponseDto?> LoginAsync(LoginDto request)
@@ -88,8 +94,8 @@ namespace TalanLunch.Application.Services
 
             return await CreateTokenResponse(user);
         }
-        // Méthode pour créer un TokenResponse contenant le token d'accès et le refresh token
 
+        // Méthode pour créer un TokenResponse contenant le token d'accès et le refresh token
         private async Task<TokenResponseDto> CreateTokenResponse(User? user)
         {
             if (user == null)
@@ -105,7 +111,6 @@ namespace TalanLunch.Application.Services
         }
 
         // Méthode pour générer et sauvegarder un refresh token
-
         private async Task<string> GenerateAndSaveRefreshTokenAsync(User user)
         {
             var refreshToken = GenerateRefreshToken();
@@ -114,6 +119,7 @@ namespace TalanLunch.Application.Services
             await _userRepository.UpdateUserAsync(user);
             return refreshToken;
         }
+
         private string GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
@@ -121,8 +127,8 @@ namespace TalanLunch.Application.Services
             rng.GetBytes(randomNumber);
             return Convert.ToBase64String(randomNumber);
         }
-        // Méthode pour créer un token JWT d'accès
 
+        // Méthode pour créer un token JWT d'accès
         private string CreateToken(User user)
         {
             var claims = new List<Claim>
@@ -147,6 +153,7 @@ namespace TalanLunch.Application.Services
 
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }
+
         // Méthode pour rafraîchir les tokens (access token et refresh token)
         public async Task<TokenResponseDto?> RefreshTokensAsync(RefreshTokenRequestDto request)
         {
@@ -168,6 +175,57 @@ namespace TalanLunch.Application.Services
             }
 
             return user;
+        }
+
+        public async Task<bool> LogoutAsync(string refreshToken)
+        {
+            // Récupérer l'utilisateur via son RefreshToken
+            var user = await _userRepository.GetUserByRefreshTokenAsync(refreshToken);
+
+            if (user == null) return false;
+
+            // Supprimer le RefreshToken et sa date d'expiration
+            await _userRepository.DeleteRefreshTokenAsync(user);
+            return true;
+        }
+
+        public async Task<bool> ForgotPasswordAsync(string email)
+        {
+            var user = await _userRepository.GetUserByEmailAsync(email);
+            if (user == null)
+            {
+                return false;
+            }
+
+            // Générer un token unique
+            string resetToken = Guid.NewGuid().ToString();
+            user.ResetToken = resetToken;
+            user.ResetTokenExpiry = DateTime.UtcNow.AddHours(1);
+            await _userRepository.UpdateUserAsync(user);
+
+            // Envoyer l'email via MailService
+            await _mailService.SendPasswordResetEmailAsync(user, resetToken);
+            return true;
+        }
+
+        public async Task<bool> ResetPasswordAsync(string token, string newPassword)
+        {
+            var user = await _userRepository.GetByResetTokenAsync(token);
+
+            if (user == null || user.ResetTokenExpiry < DateTime.UtcNow)
+            {
+                return false; // Token invalide ou expiré
+            }
+
+            // Hachage du mot de passe
+            var hashedPassword = HashPassword(newPassword);
+
+            user.HashedPassword = hashedPassword;
+            user.ResetToken = null;
+            user.ResetTokenExpiry = null;
+
+            await _userRepository.UpdateUserAsync(user);
+            return true; // Mot de passe réinitialisé avec succès
         }
     }
 }

@@ -51,5 +51,9 @@ namespace TalanLunch.Application.Interfaces
 
         // Mettre à jour les données d'un utilisateur
         Task UpdateUserDataAsync(User user);
+        Task<User?> GetUserByRefreshTokenAsync(string refreshToken);
+        Task DeleteRefreshTokenAsync(User user);
+        Task<User> GetByResetTokenAsync(string token);
+
     }
 }
