@@ -4,6 +4,8 @@ using TalanLunch.Application.Interfaces;
 using TalanLunch.Application.DTOs;
 using TalanLunch.Application.Dtos;
 using TalanLunch.Application.Services;
+using Microsoft.AspNetCore.Identity.Data;
+
 
 namespace talanlunch.Controllers
 {
@@ -19,7 +21,7 @@ namespace talanlunch.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromForm] RegisterUserDto registerUserDto, [FromQuery] bool isCaterer)
+        public async Task<IActionResult> Register([FromBody] RegisterUserDto registerUserDto, [FromQuery] bool isCaterer)
         {
             if (registerUserDto == null)
             {
@@ -83,18 +85,24 @@ namespace talanlunch.Controllers
             return Ok("Un e-mail de réinitialisation a été envoyé.");
         }
         // POST: api/user/reset-password
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromQuery] string token, [FromBody] string newPassword)
+        [HttpPost("reset-password/{token}")]
+        public async Task<IActionResult> ResetPassword([FromRoute] string token, [FromBody] ResetRequest request)
         {
-            // Appel de la méthode ResetPasswordAsync du service
-            var result = await _authService.ResetPasswordAsync(token, newPassword);
+            // Vérifier si le mot de passe est valide
+            if (string.IsNullOrEmpty(request.NewPassword))
+            {
+                return BadRequest(new { Message = "Le mot de passe ne peut pas être vide." });
+            }
+
+            // Appel à la méthode de réinitialisation du mot de passe dans le service
+            var result = await _authService.ResetPasswordAsync(token, request.NewPassword);
 
             if (result)
             {
                 return Ok(new { Message = "Mot de passe réinitialisé avec succès." });
             }
 
-            return BadRequest(new { Message = "Échec de la réinitialisation du mot de passe. Vérifiez le token ou le mot de passe." });
+            return StatusCode(500, new { Message = "Une erreur est survenue lors de la réinitialisation du mot de passe." });
         }
 
 

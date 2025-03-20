@@ -14,6 +14,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TalanLunch.Application.Dtos;
 using System.Security.Cryptography;
+using Microsoft.Extensions.Logging;
+
 
 namespace TalanLunch.Application.Services
 {
@@ -22,6 +24,7 @@ namespace TalanLunch.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
         private readonly IMailService _mailService;
+
 
         public AuthService(IUserRepository userRepository, IConfiguration configuration, IMailService mailService)
         {
@@ -86,14 +89,21 @@ namespace TalanLunch.Application.Services
             {
                 return null;
             }
+
             if (new PasswordHasher<User>().VerifyHashedPassword(user, user.HashedPassword, request.Password)
                 == PasswordVerificationResult.Failed)
             {
                 return null;
             }
 
-            return await CreateTokenResponse(user);
+            var tokenResponse = await CreateTokenResponse(user);
+
+            // Ajouter IsApproved dans la réponse
+            tokenResponse.IsApproved = user.IsApproved;
+
+            return tokenResponse;
         }
+
 
         // Méthode pour créer un TokenResponse contenant le token d'accès et le refresh token
         private async Task<TokenResponseDto> CreateTokenResponse(User? user)

@@ -30,17 +30,17 @@ namespace TalanLunch
             // Ajouter les services par défaut
             builder.AddServiceDefaults();
 
+            // Ajout des services CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowReactApp", policy =>
                 {
-                    policy.WithOrigins("http://localhost:5173")  // Autoriser les requêtes venant de ce domaine
-                          .AllowAnyMethod()                    // Permettre toutes les méthodes HTTP (GET, POST, etc.)
-                          .AllowAnyHeader();                   // Permettre tous les en-têtes (headers)
+                    policy.WithOrigins("http://localhost:5173") // URL du frontend
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
                 });
             });
-
-
             // Ajouter les services à l'injection de dépendances
             builder.Services.AddControllers();
 
@@ -107,8 +107,7 @@ namespace TalanLunch
             // Création de l'application
             var app = builder.Build();
 
-            // Étape 2 : Appliquer la politique CORS
-
+            // Activation de CORS
             app.UseCors("AllowReactApp");
 
 

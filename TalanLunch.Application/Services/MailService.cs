@@ -5,7 +5,7 @@ using TalanLunch.Application.Configurations;
 using TalanLunch.Application.Dtos;
 using TalanLunch.Domain.Entities;
 using TalanLunch.Application.Interfaces;
-using MailKit.Net.Smtp;  // Utilisation de MailKit
+using MailKit.Net.Smtp;  
 using MimeKit;
 
 namespace TalanLunch.Application.Services
@@ -26,7 +26,6 @@ namespace TalanLunch.Application.Services
             message.To.Add(new MailboxAddress(mailData.EmailToName, mailData.EmailToId));
             message.Subject = mailData.EmailSubject;
 
-            // Contenu de l'email avec le HTML et le style
             string emailBody = $@"
     <!DOCTYPE html>
     <html lang='fr'>
@@ -150,6 +149,7 @@ namespace TalanLunch.Application.Services
             {
                 EmailToId = caterer.EmailAddress,
                 EmailToName = $"{caterer.FirstName} {caterer.LastName}",
+
                 EmailSubject = "Confirmation d'Approbation de Traiteur",
 
             };
@@ -157,7 +157,7 @@ namespace TalanLunch.Application.Services
         // Méthode pour envoyer un email de réinitialisation de mot de passe
         public async Task SendPasswordResetEmailAsync(User user, string resetToken)
         {
-            string resetLink = $"https://votresite.com/reset-password?token={resetToken}";
+            string resetLink = $"http://localhost:5173/reset-password?token={resetToken}"; // Le token en tant que paramètre de requête
 
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(_mailSettings.SenderName, _mailSettings.SenderEmail));
