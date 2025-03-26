@@ -14,6 +14,8 @@ namespace TalanLunch.Application.Dtos
             public string LastName { get; set; } = string.Empty;
             public string PhoneNumber { get; set; } = string.Empty;
             public string EmailAddress { get; set; } = string.Empty;
+            public string? UpdatedPassword { get; set; }
+
             public IFormFile? ProfilePicture { get; set; }
         
 

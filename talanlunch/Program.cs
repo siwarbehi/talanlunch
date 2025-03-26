@@ -109,7 +109,9 @@ namespace TalanLunch
 
             // Activation de CORS
             app.UseCors("AllowReactApp");
+            // Configurer le middleware pour les fichiers statiques (permettre l'accès aux fichiers dans wwwroot)
 
+            app.UseStaticFiles();
 
             // Configure le pipeline HTTP
             if (app.Environment.IsDevelopment())

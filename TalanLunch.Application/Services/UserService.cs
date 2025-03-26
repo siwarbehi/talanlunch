@@ -16,7 +16,8 @@ namespace TalanLunch.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly string _uploadsFolder;
 
-        public UserService(IUserRepository userRepository)
+
+        public UserService(IUserRepository userRepository )
         {
             _userRepository = userRepository;
             _uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "UserProfilePictures");
@@ -74,6 +75,14 @@ namespace TalanLunch.Application.Services
                 isUpdated = true;
             }
 
+            // Gestion du mot de passe mis à jour
+            if (!string.IsNullOrEmpty(userDto.UpdatedPassword))
+            {
+                // Appel de la méthode HashPassword d'AuthService pour hacher le mot de passe
+                user.HashedPassword = AuthService.HashPassword(userDto.UpdatedPassword);
+                isUpdated = true;
+            }
+
             // Mise à jour uniquement si des changements ont été effectués
             if (isUpdated)
             {
@@ -109,24 +118,29 @@ namespace TalanLunch.Application.Services
 
         private async Task<string> SaveProfileImageAsync(IFormFile profilePicture)
         {
-            // Ensure the directory exists
-            if (!Directory.Exists(_uploadsFolder))
+            // Obtenez le répertoire wwwroot/uploads
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+
+            // Assurez-vous que le répertoire existe
+            if (!Directory.Exists(uploadsFolder))
             {
-                Directory.CreateDirectory(_uploadsFolder);
+                Directory.CreateDirectory(uploadsFolder);
             }
 
-            // Generate a unique file name for the profile image
+            // Générer un nom de fichier unique pour l'image de profil
             string uniqueFileName = $"{Guid.NewGuid()}_{profilePicture.FileName}";
-            string filePath = Path.Combine(_uploadsFolder, uniqueFileName);
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-            // Save the profile picture to the disk
+            // Sauvegarder l'image de profil sur le disque
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await profilePicture.CopyToAsync(stream);
             }
 
+            // Retourner le nom du fichier unique pour l'enregistrement
             return uniqueFileName;
         }
+
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
             return await _userRepository.GetAllUsersAsync();

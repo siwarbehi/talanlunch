@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TalanLunch.Application.Dtos;
 using TalanLunch.Application.Interfaces;
 
 namespace talanlunch.Controllers
@@ -25,19 +26,21 @@ namespace talanlunch.Controllers
             return Ok(result);
         }
         // Approuve un traiteur
+        
         [HttpPut("approve-caterer")]
-        public async Task<IActionResult> ApproveCaterer([FromBody] int catererId)
+        public async Task<IActionResult> ApproveCaterer([FromBody] ApproveCatererDto approveCatererDto)
         {
-            bool success = await _adminService.ApproveCatererAsync(catererId);
+            bool success = await _adminService.ApproveCatererAsync(approveCatererDto.UserId);
             if (!success)
             {
-                return BadRequest("Impossible approuver le traiteur.");
+                return BadRequest("Impossible d'approuver le traiteur.");
             }
 
             return Ok("Le traiteur a été approuvé.");
         }
 
-            // 3Approuver plusieurs traiteurs
+
+        // 3Approuver plusieurs traiteurs
         [HttpPut("approve-multiple-caterers")]
         public async Task<IActionResult> ApproveMultipleCaterers([FromBody] List<int> catererIds)
         {
