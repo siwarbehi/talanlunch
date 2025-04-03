@@ -29,7 +29,6 @@ namespace TalanLunch.Infrastructure.Repos
             }
             catch (Exception ex)
             {
-                // Log the exception (you can use a logging framework like Serilog or NLog)
                 throw new Exception("An error occurred while adding the menu.", ex);
             }
         }

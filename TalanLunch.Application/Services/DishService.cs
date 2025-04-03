@@ -46,30 +46,31 @@ namespace TalanLunch.Application.Services
                 CurrentRating = 0,
             };
 
-            // Gestion de l'upload de l'image
             if (dishDto.DishPhoto != null && dishDto.DishPhoto.Length > 0)
             {
                 string uniqueFileName = await SaveDishImageAsync(dishDto.DishPhoto);
-                newDish.DishPhoto = uniqueFileName;
+                newDish.DishPhoto = uniqueFileName; 
             }
 
             return await _dishRepository.AddDishAsync(newDish);
         }
 
         // Méthode pour sauvegarder l'image du plat
-        private async Task<string> SaveDishImageAsync(IFormFile dishPhoto)
+        private async Task<string> SaveDishImageAsync(IFormFile dishImage)
         {
-            if (!Directory.Exists(_uploadsFolder))
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "dishes");
+
+            if (!Directory.Exists(uploadsFolder))
             {
-                Directory.CreateDirectory(_uploadsFolder);
+                Directory.CreateDirectory(uploadsFolder);
             }
 
-            string uniqueFileName = $"{Guid.NewGuid()}_{dishPhoto.FileName}";
-            string filePath = Path.Combine(_uploadsFolder, uniqueFileName);
+            string uniqueFileName = $"{Guid.NewGuid()}_{dishImage.FileName}";
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                await dishPhoto.CopyToAsync(stream);
+                await dishImage.CopyToAsync(stream);
             }
 
             return uniqueFileName;

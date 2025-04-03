@@ -40,20 +40,17 @@ namespace talanlunch.Controllers
 
             return Ok(result);
         }
-        /// Refresh the access token and refresh token using the provided refresh token.
 
         [HttpPost("refresh-token")]
         public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto request)
         {
             var result = await _authService.RefreshTokensAsync(request);
 
-            // Vérification si le résultat est null ou si les tokens sont invalides
             if (result is null || result.AccessToken is null || result.RefreshToken is null)
             {
                 return Unauthorized("Invalid refresh token.");
             }
 
-            // Retourne les nouveaux tokens si valides
             return Ok(result);
         }
         [HttpPost("logout")]
@@ -88,13 +85,11 @@ namespace talanlunch.Controllers
         [HttpPost("reset-password/{token}")]
         public async Task<IActionResult> ResetPassword([FromRoute] string token, [FromBody] ResetRequest request)
         {
-            // Vérifier si le mot de passe est valide
             if (string.IsNullOrEmpty(request.NewPassword))
             {
                 return BadRequest(new { Message = "Le mot de passe ne peut pas être vide." });
             }
 
-            // Appel à la méthode de réinitialisation du mot de passe dans le service
             var result = await _authService.ResetPasswordAsync(token, request.NewPassword);
 
             if (result)

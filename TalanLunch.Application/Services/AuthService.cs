@@ -35,14 +35,12 @@ namespace TalanLunch.Application.Services
 
         public async Task<string> RegisterUserAsync(RegisterUserDto registerUserDto, bool isCaterer)
         {
-            // Vérifier si l'email existe déjà
             var existingUser = await _userRepository.GetUserByEmailAsync(registerUserDto.EmailAddress);
             if (existingUser != null)
             {
                 return "Cet email est déjà utilisé.";
             }
 
-            // Création de l'utilisateur
             var user = new User
             {
                 FirstName = registerUserDto.FirstName,
@@ -50,23 +48,19 @@ namespace TalanLunch.Application.Services
                 EmailAddress = registerUserDto.EmailAddress,
                 PhoneNumber = registerUserDto.PhoneNumber,
                 UserRole = isCaterer ? UserRole.CATERER : UserRole.COLLABORATOR,
-                IsApproved = !isCaterer, // Si c'est un traiteur, il doit être approuvé manuellement
+                IsApproved = !isCaterer, 
             };
 
-            // Utilisation de PasswordHasher pour hacher le mot de passe
             var hashedPassword = HashPassword(registerUserDto.Password);
             user.HashedPassword = hashedPassword;
 
-            // Enregistrement de l'utilisateur dans la base de données
             bool isAdded = await _userRepository.AddUserAsync(user);
 
-            // Vérifier que l'utilisateur a bien été ajouté
             if (!isAdded)
             {
                 return "Une erreur s'est produite lors de l'enregistrement de l'utilisateur. Veuillez réessayer.";
             }
 
-            // Retour d'un message basé sur le rôle de l'utilisateur
             if (isCaterer)
             {
                 return "Votre demande d'inscription en tant que traiteur a été enregistrée. Un administrateur doit approuver votre compte.";
@@ -75,11 +69,10 @@ namespace TalanLunch.Application.Services
             return "Inscription réussie.";
         }
 
-        // Fonction pour hacher un mot de passe et assigner le mot de passe haché à l'utilisateur
         public static string HashPassword(string password)
         {
             var passwordHasher = new PasswordHasher<User>();
-            return passwordHasher.HashPassword(null, password);  // Le paramètre 'null' est suffisant
+            return passwordHasher.HashPassword(null, password); 
         }
 
         public async Task<TokenResponseDto?> LoginAsync(LoginDto request)

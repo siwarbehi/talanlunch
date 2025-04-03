@@ -16,7 +16,6 @@ namespace talanlunch.Controllers
             _mailService = mailService;
         }
 
-        // Endpoint pour envoyer un e-mail
         [HttpPost("send-email")]
         public async Task<IActionResult> SendEmail([FromBody] MailDataDto mailData)
         {

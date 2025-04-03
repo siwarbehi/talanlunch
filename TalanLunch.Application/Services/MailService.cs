@@ -134,7 +134,6 @@ namespace TalanLunch.Application.Services
                 }
                 finally
                 {
-                    // Déconnexion après l'envoi
                     await client.DisconnectAsync(true);
                     client.Dispose();
                 }

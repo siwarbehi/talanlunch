@@ -90,7 +90,7 @@ namespace talanlunch.Controllers
         {
             try
             {
-                await _dishService.DeleteDishAsync(id); // Appel à la méthode du service
+                await _dishService.DeleteDishAsync(id); 
                 return NoContent(); // 204 No Content (successful deletion)
             }
             catch (KeyNotFoundException)
