@@ -23,25 +23,27 @@ namespace TalanLunch.Infrastructure.Repos
         {
             try
             {
-                _context.Menus.Add(menu);
-                await _context.SaveChangesAsync();
-                return menu;
+                _context.Menus.Add(menu);  
+                await _context.SaveChangesAsync();  
+                return menu;  
             }
             catch (Exception ex)
             {
-                throw new Exception("An error occurred while adding the menu.", ex);
+                throw new Exception("Une erreur s'est produite lors de l'ajout du menu.", ex);
             }
         }
 
 
-        public async Task<Menu> UpdateMenuAsync(Menu menu)
-            {
-                _context.Menus.Update(menu);
-                await _context.SaveChangesAsync();
-                return menu;
-            }
 
-            public async Task DeleteMenuAsync(int id)
+        public async Task<Menu> UpdateMenuAsync(Menu menu)
+        {
+            _context.Menus.Update(menu);
+            await _context.SaveChangesAsync(); 
+            return menu; 
+        }
+
+
+        public async Task DeleteMenuAsync(int id)
             {
                 var menu = await _context.Menus.FindAsync(id);
                 if (menu != null)
@@ -61,7 +63,25 @@ namespace TalanLunch.Infrastructure.Repos
 
         public async Task<IEnumerable<Menu>> GetAllMenusAsync()
             {
-                return await _context.Menus.Include(m => m.MenuDishes).ThenInclude(md => md.Dish).ToListAsync();
+                 return await _context.Menus
+            .Include(m => m.MenuDishes)
+            .ThenInclude(md => md.Dish)
+            .ToListAsync();
             }
+        public List<int> GetAllMenuIds()
+        {
+            return _context.Menus
+                .Select(menu => menu.MenuId) 
+                .ToList();
         }
+        // Méthode pour récupérer tous les DishId associés à un MenuId
+        public List<int> GetDishIdsByMenuId(int menuId)
+        {
+            return _context.MenuDishes
+                .Where(md => md.MenuId == menuId)
+                .Select(md => md.DishId)
+                .ToList();
+        }
+    }
+
     }

@@ -9,10 +9,10 @@ namespace TalanLunch.Domain.Entities
     {
         public int MenuId { get; set; }
         
-        [JsonInclude] 
+         
 
-        public required Menu Menu { get; set; }
+        public  Menu Menu { get; set; }
         public int DishId { get; set; }
-        public required Dish Dish { get; set; }
+        public  Dish Dish { get; set; }
     }
 } //on doit toujours avoir Dish et Menu sinon pas d'association valide

@@ -43,33 +43,28 @@ namespace TalanLunch.Infrastructure.Data
             modelBuilder.Entity<OrderDish>()
                 .HasKey(od => new { od.OrderId, od.DishId });
 
-            modelBuilder.Entity<OrderDish>()
-                .HasOne(od => od.Order)
-                .WithMany(o => o.OrderDishes)
-                .HasForeignKey(od => od.OrderId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<OrderDish>()
-                .HasOne(od => od.Dish)
-                .WithMany(d => d.OrderDishes)
-                .HasForeignKey(od => od.DishId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // Configuring the join table MenuDish (Many-to-many relationship between Menu and Dish)
+            // Clé composite pour la table de jointure MenuDish
             modelBuilder.Entity<MenuDish>()
                 .HasKey(md => new { md.MenuId, md.DishId });
 
+            // Relation Menu ↔ MenuDish
             modelBuilder.Entity<MenuDish>()
                 .HasOne(md => md.Menu)
                 .WithMany(m => m.MenuDishes)
                 .HasForeignKey(md => md.MenuId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict); 
 
             modelBuilder.Entity<MenuDish>()
                 .HasOne(md => md.Dish)
                 .WithMany(d => d.MenuDishes)
                 .HasForeignKey(md => md.DishId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            modelBuilder.Entity<MenuDish>()
+                .HasIndex(md => new { md.MenuId, md.DishId })
+                .IsUnique();
+
+
 
             // Ensure that UserRole is stored as a string in the database (instead of an integer)
             modelBuilder.Entity<User>()

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TalanLunch.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using TalanLunch.Infrastructure.Data;
 namespace TalanLunch.Infrastructure.Migrations
 {
     [DbContext(typeof(TalanLunchDbContext))]
-    partial class TalanLunchDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250405230759_AddMenuDishManyToMany")]
+    partial class AddMenuDishManyToMany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,9 +120,6 @@ namespace TalanLunch.Infrastructure.Migrations
                     b.HasKey("MenuId", "DishId");
 
                     b.HasIndex("DishId");
-
-                    b.HasIndex("MenuId", "DishId")
-                        .IsUnique();
 
                     b.ToTable("MenuDishes");
                 });
@@ -243,13 +243,13 @@ namespace TalanLunch.Infrastructure.Migrations
                     b.HasOne("TalanLunch.Domain.Entities.Dish", "Dish")
                         .WithMany("MenuDishes")
                         .HasForeignKey("DishId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TalanLunch.Domain.Entities.Menu", "Menu")
                         .WithMany("MenuDishes")
                         .HasForeignKey("MenuId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Dish");

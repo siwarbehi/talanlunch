@@ -95,12 +95,8 @@ namespace TalanLunch.Application.Services
         }
 
         // Mettre à jour un plat
-
-
-        // Mise à jour d'un plat avec gestion de la photo et des propriétés
         public async Task<Dish> UpdateDishAsync(Dish existingDish, DishUpdateDto updatedDish, IFormFile? dishPhoto)
         {
-            // Mettre à jour les propriétés du plat seulement si elles sont spécifiées
             if (!string.IsNullOrEmpty(updatedDish.DishName))
                 existingDish.DishName = updatedDish.DishName;
 
@@ -116,14 +112,12 @@ namespace TalanLunch.Application.Services
             if (updatedDish.IsSalad.HasValue)
                 existingDish.IsSalad = updatedDish.IsSalad.Value;
 
-            // Gestion de la photo du plat
             if (dishPhoto != null && dishPhoto.Length > 0)
             {
                 var fileName = await SaveDishImageAsync(dishPhoto);
                 existingDish.DishPhoto = fileName;
             }
           
-            // Mise à jour du plat dans la base de données via le repository
             return await _dishRepository.UpdateDishAsync(existingDish);
         }
         // Supprimer un plat

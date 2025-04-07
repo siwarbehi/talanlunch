@@ -21,45 +21,45 @@ namespace TalanLunch.Application.Services
             _dishRepository = dishRepository;
         }
 
-        // Ajouter un menu
         public async Task<Menu> AddMenuAsync(MenuDto menuDto)
         {
             var newMenu = new Menu
             {
                 MenuDescription = menuDto.MenuDescription,
-                MenuDate = DateTime.Now,
-                MenuDishes = new List<MenuDish>()
+                MenuDate = DateTime.Now,  // Date actuelle
+                MenuDishes = new List<MenuDish>()  // Initialise la liste de MenuDish
             };
 
-            var invalidDishIds = new List<int>();
+            var invalidDishIds = new List<int>();  // Liste pour les plats invalides
 
             if (menuDto.DishIds != null && menuDto.DishIds.Count > 0)
             {
                 foreach (var dishId in menuDto.DishIds)
                 {
-                    var dish = await _dishRepository.GetDishByIdAsync(dishId);
+                    var dish = await _dishRepository.GetDishByIdAsync(dishId);  // Recherche le plat par ID
                     if (dish != null)
                     {
                         newMenu.MenuDishes.Add(new MenuDish
                         {
-                            Menu = newMenu,
-                            Dish = dish,
-                            DishId = dish.DishId
+                            Menu = newMenu,  // Lier le menu
+                            Dish = dish,     // Lier le plat
+                            DishId = dish.DishId  // Lier l'ID du plat
                         });
                     }
                     else
                     {
-                        invalidDishIds.Add(dishId);
+                        invalidDishIds.Add(dishId);  // Ajoute l'ID du plat invalide à la liste
                     }
                 }
             }
 
             if (invalidDishIds.Count > 0)
             {
+                // Si des plats sont invalides, lève une exception avec les ID des plats invalides
                 throw new ArgumentException("Certains identifiants de plats sont invalides.", nameof(menuDto.DishIds));
             }
 
-            return await _menuRepository.AddMenuAsync(newMenu);
+            return await _menuRepository.AddMenuAsync(newMenu);  // Ajoute le menu au repository
         }
 
         // Modifier la description du menu
@@ -74,22 +74,35 @@ namespace TalanLunch.Application.Services
         }
 
         // Ajouter un plat au menu
-        public async Task<Menu?> AddDishToMenuAsync(int menuId, int dishId)
+        public async Task<(Menu?, bool)> AddDishToMenuAsync(int menuId, int dishId)
         {
             var menu = await _menuRepository.GetMenuByIdAsync(menuId);
             var dish = await _dishRepository.GetDishByIdAsync(dishId);
 
-            if (menu == null || dish == null) return null;
+            if (menu == null || dish == null)
+            {
+                return (null, false); 
+            }
+
+            if (menu.MenuDishes.Any(md => md.DishId == dishId))
+            {
+                return (menu, true); 
+            }
 
             menu.MenuDishes.Add(new MenuDish
             {
                 MenuId = menuId,
                 DishId = dishId,
-                Menu = menu,         // Associer l'objet menu réel
-                Dish = dish          // Associer l'objet plat réel
+                Menu = menu,
+                Dish = dish
             });
-            return await _menuRepository.UpdateMenuAsync(menu);
+
+            var updatedMenu = await _menuRepository.UpdateMenuAsync(menu);
+            return (updatedMenu, false); // Plat ajouté avec succès
         }
+
+
+
 
         // Supprimer un plat du menu
         public async Task<Menu?> RemoveDishFromMenuAsync(int menuId, int dishId)
@@ -128,6 +141,15 @@ namespace TalanLunch.Application.Services
         {
             
             return await _menuRepository.GetAllMenusAsync();
+        }
+        public List<int> GetAllMenuIds()
+        {
+            return _menuRepository.GetAllMenuIds(); // Appel du repository pour récupérer les MenuId
+        }
+        // Méthode pour récupérer les plats associés à un menu donné
+        public List<int> GetDishIdsForMenu(int menuId)
+        {
+            return _menuRepository.GetDishIdsByMenuId(menuId);
         }
     }
 }

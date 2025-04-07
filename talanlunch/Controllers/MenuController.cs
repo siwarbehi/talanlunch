@@ -17,24 +17,32 @@ namespace talanlunch.Controllers
             _menuService = menuService;
         }
 
-        // Ajouter un menu
         [HttpPost]
         public async Task<IActionResult> AddMenuAsync([FromForm] MenuDto menuDto)
         {
             try
             {
                 var createdMenu = await _menuService.AddMenuAsync(menuDto);
-                return Ok(createdMenu);
+                return Ok(createdMenu);  
             }
             catch (ArgumentException ex)
             {
                 return BadRequest(new
                 {
                     Message = ex.Message,
-                    ParamName = ex.ParamName
+                    ParamName = ex.ParamName  
                 });
             }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    Message = "An unexpected error occurred.",
+                    Error = ex.Message
+                });  
+            }
         }
+
 
 
         // Modifier la description du menu
@@ -53,13 +61,23 @@ namespace talanlunch.Controllers
         [HttpPost("{menuId}/add-dish/{dishId}")]
         public async Task<ActionResult<Menu>> AddDishToMenu(int menuId, int dishId)
         {
-            var menu = await _menuService.AddDishToMenuAsync(menuId, dishId);
-            if (menu == null)
+            var result = await _menuService.AddDishToMenuAsync(menuId, dishId);
+
+            if (result.Item1 == null)
             {
                 return NotFound();
             }
-            return Ok(menu);
+
+            if (result.Item2)
+            {
+                return BadRequest("Le plat est déjà présent dans ce menu.");
+            }
+
+            return Ok(result.Item1); 
         }
+
+
+
 
         // Supprimer un plat du menu
         [HttpDelete("{menuId}/remove-dish/{dishId}")]
@@ -99,6 +117,32 @@ namespace talanlunch.Controllers
         {
             var menus = await _menuService.GetAllMenusAsync();
             return Ok(menus);
+        }
+        // Action pour récupérer tous les MenuId
+        [HttpGet("menu-ids")]
+        public IActionResult GetAllMenuIds()
+        {
+            var menuIds = _menuService.GetAllMenuIds();
+
+            if (menuIds == null || menuIds.Count == 0)
+            {
+                return NotFound(new { message = "Aucun menu trouvé." });
+            }
+
+            return Ok(menuIds);
+        }
+        // Action pour récupérer les plats associés à un menu donné
+        [HttpGet("menu/{menuId}/dishes")]
+        public IActionResult GetDishesByMenuId(int menuId)
+        {
+            var dishIds = _menuService.GetDishIdsForMenu(menuId);
+
+            if (dishIds == null || !dishIds.Any())
+            {
+                return NotFound(new { message = "Aucun plat trouvé pour ce menu." });
+            }
+
+            return Ok(dishIds);
         }
     }
 }
