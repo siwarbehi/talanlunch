@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,6 @@ namespace TalanLunch.Application.Services
     {
         private readonly IMenuRepository _menuRepository;
         private readonly IDishRepository _dishRepository;
-
         public MenuService(IMenuRepository menuRepository, IDishRepository dishRepository)
         {
             _menuRepository = menuRepository;
@@ -23,44 +23,63 @@ namespace TalanLunch.Application.Services
 
         public async Task<Menu> AddMenuAsync(MenuDto menuDto)
         {
+            if (menuDto == null)
+                throw new ArgumentNullException(nameof(menuDto), "Le DTO du menu ne peut pas être null.");
+
+            if (menuDto.Dishes == null || !menuDto.Dishes.Any())
+                throw new ArgumentException("Le menu doit contenir au moins un plat.", nameof(menuDto.Dishes));
+
+            // Création du menu
             var newMenu = new Menu
             {
                 MenuDescription = menuDto.MenuDescription,
-                MenuDate = DateTime.Now,  // Date actuelle
-                MenuDishes = new List<MenuDish>()  // Initialise la liste de MenuDish
+                MenuDate = DateTime.Now,
+                MenuDishes = new List<MenuDish>()
             };
 
-            var invalidDishIds = new List<int>();  // Liste pour les plats invalides
+            var invalidDishIds = new List<int>();
 
-            if (menuDto.DishIds != null && menuDto.DishIds.Count > 0)
+            // Traitement de chaque plat
+            foreach (var dishDto in menuDto.Dishes)
             {
-                foreach (var dishId in menuDto.DishIds)
+                if (dishDto == null)
+                    throw new Exception("dishDto est null");
+
+                if (_dishRepository == null)
+                    throw new Exception("_dishRepository est null");
+
+                var dish = await _dishRepository.GetDishByIdAsync(dishDto.DishId);
+
+                if (dish == null)
+                    throw new Exception($"Aucun plat trouvé avec l'ID {dishDto.DishId}");
+
+                if (dish != null)
                 {
-                    var dish = await _dishRepository.GetDishByIdAsync(dishId);  // Recherche le plat par ID
-                    if (dish != null)
+                    var menuDish = new MenuDish
                     {
-                        newMenu.MenuDishes.Add(new MenuDish
-                        {
-                            Menu = newMenu,  // Lier le menu
-                            Dish = dish,     // Lier le plat
-                            DishId = dish.DishId  // Lier l'ID du plat
-                        });
-                    }
-                    else
-                    {
-                        invalidDishIds.Add(dishId);  // Ajoute l'ID du plat invalide à la liste
-                    }
+                        Menu = newMenu,
+                        Dish = dish,
+                        DishId = dish.DishId,
+                        DishQuantity = dishDto.DishQuantity
+                    };
+                    newMenu.MenuDishes.Add(menuDish);
+                }
+                else
+                {
+                    invalidDishIds.Add(dishDto.DishId);
                 }
             }
 
-            if (invalidDishIds.Count > 0)
+            if (invalidDishIds.Any())
             {
-                // Si des plats sont invalides, lève une exception avec les ID des plats invalides
-                throw new ArgumentException("Certains identifiants de plats sont invalides.", nameof(menuDto.DishIds));
+                throw new ArgumentException($"Certains identifiants de plats sont invalides : {string.Join(", ", invalidDishIds)}", nameof(menuDto.Dishes));
             }
 
-            return await _menuRepository.AddMenuAsync(newMenu);  // Ajoute le menu au repository
+            return await _menuRepository.AddMenuAsync(newMenu);
         }
+
+    
+
 
         // Modifier la description du menu
         public async Task<bool> UpdateMenuDescriptionAsync(int id, string newDescription)
@@ -98,7 +117,7 @@ namespace TalanLunch.Application.Services
             });
 
             var updatedMenu = await _menuRepository.UpdateMenuAsync(menu);
-            return (updatedMenu, false); // Plat ajouté avec succès
+            return (updatedMenu, false); 
         }
 
 
@@ -136,20 +155,64 @@ namespace TalanLunch.Application.Services
         {
             return await _menuRepository.GetMenuByIdAsync(id);
         }
-        //Obtenir tous les menus
-        public async Task<IEnumerable<Menu>> GetAllMenusAsync()
-        {
-            
-            return await _menuRepository.GetAllMenusAsync();
-        }
+        // Obtenir tous les menus 
+        public async Task<IEnumerable<GetAllMenusDto>> GetAllMenusAsync() { 
+            return await _menuRepository.GetAllMenusAsync(); }
         public List<int> GetAllMenuIds()
         {
-            return _menuRepository.GetAllMenuIds(); // Appel du repository pour récupérer les MenuId
+            return _menuRepository.GetAllMenuIds(); 
         }
-        // Méthode pour récupérer les plats associés à un menu donné
         public List<int> GetDishIdsForMenu(int menuId)
         {
             return _menuRepository.GetDishIdsByMenuId(menuId);
         }
+        public async Task<bool> SetMenuOfTheDayAsync(int menuId)
+        {
+            var menu = await _menuRepository.GetMenuByIdAsync(menuId);
+            if (menu == null)
+            {
+                return false; 
+            }
+
+            var allMenuIds = _menuRepository.GetAllMenuIds();
+
+            foreach (var id in allMenuIds)
+            {
+                var m = await _menuRepository.GetMenuByIdAsync(id);
+                if (m == null)
+                {
+                    continue; 
+                }
+
+                if (m.MenuId != menuId)
+                {
+                    m.IsMenuOfTheDay = false;
+                    await _menuRepository.UpdateMenuAsync(m);
+                }
+            }
+
+            menu.IsMenuOfTheDay = true;
+
+            await _menuRepository.UpdateMenuAsync(menu);
+
+            return true;
+        }
+
+
+        public async Task ResetMenuOfTheDayAsync()
+        {
+            var allMenuIds = _menuRepository.GetAllMenuIds();
+
+            foreach (var menuId in allMenuIds)
+            {
+                var menu = await _menuRepository.GetMenuByIdAsync(menuId);
+                if (menu != null)
+                {
+                    menu.IsMenuOfTheDay = false;
+                    await _menuRepository.UpdateMenuAsync(menu);  // Mettre à jour chaque menu
+                }
+            }
+        }
+
     }
 }

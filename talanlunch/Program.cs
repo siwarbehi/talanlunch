@@ -11,6 +11,11 @@ using MailKit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
+using TalanLunch.Application.Jobs;
+
 
 
 
@@ -102,6 +107,24 @@ namespace TalanLunch
                         ValidateIssuerSigningKey = true // Vérifie que le token a été signé avec la clé correcte
                     };
                 });
+
+
+
+            // Quartz
+            builder.Services.AddQuartz(q =>
+            {
+                var jobKey = new JobKey("ResetMenuOfTheDayJob");
+
+                q.AddJob<ResetMenuOfTheDayJob>(opts => opts.WithIdentity(jobKey));
+
+                q.AddTrigger(opts => opts
+                    .ForJob(jobKey)
+                    .WithIdentity("ResetMenuOfTheDayTrigger")
+                    .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(00, 00)) // Exécution à minuit chaque jour
+                );
+
+            });
+            builder.Services.AddQuartzHostedService();
 
 
             // Création de l'application

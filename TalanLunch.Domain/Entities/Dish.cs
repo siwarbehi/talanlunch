@@ -16,8 +16,6 @@ namespace TalanLunch.Domain.Entities
         [Range(0, int.MaxValue, ErrorMessage = "La quantité ne peut pas être négative.")]
 
         [Required]
-        public int DishQuantity { get; set; }
-        [Required]
         public int ReviewCount { get; set; }
         public string? DishPhoto { get; set; }
         [Required]
@@ -25,7 +23,6 @@ namespace TalanLunch.Domain.Entities
 
         public decimal DishPrice { get; set; }
         public int CurrentRating { get; set; }
-        public bool IsSalad { get; set; }
 
 
         [Required]

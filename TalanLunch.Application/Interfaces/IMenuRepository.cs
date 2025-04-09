@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TalanLunch.Application.Dtos;
 using TalanLunch.Domain.Entities;
 
 namespace TalanLunch.Application.Interfaces
@@ -14,7 +15,7 @@ namespace TalanLunch.Application.Interfaces
         Task<Menu> UpdateMenuAsync(Menu menu);
         Task DeleteMenuAsync(int id);
         Task<Menu?> GetMenuByIdAsync(int id);
-        Task<IEnumerable<Menu>> GetAllMenusAsync();
+        Task<IEnumerable<GetAllMenusDto>> GetAllMenusAsync();
         List<int> GetAllMenuIds(); // Méthode pour récupérer tous les MenuId
         List<int> GetDishIdsByMenuId(int menuId); // Méthode pour récupérer les DishId par MenuId
 

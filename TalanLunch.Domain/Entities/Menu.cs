@@ -10,6 +10,7 @@ namespace TalanLunch.Domain.Entities
         public int MenuId { get; set; }
         public string? MenuDescription { get; set; }
         public DateTime MenuDate { get; set; } = DateTime.Now;
+        public bool IsMenuOfTheDay { get; set; } = false;
 
         [Required]
         public ICollection<MenuDish> MenuDishes { get; set; } = [];

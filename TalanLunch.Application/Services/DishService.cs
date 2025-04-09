@@ -38,10 +38,8 @@ namespace TalanLunch.Application.Services
             {
                 DishName = dishDto.DishName,
                 DishDescription = dishDto.DishDescription,
-                DishQuantity = dishDto.DishQuantity,
                 DishPrice = dishDto.DishPrice,
-                IsSalad = dishDto.IsSalad,
-                OrderDate = DateTime.UtcNow, // Date actuelle
+                OrderDate = DateTime.UtcNow, 
                 ReviewCount = 0,
                 CurrentRating = 0,
             };
@@ -103,14 +101,12 @@ namespace TalanLunch.Application.Services
             if (!string.IsNullOrEmpty(updatedDish.DishDescription))
                 existingDish.DishDescription = updatedDish.DishDescription;
 
-            if (updatedDish.DishQuantity.HasValue && updatedDish.DishQuantity >= 0)
-                existingDish.DishQuantity = updatedDish.DishQuantity.Value;
+         
 
             if (updatedDish.DishPrice.HasValue && updatedDish.DishPrice >= 0)
                 existingDish.DishPrice = (decimal)updatedDish.DishPrice.Value;
 
-            if (updatedDish.IsSalad.HasValue)
-                existingDish.IsSalad = updatedDish.IsSalad.Value;
+           
 
             if (dishPhoto != null && dishPhoto.Length > 0)
             {

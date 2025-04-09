@@ -16,9 +16,11 @@ namespace TalanLunch.Application.Interfaces
         Task<Menu?> RemoveDishFromMenuAsync(int menuId, int dishId);
         Task DeleteMenuAsync(int id);
         Task<Menu?> GetMenuByIdAsync(int id);
-        Task<IEnumerable<Menu>> GetAllMenusAsync();
+        Task<IEnumerable<GetAllMenusDto>> GetAllMenusAsync();
         List<int> GetAllMenuIds();
-        List<int> GetDishIdsForMenu(int menuId); 
+        List<int> GetDishIdsForMenu(int menuId);
+        Task<bool> SetMenuOfTheDayAsync(int menuId);
+        Task ResetMenuOfTheDayAsync();
 
 
 

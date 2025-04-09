@@ -17,31 +17,36 @@ namespace talanlunch.Controllers
             _menuService = menuService;
         }
 
+        // POST: api/Menu
         [HttpPost]
-        public async Task<IActionResult> AddMenuAsync([FromForm] MenuDto menuDto)
+        public async Task<IActionResult> AddMenuAsync([FromBody] MenuDto menuDto)
         {
             try
             {
+                if (menuDto == null)
+                    return BadRequest("Le DTO du menu ne peut pas être null.");
+
                 var createdMenu = await _menuService.AddMenuAsync(menuDto);
-                return Ok(createdMenu);  
+                return CreatedAtAction(nameof(GetMenu), new { id = createdMenu.MenuId }, createdMenu);
             }
             catch (ArgumentException ex)
             {
                 return BadRequest(new
                 {
                     Message = ex.Message,
-                    ParamName = ex.ParamName  
+                    ParamName = ex.ParamName
                 });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new
                 {
-                    Message = "An unexpected error occurred.",
+                    Message = "Une erreur inattendue est survenue.",
                     Error = ex.Message
-                });  
+                });
             }
         }
+
 
 
 
@@ -113,11 +118,12 @@ namespace talanlunch.Controllers
 
         // Obtenir tous les menus
         [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<Menu>>> GetMenus()
+        public async Task<ActionResult<IEnumerable<GetAllMenusDto>>> GetMenus()
         {
             var menus = await _menuService.GetAllMenusAsync();
             return Ok(menus);
         }
+
         // Action pour récupérer tous les MenuId
         [HttpGet("menu-ids")]
         public IActionResult GetAllMenuIds()
@@ -143,6 +149,17 @@ namespace talanlunch.Controllers
             }
 
             return Ok(dishIds);
+        }
+        // Endpoint pour sélectionner un menu comme "Menu du jour"
+        [HttpPost("setMenuOfTheDay/{menuId}")]
+        public async Task<IActionResult> SetMenuOfTheDay(int menuId)
+        {
+            var success = await _menuService.SetMenuOfTheDayAsync(menuId);
+            if (success)
+            {
+                return Ok("Menu of the day has been updated.");
+            }
+            return BadRequest("Could not update menu of the day.");
         }
     }
 }
