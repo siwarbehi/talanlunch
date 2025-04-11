@@ -43,23 +43,24 @@ namespace talanlunch.Controllers
 
 
 
-        // PUT: api/dish/update/{id}
-        [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateDish(int id, [FromForm] DishUpdateDto updatedDish, IFormFile? dishPhoto)
+        // PATCH: api/dish/update/{id}
+        [HttpPatch("update/{id}")]
+        public async Task<IActionResult> PatchDish(int id, [FromForm] DishUpdateDto updatedDish, IFormFile? dishPhoto)
         {
             if (updatedDish == null)
                 return BadRequest("Dish data is null.");
 
-            // Vérification si le plat existe dans la base de données à l'aide de l'ID
+            // Vérifie si le plat existe
             var existingDish = await _dishService.GetDishByIdAsync(id);
             if (existingDish == null)
                 return NotFound($"Dish with id {id} not found.");
 
-            // Appel du service pour mettre à jour les informations du plat
+            // Met à jour partiellement le plat
             var updatedDishEntity = await _dishService.UpdateDishAsync(existingDish, updatedDish, dishPhoto);
 
-            return Ok(updatedDishEntity); // Retourner l'entité mise à jour
+            return Ok(updatedDishEntity); // Retourne le plat mis à jour
         }
+
 
 
         // GET: api/dish/all

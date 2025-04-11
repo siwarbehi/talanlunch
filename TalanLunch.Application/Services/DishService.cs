@@ -101,21 +101,18 @@ namespace TalanLunch.Application.Services
             if (!string.IsNullOrEmpty(updatedDish.DishDescription))
                 existingDish.DishDescription = updatedDish.DishDescription;
 
-         
-
             if (updatedDish.DishPrice.HasValue && updatedDish.DishPrice >= 0)
                 existingDish.DishPrice = (decimal)updatedDish.DishPrice.Value;
 
-           
-
             if (dishPhoto != null && dishPhoto.Length > 0)
             {
-                var fileName = await SaveDishImageAsync(dishPhoto);
+                var fileName = await SaveDishImageAsync(dishPhoto); // Implémentation de stockage image
                 existingDish.DishPhoto = fileName;
             }
-          
+
             return await _dishRepository.UpdateDishAsync(existingDish);
         }
+
         // Supprimer un plat
         public async Task DeleteDishAsync(int id)
         {
