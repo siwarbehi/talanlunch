@@ -10,7 +10,7 @@ namespace TalanLunch.Domain.Entities
         public int OrderId { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.Now;
 
-        [Column(TypeName = "decimal(10,2)")]
+        [Column(TypeName = "decimal(10,3)")]
         public decimal TotalAmount { get; set; }
         public bool Paid { get; set; } 
 

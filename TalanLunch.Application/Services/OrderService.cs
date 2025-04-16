@@ -65,6 +65,25 @@ namespace TalanLunch.Application.Services
 
             return await _orderRepository.AddOrderAsync(newOrder);
         }
+        public async Task<List<OrderDayDto>> GetOrdersByDateAsync(DateTime date)
+        {
+            var orders = await _orderRepository.GetOrdersByDateAsync(date);
+
+            return orders.Select(o => new OrderDayDto
+            {
+                UserId = o.UserId,
+                OrderRemark = o.OrderRemark,
+                TotalAmount = o.TotalAmount,
+                Paid = o.Paid,
+                Served = o.Served,
+                OrderDate = o.OrderDate,
+                Dishes = o.OrderDishes.Select(od => new DishOrderDto
+                {
+                    DishId = od.DishId,
+                    Quantity = od.Quantity
+                }).ToList()
+            }).ToList();
+        }
 
 
     }

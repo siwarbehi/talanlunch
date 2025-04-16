@@ -16,6 +16,8 @@ namespace talanlunch.API.Controllers
         {
             _orderService = orderService;
         }
+
+        // Passer un ordre
         [HttpPost("place")]
         public async Task<IActionResult> PlaceOrder([FromBody] OrderRequestDto request)
         {
@@ -29,5 +31,15 @@ namespace talanlunch.API.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        //get all orders by day 
+        [HttpGet("orders-by-date")]
+        public async Task<IActionResult> GetOrdersByDate([FromQuery] DateTime date)
+        {
+            var orders = await _orderService.GetOrdersByDateAsync(date);
+            return Ok(orders);
+        }
+
+
     }
 }

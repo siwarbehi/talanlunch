@@ -11,6 +11,7 @@ namespace TalanLunch.Application.Interfaces
     public interface IOrderService
     {
         Task<Order> CreateOrderAsync(OrderRequestDto request);
+        Task<List<OrderDayDto>> GetOrdersByDateAsync(DateTime date);
 
     }
 }
