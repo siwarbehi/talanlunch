@@ -116,15 +116,34 @@ namespace TalanLunch.Application.Services
         // Supprimer un plat
         public async Task DeleteDishAsync(int id)
         {
-            // Vérification si le plat existe
             var dish = await _dishRepository.GetDishByIdAsync(id);
             if (dish == null)
-            {
                 throw new KeyNotFoundException($"Dish with ID {id} not found.");
-            }
 
-            // Suppression du plat dans le repository
             await _dishRepository.DeleteDishAsync(id);
         }
+        // Rate a dish
+     
+        public async Task RateDishAsync(RateDishDto dto)
+        {
+            if (dto.Rating < 1 || dto.Rating > 5)
+                throw new ArgumentException("La note doit être sur 5.");
+            var dish = await _dishRepository.GetDishByIdAsync(dto.DishId);
+
+            if (dish == null)
+                throw new Exception("Plat non trouvé");
+
+            // Mise à jour de la note moyenne
+            float oldRating = dish.CurrentRating;
+            int oldCount = dish.ReviewCount;
+
+            float newRating = ((oldRating * oldCount) + dto.Rating) / (oldCount + 1);
+
+            dish.CurrentRating = newRating;
+            dish.ReviewCount++;
+
+            await _dishRepository.UpdateDishAsync(dish);
+        }
+
     }
 }

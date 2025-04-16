@@ -40,12 +40,16 @@ namespace TalanLunch
             {
                 options.AddPolicy("AllowReactApp", policy =>
                 {
-                    policy.WithOrigins("http://localhost:5173") // URL du frontend
-                          .AllowAnyHeader()
-                          .AllowAnyMethod()
-                          .AllowCredentials();
+                    policy.WithOrigins(
+                            "http://localhost:5173",
+                            "http://localhost:5174"
+                        )
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
                 });
             });
+
             // Ajouter les services à l'injection de dépendances
             builder.Services.AddControllers();
 
@@ -66,6 +70,9 @@ namespace TalanLunch
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+
 
 
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);

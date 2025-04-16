@@ -17,4 +17,4 @@ namespace TalanLunch.Domain.Entities
         public int DishQuantity { get; set; }
 
     }
-} //on doit toujours avoir Dish et Menu sinon pas d'association valide
+} 

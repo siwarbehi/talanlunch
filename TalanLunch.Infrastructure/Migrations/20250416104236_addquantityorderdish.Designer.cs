@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TalanLunch.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using TalanLunch.Infrastructure.Data;
 namespace TalanLunch.Infrastructure.Migrations
 {
     [DbContext(typeof(TalanLunchDbContext))]
-    partial class TalanLunchDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250416104236_addquantityorderdish")]
+    partial class addquantityorderdish
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,8 +33,8 @@ namespace TalanLunch.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DishId"));
 
-                    b.Property<float>("CurrentRating")
-                        .HasColumnType("real");
+                    b.Property<int>("CurrentRating")
+                        .HasColumnType("int");
 
                     b.Property<string>("DishDescription")
                         .HasColumnType("nvarchar(max)");

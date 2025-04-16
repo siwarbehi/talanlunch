@@ -86,12 +86,15 @@ namespace TalanLunch.Infrastructure.Repos
                     Dishes = menu.MenuDishes.Select(md => new DishMenuAllDto
                     {
                         DishName = md.Dish.DishName,
-                        DishQuantity = md.DishQuantity
-
+                        DishQuantity = md.DishQuantity,
+                        DishPrice = md.Dish.DishPrice,
+                        DishPhoto = md.Dish.DishPhoto,
+                        DishDescription = md.Dish.DishDescription
                     }).ToList()
                 })
                 .ToListAsync();
         }
+
 
         //.Include(m => m.MenuDishes)
         //.ThenInclude(md => md.Dish)

@@ -7,6 +7,7 @@ namespace TalanLunch.Domain.Entities
         public required Order Order { get; set; }  
         public int DishId { get; set; }
         public required Dish Dish { get; set; }
+        public int Quantity { get; set; }  // Quantité de chaque plat dans la commande
     }
 }
 

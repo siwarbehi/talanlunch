@@ -22,7 +22,7 @@ namespace TalanLunch.Domain.Entities
         [Range(0, double.MaxValue, ErrorMessage = "Price must be a positive value.")]
 
         public decimal DishPrice { get; set; }
-        public int CurrentRating { get; set; }
+        public float CurrentRating { get; set; }
 
 
         [Required]

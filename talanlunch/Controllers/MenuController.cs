@@ -64,9 +64,9 @@ namespace talanlunch.Controllers
 
         // Ajouter un plat au menu
         [HttpPost("{menuId}/add-dish/{dishId}")]
-        public async Task<ActionResult<Menu>> AddDishToMenu(int menuId, int dishId)
+        public async Task<ActionResult<Menu>> AddDishToMenu(int menuId, int dishId, [FromQuery] int quantity = 1)
         {
-            var result = await _menuService.AddDishToMenuAsync(menuId, dishId);
+            var result = await _menuService.AddDishToMenuAsync(menuId, dishId, quantity);
 
             if (result.Item1 == null)
             {
@@ -78,11 +78,8 @@ namespace talanlunch.Controllers
                 return BadRequest("Le plat est déjà présent dans ce menu.");
             }
 
-            return Ok(result.Item1); 
+            return Ok(result.Item1);
         }
-
-
-
 
         // Supprimer un plat du menu
         [HttpDelete("{menuId}/remove-dish/{dishId}")]

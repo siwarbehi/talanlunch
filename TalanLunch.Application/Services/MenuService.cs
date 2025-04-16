@@ -93,19 +93,19 @@ namespace TalanLunch.Application.Services
         }
 
         // Ajouter un plat au menu
-        public async Task<(Menu?, bool)> AddDishToMenuAsync(int menuId, int dishId)
+        public async Task<(Menu?, bool)> AddDishToMenuAsync(int menuId, int dishId, int quantity)
         {
             var menu = await _menuRepository.GetMenuByIdAsync(menuId);
             var dish = await _dishRepository.GetDishByIdAsync(dishId);
 
             if (menu == null || dish == null)
             {
-                return (null, false); 
+                return (null, false);
             }
 
             if (menu.MenuDishes.Any(md => md.DishId == dishId))
             {
-                return (menu, true); 
+                return (menu, true);
             }
 
             menu.MenuDishes.Add(new MenuDish
@@ -113,15 +113,13 @@ namespace TalanLunch.Application.Services
                 MenuId = menuId,
                 DishId = dishId,
                 Menu = menu,
-                Dish = dish
+                Dish = dish,
+                DishQuantity = quantity   
             });
 
             var updatedMenu = await _menuRepository.UpdateMenuAsync(menu);
-            return (updatedMenu, false); 
+            return (updatedMenu, false);
         }
-
-
-
 
         // Supprimer un plat du menu
         public async Task<Menu?> RemoveDishFromMenuAsync(int menuId, int dishId)

@@ -12,7 +12,7 @@ namespace TalanLunch.Application.Interfaces
     {
         Task<Menu> AddMenuAsync(MenuDto menuDto);
         Task<bool> UpdateMenuDescriptionAsync(int id, string newDescription);
-        Task<(Menu?, bool)> AddDishToMenuAsync(int menuId, int dishId);
+        Task<(Menu?, bool)> AddDishToMenuAsync(int menuId, int dishId, int quantity);
         Task<Menu?> RemoveDishFromMenuAsync(int menuId, int dishId);
         Task DeleteMenuAsync(int id);
         Task<Menu?> GetMenuByIdAsync(int id);

@@ -49,13 +49,24 @@ namespace TalanLunch.Infrastructure.Repos
         }
         public async Task DeleteDishAsync(int id)
         {
-            var dish = await _context.Dishes.FindAsync(id);
+            var dish = await _context.Dishes
+                .Include(d => d.MenuDishes) 
+                .FirstOrDefaultAsync(d => d.DishId == id);
+
             if (dish != null)
             {
+                // Supprimer les liaisons avec les menus
+                if (dish.MenuDishes != null && dish.MenuDishes.Any())
+                {
+                    _context.MenuDishes.RemoveRange(dish.MenuDishes);
+                }
+
+                // Supprimer le plat lui-même
                 _context.Dishes.Remove(dish);
                 await _context.SaveChangesAsync();
             }
         }
+
         public async Task<IEnumerable<Dish>> GetAllDishesAsync()
         {
             return await _context.Dishes.ToListAsync();

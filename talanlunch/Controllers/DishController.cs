@@ -91,13 +91,34 @@ namespace talanlunch.Controllers
         {
             try
             {
-                await _dishService.DeleteDishAsync(id); 
-                return NoContent();
+                await _dishService.DeleteDishAsync(id);
+                return NoContent(); // 204
             }
             catch (KeyNotFoundException)
             {
                 return NotFound($"Dish with ID {id} not found.");
             }
+            catch (Exception ex)
+            {
+                // Gérer d'autres erreurs possibles
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
+     
+        [HttpPost("rate")]
+        public async Task<IActionResult> RateDish([FromBody] RateDishDto dto)
+        {
+            try
+            {
+                await _dishService.RateDishAsync(dto);
+                return Ok(new { message = "Merci pour votre note !" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+
     }
 }
