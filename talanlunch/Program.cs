@@ -32,9 +32,6 @@ namespace TalanLunch
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
             Directory.CreateDirectory(uploadsFolder);
 
-            // Ajouter les services par défaut
-            builder.AddServiceDefaults();
-
             // Ajout des services CORS
             builder.Services.AddCors(options =>
             {

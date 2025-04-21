@@ -5,8 +5,6 @@ VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "talanlunch..API", "talanlunch\talanlunch..API.csproj", "{C878C682-DB58-173B-2356-B991B1444875}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "talanlunch.ServiceDefaults", "talanlunch.ServiceDefaults\talanlunch.ServiceDefaults.csproj", "{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalanLunch.Application", "TalanLunch.Application\TalanLunch.Application.csproj", "{C203B98D-0A88-42A6-82A6-AE0264E09BFE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalanLunch.Infrastructure", "TalanLunch.Infrastructure\TalanLunch.Infrastructure.csproj", "{96F7D5C7-AC98-4FAC-AE9D-3B02393CEE7D}"
@@ -35,18 +33,6 @@ Global
 		{C878C682-DB58-173B-2356-B991B1444875}.Release|x64.Build.0 = Release|Any CPU
 		{C878C682-DB58-173B-2356-B991B1444875}.Release|x86.ActiveCfg = Release|Any CPU
 		{C878C682-DB58-173B-2356-B991B1444875}.Release|x86.Build.0 = Release|Any CPU
-		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Debug|x64.Build.0 = Debug|Any CPU
-		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Debug|x86.Build.0 = Debug|Any CPU
-		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Release|x64.ActiveCfg = Release|Any CPU
-		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Release|x64.Build.0 = Release|Any CPU
-		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Release|x86.ActiveCfg = Release|Any CPU
-		{79B81650-2E3A-B2C3-0303-57D9CED6CF5E}.Release|x86.Build.0 = Release|Any CPU
 		{C203B98D-0A88-42A6-82A6-AE0264E09BFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C203B98D-0A88-42A6-82A6-AE0264E09BFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C203B98D-0A88-42A6-82A6-AE0264E09BFE}.Debug|x64.ActiveCfg = Debug|Any CPU
