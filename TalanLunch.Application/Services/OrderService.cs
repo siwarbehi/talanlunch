@@ -31,8 +31,16 @@ namespace TalanLunch.Application.Services
             if (!dishes.Any())
                 throw new Exception("Aucun plat valide sélectionné");
 
-            decimal totalAmount = 0;
-            var orderDishes = new List<OrderDish>();
+            var newOrder = new Order
+            {
+                User = user,
+                TotalAmount = 0, 
+                OrderDate = DateTime.Now,
+                Paid = false,
+                Served = false,
+                OrderRemark = request.OrderRemark,
+                OrderDishes = new List<OrderDish>() 
+            };
 
             foreach (var item in request.Dishes)
             {
@@ -40,38 +48,40 @@ namespace TalanLunch.Application.Services
                 if (dish == null)
                     throw new Exception($"Plat avec ID {item.DishId} non trouvé");
 
-                totalAmount += dish.DishPrice * item.Quantity;
+                var menuDish = await _orderRepository.GetMenuDishAsync(request.MenuId, item.DishId);
+                if (menuDish == null)
+                    throw new Exception($"Le plat '{dish.DishName}' n'est pas disponible dans ce menu.");
 
-                orderDishes.Add(new OrderDish
+                if (menuDish.DishQuantity < item.Quantity)
+                    throw new Exception($"Stock insuffisant pour le plat '{dish.DishName}'. Disponible : {menuDish.DishQuantity}");
+
+                // Décrémenter la quantité
+                menuDish.DishQuantity -= item.Quantity;
+
+                var orderDish = new OrderDish
                 {
                     DishId = item.DishId,
-                    Dish = dish,
                     Quantity = item.Quantity,
-                    Order = null!
-                });
+                };
+
+                newOrder.OrderDishes.Add(orderDish);
+                newOrder.TotalAmount += dish.DishPrice * item.Quantity;
             }
 
-            var newOrder = new Order
-            {
-                User = user,
-                TotalAmount = totalAmount,
-                OrderDate = DateTime.Now,
-                Paid = false,
-                Served = false,
-                OrderRemark = request.OrderRemark,
-                OrderDishes = orderDishes
-
-            };
 
             return await _orderRepository.AddOrderAsync(newOrder);
         }
+
         public async Task<List<OrderDayDto>> GetOrdersByDateAsync(DateTime date)
         {
             var orders = await _orderRepository.GetOrdersByDateAsync(date);
 
             return orders.Select(o => new OrderDayDto
             {
-                UserId = o.UserId,
+                FirstName = o.User.FirstName,
+                LastName = o.User.LastName,
+                ProfilePicture = o.User.ProfilePicture,
+                OrderId = o.OrderId,
                 OrderRemark = o.OrderRemark,
                 TotalAmount = o.TotalAmount,
                 Paid = o.Paid,
@@ -79,11 +89,27 @@ namespace TalanLunch.Application.Services
                 OrderDate = o.OrderDate,
                 Dishes = o.OrderDishes.Select(od => new DishOrderDto
                 {
-                    DishId = od.DishId,
+                    DishName = od.Dish.DishName,
                     Quantity = od.Quantity
                 }).ToList()
             }).ToList();
         }
+
+        public async Task<bool> UpdateOrderStatusAsync(UpdateOrderStatusDto dto)
+        {
+            var order = await _orderRepository.GetOrderByIdAsync(dto.OrderId);
+            if (order == null) return false;
+
+            if (dto.Paid.HasValue)
+                order.Paid = dto.Paid.Value;
+
+            if (dto.Served.HasValue)
+                order.Served = dto.Served.Value;
+
+            await _orderRepository.UpdateOrderAsync(order);
+            return true;
+        }
+
 
 
     }

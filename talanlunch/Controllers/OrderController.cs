@@ -34,11 +34,22 @@ namespace talanlunch.API.Controllers
 
         //get all orders by day 
         [HttpGet("orders-by-date")]
-        public async Task<IActionResult> GetOrdersByDate([FromQuery] DateTime date)
+        public async Task<IActionResult> GetOrdersByDate([FromQuery] OrderDateRequest request)
         {
-            var orders = await _orderService.GetOrdersByDateAsync(date);
+            var orders = await _orderService.GetOrdersByDateAsync(request.Date);
             return Ok(orders);
+
         }
+        //paid & served
+        [HttpPut("update-status")]
+        public async Task<IActionResult> UpdateOrderStatus([FromBody] UpdateOrderStatusDto dto)
+        {
+            var result = await _orderService.UpdateOrderStatusAsync(dto);
+            if (!result) return NotFound("Order not found");
+
+            return Ok("Order status updated successfully.");
+        }
+
 
 
     }

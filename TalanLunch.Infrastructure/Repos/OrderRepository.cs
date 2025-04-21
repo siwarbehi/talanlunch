@@ -34,11 +34,30 @@ namespace TalanLunch.Infrastructure.Repos
         public async Task<List<Order>> GetOrdersByDateAsync(DateTime date)
         {
             return await _context.Orders
+                .Include(o => o.User)
                 .Include(o => o.OrderDishes)
                     .ThenInclude(od => od.Dish)
-                .Where(o => o.OrderDate.Date == date.Date)  // comparaison uniquement la date sans heure
+                .Where(o => o.OrderDate.Date == date.Date)
                 .ToListAsync();
         }
+
+        public async Task<Order?> GetOrderByIdAsync(int orderId)
+        {
+            return await _context.Orders.FindAsync(orderId);
+        }
+
+        public async Task UpdateOrderAsync(Order order)
+        {
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<MenuDish?> GetMenuDishAsync(int menuId, int dishId)
+        {
+            return await _context.MenuDishes
+                .FirstOrDefaultAsync(md => md.MenuId == menuId && md.DishId == dishId);
+        }
+
+
 
 
     }

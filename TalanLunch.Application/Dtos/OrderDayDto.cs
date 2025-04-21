@@ -8,7 +8,11 @@ namespace TalanLunch.Application.Dtos
 {
     public class OrderDayDto
     {
-        public int UserId { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string? ProfilePicture { get; set; }
+        public int OrderId { get; set; }
+
         public string? OrderRemark { get; set; }
         public decimal TotalAmount { get; set; }
         public bool Paid { get; set; }

@@ -7,6 +7,7 @@ using TalanLunch.Domain.Entities;
 using TalanLunch.Application.Interfaces;
 using MailKit.Net.Smtp;  
 using MimeKit;
+using TalanLunch.Domain.Enums;
 
 namespace TalanLunch.Application.Services
 {
@@ -156,7 +157,15 @@ namespace TalanLunch.Application.Services
         // Méthode pour envoyer un email de réinitialisation de mot de passe
         public async Task SendPasswordResetEmailAsync(User user, string resetToken)
         {
-            string resetLink = $"http://localhost:5173/reset-password?token={resetToken}"; // Le token en tant que paramètre de requête
+            // Choisir le port selon le rôle de l'utilisateur
+            string port = user.UserRole switch
+            {
+                UserRole.CATERER => "5173",
+                UserRole.COLLABORATOR => "5174",
+                _ => "5173" // Par défaut, utiliser 5173
+            };
+
+            string resetLink = $"http://localhost:{port}/reset-password?token={resetToken}";
 
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(_mailSettings.SenderName, _mailSettings.SenderEmail));
@@ -164,70 +173,70 @@ namespace TalanLunch.Application.Services
             message.Subject = "🔒 Réinitialisation de votre mot de passe - Action requise";
 
             string emailBody = $@"
-        <!DOCTYPE html>
-        <html lang='fr'>
-        <head>
-            <meta charset='UTF-8'>
-            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-            <title>Réinitialisation du mot de passe</title>
-            <style>
-                body {{
-                    font-family: Arial, sans-serif;
-                    background-color: #f9f9f9;
-                    padding: 20px;
-                    text-align: center;
-                }}
-                .container {{
-                    max-width: 600px;
-                    background: white;
-                    padding: 20px;
-                    border-radius: 8px;
-                    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-                    margin: auto;
-                }}
-                h2 {{
-                    color: #333;
-                }}
-                p {{
-                    font-size: 16px;
-                    color: #555;
-                }}
-                .button {{
-                    display: inline-block;
-                    background: #28a745;
-                    color: white;
-                    padding: 12px 25px;
-                    text-decoration: none;
-                    border-radius: 5px;
-                    font-weight: bold;
-                    margin-top: 20px;
-                }}
-                .footer {{
-                    font-size: 12px;
-                    color: #888;
-                    margin-top: 20px;
-                    border-top: 1px solid #ddd;
-                    padding-top: 10px;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class='container'>
-                <h2>🔑 Réinitialisation de votre mot de passe</h2>
-                <p>Bonjour {user.FirstName},</p>
-                <p>Nous avons reçu une demande de réinitialisation de votre mot de passe.</p>
-                <p>Si vous êtes à l'origine de cette demande, veuillez cliquer sur le bouton ci-dessous :</p>
-                <p><a class='button' href='{resetLink}'>Réinitialiser mon mot de passe</a></p>
-                <p>Si le bouton ne fonctionne pas, copiez et collez le lien suivant dans votre navigateur :</p>
-                <p><strong>{resetLink}</strong></p>
-                <p>⚠️ Ce lien est valable pendant <strong>60 minutes</strong>. Passé ce délai, vous devrez refaire une demande.</p>
-                <div class='footer'>
-                    <p>Si vous n'avez pas demandé cette réinitialisation, ignorez cet email.</p>
-                    <p>© 2025 Talan. Tous droits réservés.</p>
-                </div>
-            </div>
-        </body>
-        </html>";
+<!DOCTYPE html>
+<html lang='fr'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Réinitialisation du mot de passe</title>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+            text-align: center;
+        }}
+        .container {{
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+            margin: auto;
+        }}
+        h2 {{
+            color: #333;
+        }}
+        p {{
+            font-size: 16px;
+            color: #555;
+        }}
+        .button {{
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 20px;
+        }}
+        .footer {{
+            font-size: 12px;
+            color: #888;
+            margin-top: 20px;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }}
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <h2>🔑 Réinitialisation de votre mot de passe</h2>
+        <p>Bonjour {user.FirstName},</p>
+        <p>Nous avons reçu une demande de réinitialisation de votre mot de passe.</p>
+        <p>Veuillez cliquer sur le bouton ci-dessous pour procéder :</p>
+        <a class='button' href='{resetLink}'>Réinitialiser mon mot de passe</a>
+        <p>Ou copiez ce lien dans votre navigateur :</p>
+        <p><strong>{resetLink}</strong></p>
+        <p>⚠️ Ce lien est valable pendant <strong>60 minutes</strong>.</p>
+        <div class='footer'>
+            <p>Si vous n'avez pas demandé cette réinitialisation, ignorez cet email.</p>
+            <p>© 2025 Talan. Tous droits réservés.</p>
+        </div>
+    </div>
+</body>
+</html>";
 
             message.Body = new TextPart("html") { Text = emailBody };
 
@@ -237,8 +246,7 @@ namespace TalanLunch.Application.Services
                 {
                     client.Connect(_mailSettings.Server, _mailSettings.Port, false);
                     client.Authenticate(_mailSettings.UserName, _mailSettings.Password);
-                    client.Send(message);
-                    client.Disconnect(true);
+                    await client.SendAsync(message);
                 }
                 catch (Exception ex)
                 {
@@ -251,5 +259,7 @@ namespace TalanLunch.Application.Services
                 }
             }
         }
+
+
     }
 }

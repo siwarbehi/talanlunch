@@ -12,6 +12,7 @@ namespace TalanLunch.Application.Interfaces
     {
         Task<Order> CreateOrderAsync(OrderRequestDto request);
         Task<List<OrderDayDto>> GetOrdersByDateAsync(DateTime date);
+        Task<bool> UpdateOrderStatusAsync(UpdateOrderStatusDto dto);
 
     }
 }

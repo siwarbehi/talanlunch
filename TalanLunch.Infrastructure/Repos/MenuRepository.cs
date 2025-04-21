@@ -85,6 +85,7 @@ namespace TalanLunch.Infrastructure.Repos
                     IsMenuOfTheDay = menu.IsMenuOfTheDay,
                     Dishes = menu.MenuDishes.Select(md => new DishMenuAllDto
                     {
+                        DishId = md.Dish.DishId,
                         DishName = md.Dish.DishName,
                         DishQuantity = md.DishQuantity,
                         DishPrice = md.Dish.DishPrice,

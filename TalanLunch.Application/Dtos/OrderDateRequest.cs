@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace TalanLunch.Application.Dtos
 {
-    public class DishOrderDto
+    public class OrderDateRequest
     {
-        public string DishName { get; set; } = string.Empty;
-
-        public int DishId { get; set; }
-        public int Quantity { get; set; }
-
+        public DateTime Date { get; set; }
 
     }
 }
