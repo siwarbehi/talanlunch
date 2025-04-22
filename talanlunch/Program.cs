@@ -124,7 +124,7 @@ namespace TalanLunch
                 q.AddTrigger(opts => opts
                     .ForJob(jobKey)
                     .WithIdentity("ResetMenuOfTheDayTrigger")
-                    .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(00, 00)) // Exécution à minuit chaque jour
+                    .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(17, 58)) // Exécution à minuit chaque jour
                 );
 
             });

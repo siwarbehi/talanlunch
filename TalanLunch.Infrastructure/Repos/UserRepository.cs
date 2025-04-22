@@ -102,20 +102,6 @@ namespace TalanLunch.Infrastructure.Repos
             return await _context.SaveChangesAsync() > 0;
         }
 
-
-        // Récupérer plusieurs traiteurs non approuvés par leurs ID
-        public async Task<List<User>> GetCaterersByIdsAsync(List<int> catererIds)
-        {
-            return await _context.Users.Where(c => catererIds.Contains(c.UserId) && !c.IsApproved).ToListAsync();
-        }
-
-        // Mettre à jour plusieurs traiteurs (true=IsApproved )
-        public async Task<bool> UpdateMultipleCaterersAsync(List<User> caterers)
-        {
-            _context.Users.UpdateRange(caterers);
-            return await _context.SaveChangesAsync() > 0;
-        }
-
         public async Task UpdateUserDataAsync(User user)
         {
             // Recherche de l'utilisateur dans la base de données par son ID

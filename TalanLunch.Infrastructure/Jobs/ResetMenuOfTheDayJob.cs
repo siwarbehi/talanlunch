@@ -1,28 +1,36 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Quartz;
 using System.Threading.Tasks;
+using TalanLunch.Application.Interfaces;
+using TalanLunch.Domain.Entities;
 using TalanLunch.Infrastructure.Data; 
 
 namespace TalanLunch.Application.Jobs
 {
     public class ResetMenuOfTheDayJob : IJob
     {
-        private readonly TalanLunchDbContext  _context; // Utilise le bon DbContext
+        private readonly TalanLunchDbContext  _context;
+        private readonly IMenuRepository _menuRepository;
 
-        public ResetMenuOfTheDayJob(TalanLunchDbContext context)
+
+        public ResetMenuOfTheDayJob(TalanLunchDbContext context , IMenuRepository menuRepository)
         {
             _context = context;
+            _menuRepository = menuRepository;
+
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
             var menus = await _context.Menus.ToListAsync();
-            foreach (var menu in menus)
+            var previousMenu = menus.FirstOrDefault(menu => menu.IsMenuOfTheDay == true);
+
+            if (previousMenu != null)
             {
-                menu.IsMenuOfTheDay = false;
+                previousMenu.IsMenuOfTheDay = false;
+                await _menuRepository.UpdateMenuAsync(previousMenu);
             }
 
-            await _context.SaveChangesAsync();
         }
     }
 }

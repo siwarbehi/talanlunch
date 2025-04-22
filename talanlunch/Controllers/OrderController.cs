@@ -6,7 +6,7 @@ using TalanLunch.Application.Dtos;
 
 namespace talanlunch.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/order")]
     [ApiController]
     public class OrderController : ControllerBase
     {
@@ -18,7 +18,7 @@ namespace talanlunch.API.Controllers
         }
 
         // Passer un ordre
-        [HttpPost("place")]
+        [HttpPost]
         public async Task<IActionResult> PlaceOrder([FromBody] OrderRequestDto request)
         {
             try
@@ -33,13 +33,21 @@ namespace talanlunch.API.Controllers
         }
 
         //get all orders by day 
-        [HttpGet("orders-by-date")]
+        /* [HttpGet("orders-by-date")]
         public async Task<IActionResult> GetOrdersByDate([FromQuery] OrderDateRequest request)
         {
             var orders = await _orderService.GetOrdersByDateAsync(request.Date);
             return Ok(orders);
 
+        } */
+        // GET: api/orders/all
+        [HttpGet]
+        public async Task<IActionResult> GetAllOrders()
+        {
+            var orders = await _orderService.GetAllOrdersAsync();
+            return Ok(orders);
         }
+
         //paid & served
         [HttpPut("update-status")]
         public async Task<IActionResult> UpdateOrderStatus([FromBody] UpdateOrderStatusDto dto)

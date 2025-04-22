@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "talanlunch..API", "talanlunch\talanlunch..API.csproj", "{C878C682-DB58-173B-2356-B991B1444875}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "talanlunch.API", "talanlunch\talanlunch.API.csproj", "{C878C682-DB58-173B-2356-B991B1444875}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalanLunch.Application", "TalanLunch.Application\TalanLunch.Application.csproj", "{C203B98D-0A88-42A6-82A6-AE0264E09BFE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalanLunch.Infrastructure", "TalanLunch.Infrastructure\TalanLunch.Infrastructure.csproj", "{96F7D5C7-AC98-4FAC-AE9D-3B02393CEE7D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalanLunch.Domain", "TalanLunch.Domain\TalanLunch.Domain.csproj", "{E97349F4-2919-4F30-8DE1-890ED4E05EAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Talunch.API.Tests", "Talunch.API.Tests\Talunch.API.Tests.csproj", "{8E85AC32-6B8C-4608-A8D1-7FA3D042107A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,18 @@ Global
 		{E97349F4-2919-4F30-8DE1-890ED4E05EAB}.Release|x64.Build.0 = Release|Any CPU
 		{E97349F4-2919-4F30-8DE1-890ED4E05EAB}.Release|x86.ActiveCfg = Release|Any CPU
 		{E97349F4-2919-4F30-8DE1-890ED4E05EAB}.Release|x86.Build.0 = Release|Any CPU
+		{8E85AC32-6B8C-4608-A8D1-7FA3D042107A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E85AC32-6B8C-4608-A8D1-7FA3D042107A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E85AC32-6B8C-4608-A8D1-7FA3D042107A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8E85AC32-6B8C-4608-A8D1-7FA3D042107A}.Debug|x64.Build.0 = Debug|Any CPU
+		{8E85AC32-6B8C-4608-A8D1-7FA3D042107A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8E85AC32-6B8C-4608-A8D1-7FA3D042107A}.Debug|x86.Build.0 = Debug|Any CPU
+		{8E85AC32-6B8C-4608-A8D1-7FA3D042107A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E85AC32-6B8C-4608-A8D1-7FA3D042107A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E85AC32-6B8C-4608-A8D1-7FA3D042107A}.Release|x64.ActiveCfg = Release|Any CPU
+		{8E85AC32-6B8C-4608-A8D1-7FA3D042107A}.Release|x64.Build.0 = Release|Any CPU
+		{8E85AC32-6B8C-4608-A8D1-7FA3D042107A}.Release|x86.ActiveCfg = Release|Any CPU
+		{8E85AC32-6B8C-4608-A8D1-7FA3D042107A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

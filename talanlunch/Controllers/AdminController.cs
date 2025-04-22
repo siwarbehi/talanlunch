@@ -5,7 +5,7 @@ using TalanLunch.Application.Interfaces;
 
 namespace talanlunch.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/admin")]
     [ApiController]
     public class AdminController : ControllerBase
     {
@@ -39,19 +39,6 @@ namespace talanlunch.Controllers
             return Ok("Le traiteur a été approuvé.");
         }
 
-
-        // 3Approuver plusieurs traiteurs
-        [HttpPut("approve-multiple-caterers")]
-        public async Task<IActionResult> ApproveMultipleCaterers([FromBody] List<int> catererIds)
-        {
-            bool success = await _adminService.ApproveMultipleCaterersAsync(catererIds);
-            if (!success)
-            {
-                return BadRequest("Impossible d'approuver les traiteurs.");
-            }
-
-            return Ok("Tous les traiteurs sélectionnés ont été approuvés.");
-        }
        
     }
 }

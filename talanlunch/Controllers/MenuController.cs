@@ -6,7 +6,7 @@ using TalanLunch.Application.Interfaces;
 
 namespace talanlunch.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/menu")]
     [ApiController]
     public class MenuController : ControllerBase
     {
@@ -17,41 +17,32 @@ namespace talanlunch.Controllers
             _menuService = menuService;
         }
 
-        // POST: api/Menu
+        // Creation d un menu 
         [HttpPost]
         public async Task<IActionResult> AddMenuAsync([FromBody] MenuDto menuDto)
         {
+            if (menuDto == null)
+                return BadRequest("Le menu ne peut pas être null.");
+
             try
             {
-                if (menuDto == null)
-                    return BadRequest("Le DTO du menu ne peut pas être null.");
-
                 var createdMenu = await _menuService.AddMenuAsync(menuDto);
                 return CreatedAtAction(nameof(GetMenu), new { id = createdMenu.MenuId }, createdMenu);
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(new
-                {
-                    Message = ex.Message,
-                    ParamName = ex.ParamName
-                });
+                return BadRequest(ex.Message);
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(500, new
-                {
-                    Message = "Une erreur inattendue est survenue.",
-                    Error = ex.Message
-                });
+                return StatusCode(500, "Une erreur inattendue est survenue.");
             }
         }
 
 
 
-
         // Modifier la description du menu
-        [HttpPut("{id}/description")]
+        [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateMenuDescription (int id, [FromForm] string newDescription)
         {
             var result = await _menuService.UpdateMenuDescriptionAsync(id, newDescription);
@@ -63,7 +54,7 @@ namespace talanlunch.Controllers
         }
 
         // Ajouter un plat au menu
-        [HttpPost("{menuId}/add-dish/{dishId}")]
+        [HttpPost("{menuId}/{dishId}")]
         public async Task<ActionResult<Menu>> AddDishToMenu(int menuId, int dishId, [FromQuery] int quantity = 1)
         {
             var result = await _menuService.AddDishToMenuAsync(menuId, dishId, quantity);
@@ -82,7 +73,7 @@ namespace talanlunch.Controllers
         }
 
         // Supprimer un plat du menu
-        [HttpDelete("{menuId}/remove-dish/{dishId}")]
+        [HttpDelete("{menuId}/{dishId}")]
         public async Task<ActionResult<Menu>> RemoveDishFromMenu(int menuId, int dishId)
         {
             var menu = await _menuService.RemoveDishFromMenuAsync(menuId, dishId);
@@ -121,21 +112,9 @@ namespace talanlunch.Controllers
             return Ok(menus);
         }
 
-        // Action pour récupérer tous les MenuId
-        [HttpGet("menu-ids")]
-        public IActionResult GetAllMenuIds()
-        {
-            var menuIds = _menuService.GetAllMenuIds();
-
-            if (menuIds == null || menuIds.Count == 0)
-            {
-                return NotFound(new { message = "Aucun menu trouvé." });
-            }
-
-            return Ok(menuIds);
-        }
+        
         // Action pour récupérer les plats associés à un menu donné
-        [HttpGet("menu/{menuId}/dishes")]
+        [HttpGet("{menuId}/dishes")]
         public IActionResult GetDishesByMenuId(int menuId)
         {
             var dishIds = _menuService.GetDishIdsForMenu(menuId);
@@ -147,7 +126,7 @@ namespace talanlunch.Controllers
 
             return Ok(dishIds);
         }
-        // Endpoint pour sélectionner un menu comme "Menu du jour"
+        // Sélectionner un menu comme "Menu du jour"
         [HttpPost("setMenuOfTheDay/{menuId}")]
         public async Task<IActionResult> SetMenuOfTheDay(int menuId)
         {

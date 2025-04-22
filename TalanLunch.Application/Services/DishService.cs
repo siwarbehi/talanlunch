@@ -81,11 +81,7 @@ namespace TalanLunch.Application.Services
         {
             return await _dishRepository.GetAllDishesAsync();
         }
-        // Obtenir tous les plats avec relations avec commandes et menus
-        public async Task<IEnumerable<Dish>> GetAllDishesWithRelationsAsync()
-        {
-            return await _dishRepository.GetAllDishesWithRelationsAsync();
-        }
+    
         // Obtenir un plat par ID
         public async Task<Dish?> GetDishByIdAsync(int id)
         {

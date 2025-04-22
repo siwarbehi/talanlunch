@@ -29,7 +29,6 @@ namespace TalanLunch.Application.Services
             if (menuDto.Dishes == null || !menuDto.Dishes.Any())
                 throw new ArgumentException("Le menu doit contenir au moins un plat.", nameof(menuDto.Dishes));
 
-            // Création du menu
             var newMenu = new Menu
             {
                 MenuDescription = menuDto.MenuDescription,
@@ -39,19 +38,12 @@ namespace TalanLunch.Application.Services
 
             var invalidDishIds = new List<int>();
 
-            // Traitement de chaque plat
             foreach (var dishDto in menuDto.Dishes)
             {
                 if (dishDto == null)
                     throw new Exception("dishDto est null");
 
-                if (_dishRepository == null)
-                    throw new Exception("_dishRepository est null");
-
                 var dish = await _dishRepository.GetDishByIdAsync(dishDto.DishId);
-
-                if (dish == null)
-                    throw new Exception($"Aucun plat trouvé avec l'ID {dishDto.DishId}");
 
                 if (dish != null)
                 {
@@ -156,10 +148,7 @@ namespace TalanLunch.Application.Services
         // Obtenir tous les menus 
         public async Task<IEnumerable<GetAllMenusDto>> GetAllMenusAsync() { 
             return await _menuRepository.GetAllMenusAsync(); }
-        public List<int> GetAllMenuIds()
-        {
-            return _menuRepository.GetAllMenuIds(); 
-        }
+      
         public List<int> GetDishIdsForMenu(int menuId)
         {
             return _menuRepository.GetDishIdsByMenuId(menuId);
@@ -167,26 +156,21 @@ namespace TalanLunch.Application.Services
         public async Task<bool> SetMenuOfTheDayAsync(int menuId)
         {
             var menu = await _menuRepository.GetMenuByIdAsync(menuId);
+
             if (menu == null)
             {
                 return false; 
             }
 
-            var allMenuIds = _menuRepository.GetAllMenuIds();
+            var allMenus = await _menuRepository.GetAllMenus();
 
-            foreach (var id in allMenuIds)
+            var previousMenu = allMenus.FirstOrDefault(menu => menu.IsMenuOfTheDay == true);
+
+            if (previousMenu != null)
             {
-                var m = await _menuRepository.GetMenuByIdAsync(id);
-                if (m == null)
-                {
-                    continue; 
-                }
-
-                if (m.MenuId != menuId)
-                {
-                    m.IsMenuOfTheDay = false;
-                    await _menuRepository.UpdateMenuAsync(m);
-                }
+                previousMenu.IsMenuOfTheDay = false; 
+                
+                await _menuRepository.UpdateMenuAsync(previousMenu);
             }
 
             menu.IsMenuOfTheDay = true;
@@ -197,20 +181,7 @@ namespace TalanLunch.Application.Services
         }
 
 
-        public async Task ResetMenuOfTheDayAsync()
-        {
-            var allMenuIds = _menuRepository.GetAllMenuIds();
-
-            foreach (var menuId in allMenuIds)
-            {
-                var menu = await _menuRepository.GetMenuByIdAsync(menuId);
-                if (menu != null)
-                {
-                    menu.IsMenuOfTheDay = false;
-                    await _menuRepository.UpdateMenuAsync(menu);  // Mettre à jour chaque menu
-                }
-            }
-        }
+      
 
     }
 }

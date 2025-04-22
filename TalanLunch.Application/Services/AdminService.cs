@@ -49,19 +49,6 @@ namespace TalanLunch.Application.Services
             return true;
         }
 
-        public async Task<bool> ApproveMultipleCaterersAsync(List<int> catererIds)
-        {
-            var caterers = await _userRepository.GetCaterersByIdsAsync(catererIds);
-            if (caterers == null || caterers.Count == 0) return false;
-
-            foreach (var caterer in caterers)
-            {
-                caterer.IsApproved = true;
-            }
-
-            return await _userRepository.UpdateMultipleCaterersAsync(caterers);
-        }
-
          
         
     }

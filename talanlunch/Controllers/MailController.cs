@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace talanlunch.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/mail")]
     [ApiController]
     public class MailController : ControllerBase
     {
@@ -16,7 +16,7 @@ namespace talanlunch.Controllers
             _mailService = mailService;
         }
 
-        [HttpPost("send-email")]
+        [HttpPost]
         public async Task<IActionResult> SendEmail([FromBody] MailDataDto mailData)
         {
             if (mailData == null)

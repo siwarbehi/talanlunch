@@ -71,13 +71,7 @@ namespace TalanLunch.Infrastructure.Repos
         {
             return await _context.Dishes.ToListAsync();
         }
-        public async Task<IEnumerable<Dish>> GetAllDishesWithRelationsAsync()
-        {
-            return await _context.Dishes
-                .Include(d => d.MenuDishes)  
-                .Include(d => d.OrderDishes) 
-                .ToListAsync();
-        }
+      
 
     }
 }

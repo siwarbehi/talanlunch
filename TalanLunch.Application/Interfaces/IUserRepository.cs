@@ -43,12 +43,6 @@ namespace TalanLunch.Application.Interfaces
         // Approuver un utilisateur (mettre à jour IsApproved)
         Task<bool> ApproveUserAsync(User user);
 
-        // Récupérer plusieurs traiteurs non approuvés par leurs identifiants
-        Task<List<User>> GetCaterersByIdsAsync(List<int> catererIds);
-
-        // Mettre à jour plusieurs traiteurs (mettant à jour IsApproved)
-        Task<bool> UpdateMultipleCaterersAsync(List<User> caterers);
-
         // Mettre à jour les données d'un utilisateur
         Task UpdateUserDataAsync(User user);
         Task<User?> GetUserByRefreshTokenAsync(string refreshToken);

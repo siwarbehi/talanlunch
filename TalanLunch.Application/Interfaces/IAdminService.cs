@@ -11,8 +11,7 @@ namespace TalanLunch.Application.Interfaces
     {
         Task<List<User>> GetPendingCaterersAsync();
         Task<bool> ApproveCatererAsync(int id);
-        Task<bool> ApproveMultipleCaterersAsync(List<int> catererIds);
-
+      
 
 
     }

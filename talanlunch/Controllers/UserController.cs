@@ -8,7 +8,7 @@ using TalanLunch.Domain.Enums;
 
 namespace talanlunch.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/user")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -33,7 +33,7 @@ namespace talanlunch.Controllers
             }
         }
 
-        [HttpPut("{userId}")]
+        [HttpPatch("{userId}")]
         public async Task<IActionResult> UpdateUserProfile(int userId, [FromForm] UserDto userDto)
         {
             try
@@ -46,19 +46,25 @@ namespace talanlunch.Controllers
                 return NotFound(ex.Message);
             }
         }
-        [HttpGet("collaborators")]
-        public async Task<IActionResult> ListCollaborators()
+        
+        [HttpGet]
+        public async Task<IActionResult> GetUsersByRole([FromQuery] string role = null )
         {
-            var collaborators = await _userService.GetUsersByRoleAsync(UserRole.COLLABORATOR);
-            return Ok(collaborators);
+            var users = role?.ToLower() switch
+            {
+                null => await _userService.GetAllUsersAsync(),
+                "collaborators" => await _userService.GetUsersByRoleAsync(UserRole.COLLABORATOR),
+                "caterers" => await _userService.GetUsersByRoleAsync(UserRole.CATERER),
+                _ => null
+            };
+
+            if (users == null)
+                return BadRequest("Rôle invalide. Utilisez 'collaborators' ou 'caterers'.");
+
+            return Ok(users);
         }
 
-        [HttpGet("caterers")]
-        public async Task<IActionResult> ListCaterers()
-        {
-            var caterers = await _userService.GetUsersByRoleAsync(UserRole.CATERER);
-            return Ok(caterers);
-        }
+
 
         // Supprimer un user
         [HttpDelete("{id}")]

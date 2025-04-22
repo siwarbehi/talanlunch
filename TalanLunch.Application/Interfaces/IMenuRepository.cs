@@ -16,7 +16,7 @@ namespace TalanLunch.Application.Interfaces
         Task DeleteMenuAsync(int id);
         Task<Menu?> GetMenuByIdAsync(int id);
         Task<IEnumerable<GetAllMenusDto>> GetAllMenusAsync();
-        List<int> GetAllMenuIds(); // Méthode pour récupérer tous les MenuId
+        Task<IEnumerable<Menu>> GetAllMenus();
         List<int> GetDishIdsByMenuId(int menuId); // Méthode pour récupérer les DishId par MenuId
 
 

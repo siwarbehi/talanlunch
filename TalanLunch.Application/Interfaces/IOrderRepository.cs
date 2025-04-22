@@ -11,7 +11,9 @@ namespace TalanLunch.Application.Interfaces
     {
         Task<Order> AddOrderAsync(Order order);
         Task<List<Dish>> GetDishesByIdsAsync(List<int> dishIds);
-        Task<List<Order>> GetOrdersByDateAsync(DateTime date);
+        //Task<List<Order>> GetOrdersByDateAsync(DateTime date);
+        Task<List<Order>> GetAllOrdersAsync();
+
         Task<Order?> GetOrderByIdAsync(int orderId);
         Task UpdateOrderAsync(Order order);
         Task<MenuDish?> GetMenuDishAsync(int menuId, int dishId);

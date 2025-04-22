@@ -96,6 +96,11 @@ namespace TalanLunch.Infrastructure.Repos
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Menu>> GetAllMenus()
+        {
+            return await _context.Menus.ToListAsync();
+        }
+
 
         //.Include(m => m.MenuDishes)
         //.ThenInclude(md => md.Dish)
