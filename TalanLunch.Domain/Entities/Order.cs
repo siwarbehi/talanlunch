@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TalanLunch.Domain.Entities;
 
 
 namespace TalanLunch.Domain.Entities

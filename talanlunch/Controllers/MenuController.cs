@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TalanLunch.Application.Dtos;
-using TalanLunch.Domain.Entities;
 using TalanLunch.Application.Interfaces;
+using TalanLunch.Domain.Entities;
 
 namespace talanlunch.Controllers
 {
@@ -57,20 +56,21 @@ namespace talanlunch.Controllers
         [HttpPost("{menuId}/{dishId}")]
         public async Task<ActionResult<Menu>> AddDishToMenu(int menuId, int dishId, [FromQuery] int quantity = 1)
         {
-            var result = await _menuService.AddDishToMenuAsync(menuId, dishId, quantity);
+        var result = await _menuService.AddDishToMenuAsync(menuId, dishId, quantity);
 
-            if (result.Item1 == null)
-            {
-                return NotFound();
-            }
-
-            if (result.Item2)
-            {
-                return BadRequest("Le plat est déjà présent dans ce menu.");
-            }
-
-            return Ok(result.Item1);
+        if (result.Item1 == null)
+        {
+           return NotFound();
         }
+
+        if (result.Item2)
+        {
+          return BadRequest("Le plat est déjà présent dans ce menu.");
+        }
+
+        return Ok(result.Item1);
+}
+
 
         // Supprimer un plat du menu
         [HttpDelete("{menuId}/{dishId}")]

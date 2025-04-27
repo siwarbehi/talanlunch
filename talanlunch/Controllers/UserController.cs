@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TalanLunch.Application.Dtos;
 using TalanLunch.Application.Interfaces;
-using TalanLunch.Application.Services;
-using TalanLunch.Domain.Entities;
 using TalanLunch.Domain.Enums;
 
 namespace talanlunch.Controllers

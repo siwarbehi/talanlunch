@@ -1,12 +1,10 @@
-﻿using Microsoft.Extensions.Options;
-using System;
-using System.Threading.Tasks;
+﻿using MailKit.Net.Smtp;
+using Microsoft.Extensions.Options;
+using MimeKit;
 using TalanLunch.Application.Configurations;
 using TalanLunch.Application.Dtos;
-using TalanLunch.Domain.Entities;
 using TalanLunch.Application.Interfaces;
-using MailKit.Net.Smtp;
-using MimeKit;
+using TalanLunch.Domain.Entities;
 using TalanLunch.Domain.Enums;
 
 namespace TalanLunch.Application.Services

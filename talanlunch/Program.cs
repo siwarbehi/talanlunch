@@ -1,24 +1,15 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using TalanLunch.Application.Interfaces;
-using TalanLunch.Application.Services;
-using TalanLunch.Application.Configurations;
-using TalanLunch.Infrastructure.Data;
-using TalanLunch.Infrastructure.Repos;
-using Microsoft.Extensions.DependencyInjection;
-using MailKit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Quartz;
-using Quartz.Impl;
-using Quartz.Spi;
+using System.Text;
+using TalanLunch.Application.Configurations;
+using TalanLunch.Application.Interfaces;
 using TalanLunch.Application.Jobs;
-
-
-
-
+using TalanLunch.Application.Services;
+using TalanLunch.Infrastructure.Data;
+using TalanLunch.Infrastructure.Repos;
+using talanlunch.Application.Hubs;
 
 namespace TalanLunch
 {
@@ -46,7 +37,7 @@ namespace TalanLunch
                         .AllowCredentials();
                 });
             });
-
+            builder.Services.AddSignalR();
             // Ajouter les services à l'injection de dépendances
             builder.Services.AddControllers();
 
@@ -70,11 +61,7 @@ namespace TalanLunch
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IOrderService, OrderService>();
 
-
-
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
-
-
 
             // Enregistrement du service de mail
             builder.Services.AddTransient<Application.Interfaces.IMailService, Application.Services.MailService>();
@@ -89,30 +76,24 @@ namespace TalanLunch
                 options.JsonSerializerOptions.WriteIndented = true;
             });
 
-            // Configuration de l'authentification JWT dans l'application ASP.NET Core
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme) // Active l'authentification avec JWT (JSON Web Token)
+            // Configuration de l'authentification JWT
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    //  Définition des paramètres de validation du token JWT
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true, // Vérifie que l'émetteur (Issuer) du token est valide
-                        ValidIssuer = builder.Configuration["AppSettings:Issuer"], // Récupère l'issuer défini dans appsettings.json
-
-                        ValidateAudience = true, // Vérifie que l'audience (Audience) du token est valide
-                        ValidAudience = builder.Configuration["AppSettings:Audience"], // Récupère l'audience définie dans appsettings.json
-
-                        ValidateLifetime = true, // Vérifie que le token n'a pas expiré
-
-                        // Clé de signature utilisée pour vérifier l'intégrité du token
+                        ValidateIssuer = true,
+                        ValidIssuer = builder.Configuration["AppSettings:Issuer"],
+                        ValidateAudience = true,
+                        ValidAudience = builder.Configuration["AppSettings:Audience"],
+                        ValidateLifetime = true,
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Token"]!)), // Récupère la clé secrète depuis appsettings.json
-
-                        ValidateIssuerSigningKey = true // Vérifie que le token a été signé avec la clé correcte
+                            Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Token"]!)),
+                        ValidateIssuerSigningKey = true
                     };
+
+                  
                 });
-
-
 
             // Quartz
             builder.Services.AddQuartz(q =>
@@ -124,19 +105,19 @@ namespace TalanLunch
                 q.AddTrigger(opts => opts
                     .ForJob(jobKey)
                     .WithIdentity("ResetMenuOfTheDayTrigger")
-                    .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(17, 58)) // Exécution à minuit chaque jour
+                    .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(17, 58))
                 );
-
             });
             builder.Services.AddQuartzHostedService();
 
+            // AJOUT : Enregistrement SignalR
+            builder.Services.AddSignalR();
 
             // Création de l'application
             var app = builder.Build();
 
             // Activation de CORS
             app.UseCors("AllowReactApp");
-            // Configurer le middleware pour les fichiers statiques (permettre l'accès aux fichiers dans wwwroot)
 
             app.UseStaticFiles();
 
@@ -147,12 +128,16 @@ namespace TalanLunch
                 app.UseSwaggerUI();
             }
 
-            // Configuration des middlewares
             app.UseHttpsRedirection();
+
+            app.UseAuthentication(); // AJOUT : Important avant Authorization
             app.UseAuthorization();
+
             app.MapControllers();
 
-            // Lancer l'application
+            // AJOUT : MapHub pour SignalR
+            app.MapHub<NotificationHub>("/notificationHub"); // <--- à adapter selon ton Hub (ex: NotificationHub)
+
             app.Run();
         }
     }

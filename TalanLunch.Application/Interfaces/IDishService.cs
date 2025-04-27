@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TalanLunch.Domain.Entities;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using TalanLunch.Application.Dtos;
+using TalanLunch.Domain.Entities;
 
 
 

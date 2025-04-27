@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TalanLunch.Application.Dtos;
 using TalanLunch.Application.Interfaces;
 
@@ -13,7 +12,7 @@ namespace talanlunch.Controllers
         public AdminController(IAdminService adminService)
         {
             _adminService = adminService;
-        }// Endpoint pour récupérer tous les traiteurs en attente
+        }// Récupérer tous les traiteurs en attente
         [HttpGet("pending-caterers")]
         public async Task<IActionResult> GetPendingCaterers()
         {

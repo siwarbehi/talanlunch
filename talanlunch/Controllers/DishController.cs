@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TalanLunch.Domain.Entities;
-using TalanLunch.Application.Interfaces;
 using TalanLunch.Application.Dtos;
-using TalanLunch.Application.Services;
+using TalanLunch.Application.Interfaces;
+using TalanLunch.Domain.Entities;
 namespace talanlunch.Controllers
 {
     [ApiController]
@@ -16,31 +15,18 @@ namespace talanlunch.Controllers
             _dishService = dishService;
         }
 
-        // Creation plat
         [HttpPost]
-        public async Task<IActionResult> AddDish([FromForm] DishDto dishDto)
+        public async Task<IActionResult> AddDish(DishDto dishDto)
         {
-            if (dishDto == null)
-                return BadRequest("Dish data is null.");
+            if (dishDto == null || string.IsNullOrEmpty(dishDto.DishName))
+            {
+                ModelState.AddModelError("DishName", "Dish name is required.");
+                return BadRequest(ModelState); // Retourne BadRequest avec l'erreur de validation
+            }
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            try
-            {
-                var createdDish = await _dishService.AddDishAsync(dishDto);
-                return CreatedAtAction(nameof(GetDishById), new { id = createdDish.DishId }, createdDish);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Une erreur interne est survenue.", error = ex.Message });
-            }
+            var createdDish = await _dishService.AddDishAsync(dishDto);
+            return CreatedAtAction(nameof(GetDishById), new { id = createdDish.DishId }, createdDish);
         }
-
 
 
         // Modifier un plat

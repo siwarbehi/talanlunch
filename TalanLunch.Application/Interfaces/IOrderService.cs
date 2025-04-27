@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TalanLunch.Application.Dtos;
+﻿using TalanLunch.Application.Dtos;
 using TalanLunch.Domain.Entities;
 
 namespace TalanLunch.Application.Interfaces
@@ -11,10 +6,11 @@ namespace TalanLunch.Application.Interfaces
     public interface IOrderService
     {
         Task<Order> CreateOrderAsync(OrderRequestDto request);
-        // Task<List<OrderDayDto>> GetOrdersByDateAsync(DateTime date);
         Task<List<OrderDayDto>> GetAllOrdersAsync();
 
         Task<bool> UpdateOrderStatusAsync(UpdateOrderStatusDto dto);
+        Task<PagedResult<OrderDayDto>> GetPaginatedOrdersAsync(PaginationQuery query);
+
 
     }
 }

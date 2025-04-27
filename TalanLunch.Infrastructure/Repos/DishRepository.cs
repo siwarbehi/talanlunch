@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TalanLunch.Infrastructure.Data;
-using TalanLunch.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
 using TalanLunch.Application.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
+using TalanLunch.Domain.Entities;
+using TalanLunch.Infrastructure.Data;
 
 namespace TalanLunch.Infrastructure.Repos
 {

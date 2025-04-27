@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TalanLunch.Application.Dtos
+﻿namespace TalanLunch.Application.Dtos
 {
     
     public class MenuDto

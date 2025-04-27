@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Quartz;
-using System.Threading.Tasks;
 using TalanLunch.Application.Interfaces;
-using TalanLunch.Domain.Entities;
-using TalanLunch.Infrastructure.Data; 
+using TalanLunch.Infrastructure.Data;
 
 namespace TalanLunch.Application.Jobs
 {

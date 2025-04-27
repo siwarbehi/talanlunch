@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TalanLunch.Application.Dtos
 {
@@ -14,17 +9,16 @@ namespace TalanLunch.Application.Dtos
             [Required]
             public string DishName { get; set; } = string.Empty;
 
-            [Required]
+            
             public string DishDescription { get; set; } = string.Empty;
 
-       
-
-            [Required]
-            [Range(0, double.MaxValue, ErrorMessage = "Price must be a positive value.")]
-            public decimal DishPrice { get; set; }
 
 
-            public IFormFile? DishPhoto { get; set; }
+           [Required(ErrorMessage = "Le prix du plat est obligatoire.")]
+           public decimal DishPrice { get; set; }
+
+
+           public IFormFile? DishPhoto { get; set; }
         }
     }
 

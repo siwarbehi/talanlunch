@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
 using TalanLunch.Infrastructure.Data;
@@ -68,6 +63,10 @@ namespace TalanLunch.Infrastructure.Repos
         }
 
 
+        public IQueryable<Order> GetAllOrdersQuery()
+        {
+            return _context.Orders.AsQueryable(); // on retourne juste la requete
+        }
 
 
     }

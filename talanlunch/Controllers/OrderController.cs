@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using TalanLunch.Application.Interfaces;
+﻿using Microsoft.AspNetCore.Mvc;
 using TalanLunch.Application.Dtos;
+using TalanLunch.Application.Interfaces;
 
 
 namespace talanlunch.API.Controllers
@@ -49,16 +48,24 @@ namespace talanlunch.API.Controllers
         }
 
         //paid & served
-        [HttpPut("update-status")]
-        public async Task<IActionResult> UpdateOrderStatus([FromBody] UpdateOrderStatusDto dto)
+        [HttpPost("update-order-status")]
+        public async Task<IActionResult> UpdateOrderStatus([FromBody] UpdateOrderStatusDto updateDto)
         {
-            var result = await _orderService.UpdateOrderStatusAsync(dto);
-            if (!result) return NotFound("Order not found");
-
-            return Ok("Order status updated successfully.");
+            var result = await _orderService.UpdateOrderStatusAsync(updateDto);
+            if (result)
+            {
+                return Ok("Notification envoyée avec succès.");
+            }
+            return BadRequest("Échec de la mise à jour de la commande.");
         }
 
+        [HttpGet("unpaid")]
+        public async Task<IActionResult> GetPaginatedOrders([FromQuery] PaginationQuery query)
+        {
+            var result = await _orderService.GetPaginatedOrdersAsync(query);
+            return Ok(result);
+        }
 
-
+       
     }
 }

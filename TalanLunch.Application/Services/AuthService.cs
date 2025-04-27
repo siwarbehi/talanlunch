@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TalanLunch.Application.DTOs;
-using TalanLunch.Application.Interfaces;
-using TalanLunch.Domain.Entities;
-using TalanLunch.Domain.Enums;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using TalanLunch.Application.Dtos;
 using System.Security.Cryptography;
-using Microsoft.Extensions.Logging;
+using System.Text;
+using TalanLunch.Application.Dtos;
+using TalanLunch.Application.DTOs;
+using TalanLunch.Application.Interfaces;
+using TalanLunch.Domain.Entities;
+using TalanLunch.Domain.Enums;
 
 
 namespace TalanLunch.Application.Services

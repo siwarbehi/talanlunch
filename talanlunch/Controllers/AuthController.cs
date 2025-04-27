@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using TalanLunch.Application.Interfaces;
-using TalanLunch.Application.DTOs;
+﻿using Microsoft.AspNetCore.Mvc;
 using TalanLunch.Application.Dtos;
-using TalanLunch.Application.Services;
-using Microsoft.AspNetCore.Identity.Data;
+using TalanLunch.Application.DTOs;
+using TalanLunch.Application.Interfaces;
 
 
 namespace talanlunch.Controllers
@@ -54,9 +51,14 @@ namespace talanlunch.Controllers
             return Ok(result);
         }
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout([FromBody] string RefreshToken)
+        public async Task<IActionResult> Logout([FromBody] LogoutRequestDto logoutRequest)
         {
-            var result = await _authService.LogoutAsync(RefreshToken);
+            if (logoutRequest == null || string.IsNullOrEmpty(logoutRequest.RefreshToken))
+            {
+                return BadRequest("Refresh token manquant.");
+            }
+
+            var result = await _authService.LogoutAsync(logoutRequest.RefreshToken);
 
             if (!result)
             {
@@ -65,6 +67,7 @@ namespace talanlunch.Controllers
 
             return Ok("Déconnexion réussie.");
         }
+
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto request)
         {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TalanLunch.Application.Interfaces;
 using TalanLunch.Application.Dtos;
-using System.Threading.Tasks;
+using TalanLunch.Application.Interfaces;
 
 namespace talanlunch.Controllers
 {
