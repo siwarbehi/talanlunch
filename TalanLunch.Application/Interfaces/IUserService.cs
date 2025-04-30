@@ -1,4 +1,4 @@
-﻿using TalanLunch.Application.Dtos;
+﻿using TalanLunch.Application.Dtos.User;
 using TalanLunch.Domain.Entities;
 using TalanLunch.Domain.Enums;
 

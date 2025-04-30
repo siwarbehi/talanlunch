@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using TalanLunch.Application.Dtos;
+using TalanLunch.Application.Dtos.Dish;
 using TalanLunch.Domain.Entities;
 
 
@@ -15,6 +15,5 @@ namespace TalanLunch.Application.Interfaces
 
         Task<Dish?> GetDishByIdAsync(int id);
         Task DeleteDishAsync(int id);
-        Task RateDishAsync(RateDishDto dto);
     }
 }

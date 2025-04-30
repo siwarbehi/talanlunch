@@ -1,4 +1,5 @@
-﻿using TalanLunch.Application.Dtos;
+﻿using TalanLunch.Application.Dtos.Menu;
+using TalanLunch.Application.Dtos.Order;
 using TalanLunch.Domain.Entities;
 
 namespace TalanLunch.Application.Interfaces

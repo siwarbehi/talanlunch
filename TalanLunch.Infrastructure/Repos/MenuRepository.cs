@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TalanLunch.Application.Dtos;
+using TalanLunch.Application.Dtos.Menu;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
 using TalanLunch.Infrastructure.Data;
@@ -66,8 +66,7 @@ namespace TalanLunch.Infrastructure.Repos
                 .FirstOrDefaultAsync(m => m.MenuId == id);
         }
 
-        //public async Task<IEnumerable<Menu>> GetAllMenusAsync()
-        // {
+      
         public async Task<IEnumerable<GetAllMenusDto>> GetAllMenusAsync()
         {
             return await _context.Menus
@@ -83,7 +82,8 @@ namespace TalanLunch.Infrastructure.Repos
                         DishId = md.Dish.DishId,
                         DishName = md.Dish.DishName,
                         DishQuantity = md.DishQuantity,
-                        DishPrice = md.Dish.DishPrice,
+                        DishPrice = md.Dish.DishPrice ?? 0,
+
                         DishPhoto = md.Dish.DishPhoto,
                         DishDescription = md.Dish.DishDescription
                     }).ToList()
@@ -96,17 +96,6 @@ namespace TalanLunch.Infrastructure.Repos
             return await _context.Menus.ToListAsync();
         }
 
-
-        //.Include(m => m.MenuDishes)
-        //.ThenInclude(md => md.Dish)
-        //.ToListAsync();
-        //}
-        public List<int> GetAllMenuIds()
-        {
-            return _context.Menus
-                .Select(menu => menu.MenuId) 
-                .ToList();
-        }
         // Méthode pour récupérer tous les DishId associés à un MenuId
         public List<int> GetDishIdsByMenuId(int menuId)
         {

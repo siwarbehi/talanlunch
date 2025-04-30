@@ -1,5 +1,4 @@
-﻿using TalanLunch.Application.Dtos;
-using TalanLunch.Application.DTOs;
+﻿using TalanLunch.Application.Dtos.Auth;
 
 namespace TalanLunch.Application.Interfaces
 {

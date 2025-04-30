@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TalanLunch.Application.Dtos;
+using TalanLunch.Application.Dtos.Order;
 using TalanLunch.Application.Interfaces;
 
 

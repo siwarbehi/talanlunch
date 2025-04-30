@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TalanLunch.Application.Dtos;
+using TalanLunch.Application.Dtos.Mail;
 using TalanLunch.Application.Interfaces;
 
 namespace talanlunch.Controllers
@@ -18,6 +18,10 @@ namespace talanlunch.Controllers
         [HttpPost]
         public async Task<IActionResult> SendEmail([FromBody] MailDataDto mailData)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             if (mailData == null)
             {
                 return BadRequest("Les données du mail sont manquantes.");

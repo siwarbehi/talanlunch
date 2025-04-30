@@ -10,6 +10,9 @@ using TalanLunch.Application.Services;
 using TalanLunch.Infrastructure.Data;
 using TalanLunch.Infrastructure.Repos;
 using talanlunch.Application.Hubs;
+using AutoMapper;
+using TalanLunch.Application.Mapping;
+using Microsoft.AspNetCore.Routing;
 
 namespace TalanLunch
 {
@@ -17,6 +20,7 @@ namespace TalanLunch
     {
         public static void Main(string[] args)
         {
+            // creation de l app
             var builder = WebApplication.CreateBuilder(args);
 
             // Création du répertoire pour les téléchargements
@@ -76,6 +80,9 @@ namespace TalanLunch
                 options.JsonSerializerOptions.WriteIndented = true;
             });
 
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
             // Configuration de l'authentification JWT
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -110,29 +117,36 @@ namespace TalanLunch
             });
             builder.Services.AddQuartzHostedService();
 
-            // AJOUT : Enregistrement SignalR
+          
             builder.Services.AddSignalR();
 
             // Création de l'application
             var app = builder.Build();
 
-            // Activation de CORS
+
+
+         //app.Use...Ajouter des middlewares 
+
+            // CORS
             app.UseCors("AllowReactApp");
 
+            //fichiers statiques
             app.UseStaticFiles();
 
-            // Configure le pipeline HTTP
+            // Swagger doc && swaggerUI
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            //redirige les requête vers https
             app.UseHttpsRedirection();
 
-            app.UseAuthentication(); // AJOUT : Important avant Authorization
+            
+            app.UseAuthentication();
             app.UseAuthorization();
 
+            //routage des controleurs
             app.MapControllers();
 
             // AJOUT : MapHub pour SignalR

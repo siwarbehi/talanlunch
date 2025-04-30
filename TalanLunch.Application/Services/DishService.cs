@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using TalanLunch.Application.Dtos;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using TalanLunch.Application.Dtos.Dish;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
 
@@ -11,40 +12,37 @@ namespace TalanLunch.Application.Services
 
         private readonly string _uploadsFolder;
 
+        private readonly IMapper _mapper;
 
 
-        public DishService(IDishRepository dishRepository)
+        public DishService(IDishRepository dishRepository, IMapper mapper)
         {
             _dishRepository = dishRepository;
             _uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-
+            _mapper = mapper;
         }
-
-        // Ajouter un plat
-
+         //creation plat
         public async Task<Dish> AddDishAsync(DishDto dishDto)
         {
             if (dishDto == null)
                 throw new ArgumentNullException(nameof(dishDto), "Dish data is null.");
 
-            var newDish = new Dish
-            {
-                DishName = dishDto.DishName,
-                DishDescription = dishDto.DishDescription,
-                DishPrice = dishDto.DishPrice,
-                OrderDate = DateTime.UtcNow, 
-                ReviewCount = 0,
-                CurrentRating = 0,
-            };
+            var dish = _mapper.Map<Dish>(dishDto);
 
             if (dishDto.DishPhoto != null && dishDto.DishPhoto.Length > 0)
             {
                 string uniqueFileName = await SaveDishImageAsync(dishDto.DishPhoto);
-                newDish.DishPhoto = uniqueFileName; 
+                dish.DishPhoto = uniqueFileName;
             }
 
-            return await _dishRepository.AddDishAsync(newDish);
+            // Données par défaut
+            dish.OrderDate = DateTime.UtcNow;
+            dish.ReviewCount = 0;
+            dish.CurrentRating = 0;
+
+            return await _dishRepository.AddDishAsync(dish);
         }
+
 
         // Méthode pour sauvegarder l'image du plat
         private async Task<string> SaveDishImageAsync(IFormFile dishImage)
@@ -81,21 +79,39 @@ namespace TalanLunch.Application.Services
             return await _dishRepository.GetDishByIdAsync(id);
         }
 
-        // Mettre à jour un plat
+        /*// Mettre à jour un plat
         public async Task<Dish> UpdateDishAsync(Dish existingDish, DishUpdateDto updatedDish, IFormFile? dishPhoto)
         {
-            if (!string.IsNullOrEmpty(updatedDish.DishName))
-                existingDish.DishName = updatedDish.DishName;
-
-            if (!string.IsNullOrEmpty(updatedDish.DishDescription))
-                existingDish.DishDescription = updatedDish.DishDescription;
-
-            if (updatedDish.DishPrice.HasValue && updatedDish.DishPrice >= 0)
-                existingDish.DishPrice = (decimal)updatedDish.DishPrice.Value;
+            
+            _mapper.Map(updatedDish, existingDish);
 
             if (dishPhoto != null && dishPhoto.Length > 0)
             {
-                var fileName = await SaveDishImageAsync(dishPhoto); // Implémentation de stockage image
+                var fileName = await SaveDishImageAsync(dishPhoto);
+                existingDish.DishPhoto = fileName;
+            }
+
+            return await _dishRepository.UpdateDishAsync(existingDish);
+        }*/
+
+        public async Task<Dish> UpdateDishAsync(Dish existingDish, DishUpdateDto updatedDish, IFormFile? dishPhoto)
+        {
+            _mapper.Map(updatedDish, existingDish);
+
+            // Si une nouvelle note est fournie, recalculer la moyenne
+            if (updatedDish.Rating.HasValue)
+            {
+                float oldRating = existingDish.CurrentRating;
+                int oldCount = existingDish.ReviewCount;
+
+                float newRating = ((oldRating * oldCount) + updatedDish.Rating.Value) / (oldCount + 1);
+                existingDish.CurrentRating = newRating;
+                existingDish.ReviewCount++;
+            }
+
+            if (dishPhoto != null && dishPhoto.Length > 0)
+            {
+                var fileName = await SaveDishImageAsync(dishPhoto);
                 existingDish.DishPhoto = fileName;
             }
 
@@ -111,28 +127,7 @@ namespace TalanLunch.Application.Services
 
             await _dishRepository.DeleteDishAsync(id);
         }
-        // Rate a dish
-     
-        public async Task RateDishAsync(RateDishDto dto)
-        {
-            if (dto.Rating < 1 || dto.Rating > 5)
-                throw new ArgumentException("La note doit être sur 5.");
-            var dish = await _dishRepository.GetDishByIdAsync(dto.DishId);
-
-            if (dish == null)
-                throw new Exception("Plat non trouvé");
-
-            // Mise à jour de la note moyenne
-            float oldRating = dish.CurrentRating;
-            int oldCount = dish.ReviewCount;
-
-            float newRating = ((oldRating * oldCount) + dto.Rating) / (oldCount + 1);
-
-            dish.CurrentRating = newRating;
-            dish.ReviewCount++;
-
-            await _dishRepository.UpdateDishAsync(dish);
-        }
+       
 
     }
 }

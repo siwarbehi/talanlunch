@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TalanLunch.Application.Dtos;
+using TalanLunch.Application.Dtos.Dish;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
 namespace talanlunch.Controllers
@@ -14,36 +14,43 @@ namespace talanlunch.Controllers
         {
             _dishService = dishService;
         }
-
+        //creation d un plat 
         [HttpPost]
         public async Task<IActionResult> AddDish(DishDto dishDto)
         {
-            if (dishDto == null || string.IsNullOrEmpty(dishDto.DishName))
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("DishName", "Dish name is required.");
-                return BadRequest(ModelState); // Retourne BadRequest avec l'erreur de validation
+                return BadRequest(ModelState);
             }
 
             var createdDish = await _dishService.AddDishAsync(dishDto);
+
             return CreatedAtAction(nameof(GetDishById), new { id = createdDish.DishId }, createdDish);
         }
 
+        //modifier un plat 
 
-        // Modifier un plat
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchDish(int id, [FromForm] DishUpdateDto updatedDish, IFormFile? dishPhoto)
         {
-            if (updatedDish == null)
-                return BadRequest("Dish data is null.");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        
+            if (updatedDish == null)
+            {
+                return BadRequest("Dish data is required.");
+            }
+
             var existingDish = await _dishService.GetDishByIdAsync(id);
             if (existingDish == null)
+            {
                 return NotFound($"Dish with id {id} not found.");
-
+            }
             var updatedDishEntity = await _dishService.UpdateDishAsync(existingDish, updatedDish, dishPhoto);
 
-            return Ok(updatedDishEntity); 
+            return Ok(updatedDishEntity);
         }
 
 
@@ -53,7 +60,7 @@ namespace talanlunch.Controllers
         public async Task<IActionResult> GetAllDishes()
         {
             var dishes = await _dishService.GetAllDishesAsync();
-            return Ok(dishes);  // 200 OK with the list of dishes
+            return Ok(dishes);  
         }
        
         // GET: api/dish/{id}
@@ -71,7 +78,7 @@ namespace talanlunch.Controllers
             try
             {
                 await _dishService.DeleteDishAsync(id);
-                return NoContent(); // 204
+                return NoContent(); 
             }
             catch (KeyNotFoundException)
             {
@@ -79,25 +86,12 @@ namespace talanlunch.Controllers
             }
             catch (Exception ex)
             {
-                // Gérer d'autres erreurs possibles
+               
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
      
-        [HttpPost("rate")]
-        public async Task<IActionResult> RateDish([FromBody] RateDishDto dto)
-        {
-            try
-            {
-                await _dishService.RateDishAsync(dto);
-                return Ok(new { message = "Merci pour votre note !" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
-        }
-
+       
 
     }
 }

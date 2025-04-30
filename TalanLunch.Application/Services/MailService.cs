@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using MimeKit;
 using TalanLunch.Application.Configurations;
-using TalanLunch.Application.Dtos;
+using TalanLunch.Application.Dtos.Mail;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
 using TalanLunch.Domain.Enums;

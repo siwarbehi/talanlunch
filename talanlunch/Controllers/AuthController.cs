@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TalanLunch.Application.Dtos;
-using TalanLunch.Application.DTOs;
+using TalanLunch.Application.Dtos.Auth;
 using TalanLunch.Application.Interfaces;
 
 
@@ -20,6 +19,8 @@ namespace talanlunch.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserDto registerUserDto, [FromQuery] bool isCaterer)
         {
+            
+
             if (registerUserDto == null)
             {
                 return BadRequest("Les données d'inscription sont manquantes.");
@@ -28,9 +29,14 @@ namespace talanlunch.Controllers
             string result = await _authService.RegisterUserAsync(registerUserDto, isCaterer);
             return Ok(result);
         }
+
         [HttpPost("login")]
         public async Task<ActionResult<TokenResponseDto>> Login(LoginDto request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var result = await _authService.LoginAsync(request);
             if (result is null)
                 return BadRequest("Invalid username or password.");

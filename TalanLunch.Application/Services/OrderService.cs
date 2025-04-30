@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using TalanLunch.Application.Dtos;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
 using talanlunch.Application.Hubs;
+using TalanLunch.Application.Dtos.Order;
+using TalanLunch.Application.Dtos.Menu;
+using AutoMapper;
 
 namespace TalanLunch.Application.Services
 {
@@ -13,11 +15,14 @@ namespace TalanLunch.Application.Services
         private readonly IOrderRepository _orderRepository;
         private readonly IUserRepository _userRepository;
         private readonly IHubContext<NotificationHub> _hubContext;
-        public OrderService(IOrderRepository orderRepository, IUserRepository userRepository, IHubContext<NotificationHub> hubContext)
+        private readonly IMapper _mapper;
+
+        public OrderService(IOrderRepository orderRepository, IUserRepository userRepository, IHubContext<NotificationHub> hubContext  ,IMapper mapper)
         {
             _orderRepository = orderRepository;
             _userRepository = userRepository;
             _hubContext = hubContext;
+            _mapper = mapper;
 
         }
         public async Task<Order> CreateOrderAsync(OrderRequestDto request)
@@ -65,57 +70,21 @@ namespace TalanLunch.Application.Services
                 };
 
                 newOrder.OrderDishes.Add(orderDish);
-                newOrder.TotalAmount += dish.DishPrice * item.Quantity;
+                newOrder.TotalAmount += (dish.DishPrice ?? 0) * item.Quantity;
             }
 
 
             return await _orderRepository.AddOrderAsync(newOrder);
         }
 
-        /* public async Task<List<OrderDayDto>> GetOrdersByDateAsync(DateTime date)
-        {
-            var orders = await _orderRepository.GetOrdersByDateAsync(date);
 
-            return orders.Select(o => new OrderDayDto
-            {
-                FirstName = o.User.FirstName,
-                LastName = o.User.LastName,
-                ProfilePicture = o.User.ProfilePicture,
-                OrderId = o.OrderId,
-                OrderRemark = o.OrderRemark,
-                TotalAmount = o.TotalAmount,
-                Paid = o.Paid,
-                Served = o.Served,
-                OrderDate = o.OrderDate,
-                Dishes = o.OrderDishes.Select(od => new DishOrderDto
-                {
-                    DishName = od.Dish.DishName,
-                    Quantity = od.Quantity
-                }).ToList()
-            }).ToList();
-        } */
         public async Task<List<OrderDayDto>> GetAllOrdersAsync()
         {
             var orders = await _orderRepository.GetAllOrdersAsync();
-
-            return orders.Select(o => new OrderDayDto
-            {
-                FirstName = o.User?.FirstName,
-                LastName = o.User?.LastName,
-                ProfilePicture = o.User?.ProfilePicture,
-                OrderId = o.OrderId,
-                OrderRemark = o.OrderRemark,
-                TotalAmount = o.TotalAmount,
-                Paid = o.Paid,
-                Served = o.Served,
-                OrderDate = o.OrderDate,
-                Dishes = o.OrderDishes.Select(od => new DishOrderDto
-                {
-                    DishName = od.Dish?.DishName,
-                    Quantity = od.Quantity
-                }).ToList()
-            }).ToList();
+            var orderDtos = _mapper.Map<List<OrderDayDto>>(orders); 
+            return orderDtos;
         }
+
 
 
         public async Task<bool> UpdateOrderStatusAsync(UpdateOrderStatusDto dto)
@@ -145,16 +114,17 @@ namespace TalanLunch.Application.Services
             await _orderRepository.UpdateOrderAsync(order);
 
             // Si l'état de la commande a changé, envoyer une notification à l'utilisateur
-            if ((paidChangedToTrue || servedChangedToTrue) && order.UserId != null)
+            if ((paidChangedToTrue || servedChangedToTrue) && order?.UserId != null)
             {
                 var notificationMessage = "";
 
                 // Construction du message de notification
-                if (paidChangedToTrue)
-                    notificationMessage += $"Votre commande (ID: {order.OrderId}) a été marquée comme payée.\n";
+                if(paidChangedToTrue)
+    notificationMessage += $"Félicitations ! Votre commande a été payée avec succès. Merci de votre achat.\n";
 
                 if (servedChangedToTrue)
-                    notificationMessage += $"Votre commande (ID: {order.OrderId}) est prête et a été servie.\n";
+                    notificationMessage += $"Votre commande a été servie ! Bon appétit !\n";
+
 
                 // Envoi de la notification via SignalR
                 await _hubContext.Clients.Group(order.UserId.ToString())

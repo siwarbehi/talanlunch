@@ -8,7 +8,6 @@ namespace TalanLunch.Application.Interfaces
         Task<IEnumerable<Dish>> GetAllDishesAsync();
         Task<Dish?> GetDishByIdAsync(int id); 
         Task<Dish> UpdateDishAsync(Dish updatedDish);
-        Task<List<int>> GetExistingDishIdsAsync();
         Task DeleteDishAsync(int id);
 
 

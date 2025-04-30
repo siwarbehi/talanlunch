@@ -33,12 +33,9 @@ namespace TalanLunch.Infrastructure.Repos
             await _context.SaveChangesAsync();
             return updatedDish;
         }
-
-        public async Task<List<int>> GetExistingDishIdsAsync()
+        public async Task<IEnumerable<Dish>> GetAllDishesAsync()
         {
-            return await _context.Dishes
-                .Select(d => d.DishId)
-                .ToListAsync();
+            return await _context.Dishes.ToListAsync();
         }
         public async Task DeleteDishAsync(int id)
         {
@@ -60,10 +57,7 @@ namespace TalanLunch.Infrastructure.Repos
             }
         }
 
-        public async Task<IEnumerable<Dish>> GetAllDishesAsync()
-        {
-            return await _context.Dishes.ToListAsync();
-        }
+      
       
 
     }
