@@ -79,21 +79,6 @@ namespace TalanLunch.Application.Services
             return await _dishRepository.GetDishByIdAsync(id);
         }
 
-        /*// Mettre à jour un plat
-        public async Task<Dish> UpdateDishAsync(Dish existingDish, DishUpdateDto updatedDish, IFormFile? dishPhoto)
-        {
-            
-            _mapper.Map(updatedDish, existingDish);
-
-            if (dishPhoto != null && dishPhoto.Length > 0)
-            {
-                var fileName = await SaveDishImageAsync(dishPhoto);
-                existingDish.DishPhoto = fileName;
-            }
-
-            return await _dishRepository.UpdateDishAsync(existingDish);
-        }*/
-
         public async Task<Dish> UpdateDishAsync(Dish existingDish, DishUpdateDto updatedDish, IFormFile? dishPhoto)
         {
             _mapper.Map(updatedDish, existingDish);

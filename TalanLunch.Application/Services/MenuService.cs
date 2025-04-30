@@ -1,4 +1,5 @@
-﻿using TalanLunch.Application.Dtos.Menu;
+﻿using AutoMapper;
+using TalanLunch.Application.Dtos.Menu;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
 
@@ -8,12 +9,15 @@ namespace TalanLunch.Application.Services
     {
         private readonly IMenuRepository _menuRepository;
         private readonly IDishRepository _dishRepository;
-        public MenuService(IMenuRepository menuRepository, IDishRepository dishRepository)
+        private readonly IMapper _mapper;
+        public MenuService(IMenuRepository menuRepository, IDishRepository dishRepository, IMapper mapper)
         {
             _menuRepository = menuRepository;
             _dishRepository = dishRepository;
+            _mapper = mapper;
         }
 
+        // Creation d un menu 
         public async Task<Menu> AddMenuAsync(MenuDto menuDto)
         {
             if (menuDto == null)
@@ -22,32 +26,19 @@ namespace TalanLunch.Application.Services
             if (menuDto.Dishes == null || !menuDto.Dishes.Any())
                 throw new ArgumentException("Le menu doit contenir au moins un plat.", nameof(menuDto.Dishes));
 
-            var newMenu = new Menu
-            {
-                MenuDescription = menuDto.MenuDescription,
-                MenuDate = DateTime.Now,
-                MenuDishes = new List<MenuDish>()
-            };
-
             var invalidDishIds = new List<int>();
+
+            var menu = _mapper.Map<Menu>(menuDto);
 
             foreach (var dishDto in menuDto.Dishes)
             {
-                if (dishDto == null)
-                    throw new Exception("dishDto est null");
-
                 var dish = await _dishRepository.GetDishByIdAsync(dishDto.DishId);
-
                 if (dish != null)
                 {
-                    var menuDish = new MenuDish
-                    {
-                        Menu = newMenu,
-                        Dish = dish,
-                        DishId = dish.DishId,
-                        DishQuantity = dishDto.DishQuantity
-                    };
-                    newMenu.MenuDishes.Add(menuDish);
+                    var menuDish = _mapper.Map<MenuDish>(dishDto);
+                    menuDish.Dish = dish;
+                    menuDish.Menu = menu;
+                    menu.MenuDishes.Add(menuDish);
                 }
                 else
                 {
@@ -56,14 +47,10 @@ namespace TalanLunch.Application.Services
             }
 
             if (invalidDishIds.Any())
-            {
-                throw new ArgumentException($"Certains identifiants de plats sont invalides : {string.Join(", ", invalidDishIds)}", nameof(menuDto.Dishes));
-            }
+                throw new ArgumentException($"Certains plats sont invalides : {string.Join(", ", invalidDishIds)}");
 
-            return await _menuRepository.AddMenuAsync(newMenu);
+            return await _menuRepository.AddMenuAsync(menu);
         }
-
-    
 
 
         // Modifier la description du menu
