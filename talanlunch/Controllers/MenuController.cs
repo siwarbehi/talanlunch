@@ -38,38 +38,19 @@ namespace talanlunch.Controllers
             }
         }
 
-
-
-        // Modifier la description du menu
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateMenuDescription (int id, [FromForm] string newDescription)
+        [HttpPost("{menuId}")]
+        public async Task<ActionResult<Menu>> AddDishToMenu(int menuId, [FromBody] AddDishToMenuDto dto)
         {
-            var result = await _menuService.UpdateMenuDescriptionAsync(id, newDescription);
-            if (!result)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            var result = await _menuService.AddDishToMenuAsync(menuId, dto.DishId, dto.Quantity, dto.NewDescription);
+
+            if (result == null)
+                return NotFound("Menu introuvable ou plat invalide.");
+
+            if (result.DishAlreadyExists)
+                return BadRequest("Le plat est déjà présent dans ce menu.");
+
+            return Ok(result.Menu);
         }
-
-        // Ajouter un plat au menu
-        [HttpPost("{menuId}/{dishId}")]
-        public async Task<ActionResult<Menu>> AddDishToMenu(int menuId, int dishId, [FromQuery] int quantity = 1)
-        {
-        var result = await _menuService.AddDishToMenuAsync(menuId, dishId, quantity);
-
-        if (result.Item1 == null)
-        {
-           return NotFound();
-        }
-
-        if (result.Item2)
-        {
-          return BadRequest("Le plat est déjà présent dans ce menu.");
-        }
-
-        return Ok(result.Item1);
-}
 
 
         // Supprimer un plat du menu
@@ -104,6 +85,7 @@ namespace talanlunch.Controllers
             return Ok(menu);
         }
 
+        // todo remove all
         // Obtenir tous les menus
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<GetAllMenusDto>>> GetMenus()

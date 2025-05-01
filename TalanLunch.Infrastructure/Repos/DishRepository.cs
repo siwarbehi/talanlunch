@@ -55,10 +55,16 @@ namespace TalanLunch.Infrastructure.Repos
                 _context.Dishes.Remove(dish);
                 await _context.SaveChangesAsync();
             }
+
         }
 
-      
-      
+        public async Task<List<Dish>> GetDishesByIdsAsync(IEnumerable<int> dishIds)
+        {
+            return await _context.Dishes
+                .Where(d => dishIds.Contains(d.DishId))
+                .ToListAsync();
+        }
+
 
     }
 }

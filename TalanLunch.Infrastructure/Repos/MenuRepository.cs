@@ -67,29 +67,14 @@ namespace TalanLunch.Infrastructure.Repos
         }
 
       
-        public async Task<IEnumerable<GetAllMenusDto>> GetAllMenusAsync()
+        public async Task<IEnumerable<Menu>> GetAllMenusAsync()
         {
             return await _context.Menus
-                .Include(m => m.MenuDishes)
-                    .ThenInclude(md => md.Dish)
-                .Select(menu => new GetAllMenusDto
-                {
-                    MenuId = menu.MenuId,
-                    MenuDescription = menu.MenuDescription,
-                    IsMenuOfTheDay = menu.IsMenuOfTheDay,
-                    Dishes = menu.MenuDishes.Select(md => new DishMenuAllDto
-                    {
-                        DishId = md.Dish.DishId,
-                        DishName = md.Dish.DishName,
-                        DishQuantity = md.DishQuantity,
-                        DishPrice = md.Dish.DishPrice ?? 0,
-
-                        DishPhoto = md.Dish.DishPhoto,
-                        DishDescription = md.Dish.DishDescription
-                    }).ToList()
-                })
-                .ToListAsync();
+               .Include(m => m.MenuDishes)
+               .ThenInclude(md => md.Dish)
+               .ToListAsync();
         }
+
 
         public async Task<IEnumerable<Menu>> GetAllMenus()
         {
@@ -104,6 +89,7 @@ namespace TalanLunch.Infrastructure.Repos
                 .Select(md => md.DishId)
                 .ToList();
         }
+       
     }
 
     }

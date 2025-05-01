@@ -10,9 +10,10 @@ namespace TalanLunch.Application.Interfaces
         Task<Menu> UpdateMenuAsync(Menu menu);
         Task DeleteMenuAsync(int id);
         Task<Menu?> GetMenuByIdAsync(int id);
-        Task<IEnumerable<GetAllMenusDto>> GetAllMenusAsync();
+        Task<IEnumerable<Menu>> GetAllMenusAsync();
         Task<IEnumerable<Menu>> GetAllMenus();
-        List<int> GetDishIdsByMenuId(int menuId); // Méthode pour récupérer les DishId par MenuId
+        List<int> GetDishIdsByMenuId(int menuId);
+
 
 
     }
