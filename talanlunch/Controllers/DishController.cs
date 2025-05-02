@@ -55,8 +55,8 @@ namespace talanlunch.Controllers
 
 
 
-        // GET: api/dish/all
-        [HttpGet("all")]
+        // GET: api/dish
+        [HttpGet]
         public async Task<IActionResult> GetAllDishes()
         {
             var dishes = await _dishService.GetAllDishesAsync();

@@ -17,53 +17,16 @@ namespace TalanLunch.Application.Services
             _mapper = mapper;
         }
 
-        // Creation d un menu 
-        /*public async Task<Menu> AddMenuAsync(MenuDto menuDto)
-        {
-            if (menuDto == null)
-                throw new ArgumentNullException(nameof(menuDto), "Le DTO du menu ne peut pas être null.");
-
-            if (menuDto.Dishes == null || !menuDto.Dishes.Any())
-                throw new ArgumentException("Le menu doit contenir au moins un plat.", nameof(menuDto.Dishes));
-
-            var invalidDishIds = new List<int>();
-
-            var menu = _mapper.Map<Menu>(menuDto);
-
-            foreach (var dishDto in menuDto.Dishes)
-            {
-                var dish = await _dishRepository.GetDishByIdAsync(dishDto.DishId);
-                if (dish != null)
-                {
-                    var menuDish = _mapper.Map<MenuDish>(dishDto);
-                    menuDish.Dish = dish;
-                    menuDish.Menu = menu;
-                    menu.MenuDishes.Add(menuDish);
-                }
-                else
-                {
-                    invalidDishIds.Add(dishDto.DishId);
-                }
-            }
-
-            if (invalidDishIds.Any())
-                throw new ArgumentException($"Certains plats sont invalides : {string.Join(", ", invalidDishIds)}");
-
-            return await _menuRepository.AddMenuAsync(menu);
-        }*/
-
+        
         public async Task<Menu> AddMenuAsync(MenuDto menuDto)
         {
             if (menuDto.Dishes == null || !menuDto.Dishes.Any())
                 throw new ArgumentException("Le menu doit contenir au moins un plat.", nameof(menuDto.Dishes));
 
-            // Extraction des IDs de plats
             var dishIds = menuDto.Dishes.Select(dish => dish.DishId).ToList();
 
-            // Chargement des plats en une seule requête
             var dishes = await _dishRepository.GetDishesByIdsAsync(dishIds);
 
-            // Filtrage des plats valides et des plats invalides
             var dishesById = dishes.ToDictionary(d => d.DishId);
             var invalidDishIds = dishIds.Except(dishes.Select(d => d.DishId)).ToList();
 
@@ -74,13 +37,11 @@ namespace TalanLunch.Application.Services
                     nameof(menuDto.Dishes));
             }
 
-            // Création du menu à partir du DTO en utilisant AutoMapper
             var newMenu = _mapper.Map<Menu>(menuDto);
-            newMenu.MenuDate = DateTime.Now; // Définir la date du menu
+            newMenu.MenuDate = DateTime.Now; 
 
-            // Création des MenuDish à partir des plats valides
             newMenu.MenuDishes = menuDto.Dishes
-                .Where(dishDto => dishesById.ContainsKey(dishDto.DishId)) // Filtrer uniquement les plats valides
+                .Where(dishDto => dishesById.ContainsKey(dishDto.DishId))
                 .Select(dishDto =>
                 {
                     var dish = dishesById[dishDto.DishId];
@@ -88,18 +49,16 @@ namespace TalanLunch.Application.Services
                 })
                 .ToList();
 
-            // Lier chaque MenuDish avec le Menu et le Plat
             foreach (var menuDish in newMenu.MenuDishes)
             {
                 menuDish.Menu = newMenu;
                 menuDish.Dish = dishesById[menuDish.DishId];
             }
 
-            // Ajouter le menu dans la base de données
             return await _menuRepository.AddMenuAsync(newMenu);
         }
 
-       
+       // update description & add dish to menu 
 
         public async Task<AddDishToMenuResult?> AddDishToMenuAsync(int menuId, int dishId, int quantity, string? newDescription = null)
         {
@@ -107,13 +66,11 @@ namespace TalanLunch.Application.Services
             if (menu == null)
                 return null;
 
-            // Mise à jour de la description si fournie
             if (!string.IsNullOrWhiteSpace(newDescription))
             {
                 menu.MenuDescription = newDescription;
             }
 
-            // Si DishId est 0 ou négatif, on ne fait pas d'ajout de plat
             if (dishId > 0)
             {
                 var dish = await _dishRepository.GetDishByIdAsync(dishId);
@@ -188,17 +145,14 @@ namespace TalanLunch.Application.Services
             return _mapper.Map<IEnumerable<GetAllMenusDto>>(menus);
         }
 
-        public List<int> GetDishIdsForMenu(int menuId)
-        {
-            return _menuRepository.GetDishIdsByMenuId(menuId);
-        }
+      //definir le menu de jour 
         public async Task<bool> SetMenuOfTheDayAsync(int menuId)
         {
             var menu = await _menuRepository.GetMenuByIdAsync(menuId);
 
             if (menu == null)
             {
-                return false; 
+                return false;
             }
 
             var allMenus = await _menuRepository.GetAllMenus();
@@ -207,8 +161,8 @@ namespace TalanLunch.Application.Services
 
             if (previousMenu != null)
             {
-                previousMenu.IsMenuOfTheDay = false; 
-                
+                previousMenu.IsMenuOfTheDay = false;
+
                 await _menuRepository.UpdateMenuAsync(previousMenu);
             }
 
@@ -220,7 +174,7 @@ namespace TalanLunch.Application.Services
         }
 
 
-      
+
 
     }
 }

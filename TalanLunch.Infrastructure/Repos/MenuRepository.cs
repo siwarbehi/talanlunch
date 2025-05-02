@@ -81,14 +81,7 @@ namespace TalanLunch.Infrastructure.Repos
             return await _context.Menus.ToListAsync();
         }
 
-        // Méthode pour récupérer tous les DishId associés à un MenuId
-        public List<int> GetDishIdsByMenuId(int menuId)
-        {
-            return _context.MenuDishes
-                .Where(md => md.MenuId == menuId)
-                .Select(md => md.DishId)
-                .ToList();
-        }
+       
        
     }
 

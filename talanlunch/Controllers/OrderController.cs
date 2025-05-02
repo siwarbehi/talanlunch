@@ -39,7 +39,7 @@ namespace talanlunch.API.Controllers
             return Ok(orders);
 
         } */
-        // GET: api/orders/all
+        // GET: api/order
         [HttpGet]
         public async Task<IActionResult> GetAllOrders()
         {
