@@ -5,16 +5,15 @@ namespace TalanLunch.Application.Interfaces
 {
     public interface IMenuService
     {
-        Task<Menu> AddMenuAsync(MenuDto menuDto);
+        //Task<Menu> AddMenuAsync(MenuDto menuDto);
       
-        Task<Menu?> RemoveDishFromMenuAsync(int menuId, int dishId);
-        Task DeleteMenuAsync(int id);
-        Task<Menu?> GetMenuByIdAsync(int id);
-        Task<IEnumerable<GetAllMenusDto>> GetAllMenusAsync();
-       // List<int> GetDishIdsForMenu(int menuId);
-        Task<bool> SetMenuOfTheDayAsync(int menuId);
-        Task<AddDishToMenuResult?> AddDishToMenuAsync(int menuId, int dishId, int quantity, string? newDescription = null);
-
+        //Task<Menu?> RemoveDishFromMenuAsync(int menuId, int dishId);
+        //Task DeleteMenuAsync(int id);
+        //Task<Menu?> GetMenuByIdAsync(int id);
+        //Task<IEnumerable<GetAllMenusDto>> GetAllMenusAsync();
+        //List<int> GetDishIdsForMenu(int menuId);
+        //Task<bool> SetMenuOfTheDayAsync(int menuId);
+        //Task<AddDishToMenuResultDto?> AddDishToMenuAsync(int menuId, AddDishToMenuDto dto);
 
 
 

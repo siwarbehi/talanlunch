@@ -18,7 +18,7 @@ namespace TalanLunch.Application.Services
         }
 
         
-        public async Task<Menu> AddMenuAsync(MenuDto menuDto)
+      /*  public async Task<Menu> AddMenuAsync(MenuDto menuDto)
         {
             if (menuDto.Dishes == null || !menuDto.Dishes.Any())
                 throw new ArgumentException("Le menu doit contenir au moins un plat.", nameof(menuDto.Dishes));
@@ -56,57 +56,55 @@ namespace TalanLunch.Application.Services
             }
 
             return await _menuRepository.AddMenuAsync(newMenu);
-        }
+        }*/
 
-       // update description & add dish to menu 
+       /* // update description & add dish to menu 
 
-        public async Task<AddDishToMenuResult?> AddDishToMenuAsync(int menuId, int dishId, int quantity, string? newDescription = null)
+        public async Task<AddDishToMenuResultDto?> AddDishToMenuAsync(int menuId, AddDishToMenuDto dto)
         {
             var menu = await _menuRepository.GetMenuByIdAsync(menuId);
             if (menu == null)
                 return null;
 
-            if (!string.IsNullOrWhiteSpace(newDescription))
+            if (!string.IsNullOrWhiteSpace(dto.NewDescription))
             {
-                menu.MenuDescription = newDescription;
+                menu.MenuDescription = dto.NewDescription;
             }
 
-            if (dishId > 0)
+            if (dto.DishId > 0)
             {
-                var dish = await _dishRepository.GetDishByIdAsync(dishId);
+                var dish = await _dishRepository.GetDishByIdAsync(dto.DishId);
                 if (dish == null)
                     return null;
 
-                if (menu.MenuDishes.Any(md => md.DishId == dishId))
+                if (menu.MenuDishes.Any(md => md.DishId == dto.DishId))
                 {
-                    return new AddDishToMenuResult
+                    return new AddDishToMenuResultDto
                     {
-                        Menu = menu,
                         DishAlreadyExists = true
                     };
                 }
 
-                menu.MenuDishes.Add(new MenuDish
-                {
-                    MenuId = menuId,
-                    DishId = dishId,
-                    Menu = menu,
-                    Dish = dish,
-                    DishQuantity = quantity
-                });
+                var menuDish = _mapper.Map<MenuDish>(dto);
+                menuDish.Dish = dish;
+                menuDish.Menu = menu;
+                menuDish.MenuId = menuId;
+                menuDish.DishId = dto.DishId;
+
+                menu.MenuDishes.Add(menuDish);
             }
 
-            var updatedMenu = await _menuRepository.UpdateMenuAsync(menu);
+            await _menuRepository.UpdateMenuAsync(menu);
 
-            return new AddDishToMenuResult
+            return new AddDishToMenuResultDto
             {
-                Menu = updatedMenu,
                 DishAlreadyExists = false
             };
-        }
+        }*/
 
 
-        // Supprimer un plat du menu
+
+    /*    // Supprimer un plat du menu
         public async Task<Menu?> RemoveDishFromMenuAsync(int menuId, int dishId)
         {
             var menu = await _menuRepository.GetMenuByIdAsync(menuId);
@@ -121,9 +119,9 @@ namespace TalanLunch.Application.Services
             }
 
             return await _menuRepository.UpdateMenuAsync(menu);
-        }
+        }*/
 
-        // Supprimer un menu
+      /*  // Supprimer un menu
         public async Task DeleteMenuAsync(int id)
         {
             var menu = await _menuRepository.GetMenuByIdAsync(id);
@@ -131,22 +129,22 @@ namespace TalanLunch.Application.Services
             {
                 await _menuRepository.DeleteMenuAsync(id);
             }
-        }
+        }*/
 
-        // Obtenir un menu par ID
+      /*  // Obtenir un menu par ID
         public async Task<Menu?> GetMenuByIdAsync(int id)
         {
             return await _menuRepository.GetMenuByIdAsync(id);
-        }
-        // Obtenir tous les menus 
+        }*/
+      /*  // Obtenir tous les menus 
         public async Task<IEnumerable<GetAllMenusDto>> GetAllMenusAsync()
         {
             var menus = await _menuRepository.GetAllMenusAsync();
             return _mapper.Map<IEnumerable<GetAllMenusDto>>(menus);
-        }
+        }*/
 
       //definir le menu de jour 
-        public async Task<bool> SetMenuOfTheDayAsync(int menuId)
+     /*   public async Task<bool> SetMenuOfTheDayAsync(int menuId)
         {
             var menu = await _menuRepository.GetMenuByIdAsync(menuId);
 
@@ -171,7 +169,7 @@ namespace TalanLunch.Application.Services
             await _menuRepository.UpdateMenuAsync(menu);
 
             return true;
-        }
+        }*/
 
 
 

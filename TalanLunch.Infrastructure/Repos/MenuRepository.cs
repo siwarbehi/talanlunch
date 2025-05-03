@@ -82,7 +82,8 @@ namespace TalanLunch.Infrastructure.Repos
         }
 
        
-       
-    }
+
 
     }
+
+}

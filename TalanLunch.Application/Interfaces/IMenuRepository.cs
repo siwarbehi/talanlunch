@@ -15,5 +15,6 @@ namespace TalanLunch.Application.Interfaces
 
 
 
+
     }
 }

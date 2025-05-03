@@ -3,16 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Quartz;
 using System.Text;
+using talanlunch.Application.Hubs;
 using TalanLunch.Application.Configurations;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Application.Jobs;
 using TalanLunch.Application.Services;
 using TalanLunch.Infrastructure.Data;
 using TalanLunch.Infrastructure.Repos;
-using talanlunch.Application.Hubs;
-using AutoMapper;
-using TalanLunch.Application.Mapping;
-using Microsoft.AspNetCore.Routing;
+
+
 
 namespace TalanLunch
 {
@@ -44,6 +43,12 @@ namespace TalanLunch
             builder.Services.AddSignalR();
             // Ajouter les services à l'injection de dépendances
             builder.Services.AddControllers();
+
+            // Enregistre MediatR
+            builder.Services.AddMediatR(cfg =>
+     cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
+
+
 
             // Configuration de la base de données
             builder.Services.AddDbContext<TalanLunchDbContext>(options =>
@@ -112,7 +117,7 @@ namespace TalanLunch
                 q.AddTrigger(opts => opts
                     .ForJob(jobKey)
                     .WithIdentity("ResetMenuOfTheDayTrigger")
-                    .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(17, 58))
+                    .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(00, 24))
                 );
             });
             builder.Services.AddQuartzHostedService();
