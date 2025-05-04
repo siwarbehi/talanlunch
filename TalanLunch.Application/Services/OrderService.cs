@@ -14,11 +14,11 @@ namespace TalanLunch.Application.Services
         //private readonly IHubContext<NotificationHub> _hubContext;
         private readonly IMapper _mapper;
 
-        public OrderService(IOrderRepository orderRepository, IUserRepository userRepository ,IMapper mapper)
+        public OrderService(IOrderRepository orderRepository, IUserRepository userRepository, IMapper mapper)
         {
             _orderRepository = orderRepository;
             _userRepository = userRepository;
-           // _hubContext = hubContext;
+            // _hubContext = hubContext;
             _mapper = mapper;
 
         }
@@ -36,12 +36,12 @@ namespace TalanLunch.Application.Services
             var newOrder = new Order
             {
                 User = user,
-                TotalAmount = 0, 
+                TotalAmount = 0,
                 OrderDate = DateTime.Now,
                 Paid = false,
                 Served = false,
                 OrderRemark = request.OrderRemark,
-                OrderDishes = new List<OrderDish>() 
+                OrderDishes = new List<OrderDish>()
             };
 
             foreach (var item in request.Dishes)
@@ -72,19 +72,19 @@ namespace TalanLunch.Application.Services
 
 
             return await _orderRepository.AddOrderAsync(newOrder);
-        }*/
+        }
 
 
-      /*  public async Task<List<OrderDayDto>> GetAllOrdersAsync()
+        public async Task<List<OrderDayDto>> GetAllOrdersAsync()
         {
             var orders = await _orderRepository.GetAllOrdersAsync();
-            var orderDtos = _mapper.Map<List<OrderDayDto>>(orders); 
+            var orderDtos = _mapper.Map<List<OrderDayDto>>(orders);
             return orderDtos;
         }
-*/
 
 
-       /* public async Task<bool> UpdateOrderStatusAsync(UpdateOrderStatusDto dto)
+
+        public async Task<bool> UpdateOrderStatusAsync(UpdateOrderStatusDto dto)
         {
             // Récupération de la commande par ID
             var order = await _orderRepository.GetOrderByIdAsync(dto.OrderId);
@@ -116,8 +116,8 @@ namespace TalanLunch.Application.Services
                 var notificationMessage = "";
 
                 // Construction du message de notification
-                if(paidChangedToTrue)
-    notificationMessage += $"Félicitations ! Votre commande a été payée avec succès. Merci de votre achat.\n";
+                if (paidChangedToTrue)
+                    notificationMessage += $"Félicitations ! Votre commande a été payée avec succès. Merci de votre achat.\n";
 
                 if (servedChangedToTrue)
                     notificationMessage += $"Votre commande a été servie ! Bon appétit !\n";
@@ -136,8 +136,8 @@ namespace TalanLunch.Application.Services
 
             return true; // Retourne true si la mise à jour a réussi
         }
-    
-    */
+
+
 
         public async Task<PagedResult<OrderDayDto>> GetPaginatedOrdersAsync(PaginationQuery query)
         {
@@ -195,6 +195,6 @@ namespace TalanLunch.Application.Services
         }
 
 
-
+*/
     }
 }

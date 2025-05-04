@@ -4,6 +4,7 @@ using TalanLunch.Application.Commands.Order;
 using TalanLunch.Application.Dtos.Order;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Application.Queries.Order;
+using TalanLunch.Application.Orders.Queries;
 
 
 namespace talanlunch.API.Controllers
@@ -90,13 +91,19 @@ namespace talanlunch.API.Controllers
             return BadRequest("Échec de la mise à jour de la commande.");
         }
 
+        /*  [HttpGet("unpaid")]
+          public async Task<IActionResult> GetPaginatedOrders([FromQuery] PaginationQuery query)
+          {
+              var result = await _orderService.GetPaginatedOrdersAsync(query);
+              return Ok(result);
+          }*/
+
         [HttpGet("unpaid")]
-        public async Task<IActionResult> GetPaginatedOrders([FromQuery] PaginationQuery query)
+        public async Task<IActionResult> GetPaginatedOrders([FromQuery] GetPaginatedOrdersQuery query)
         {
-            var result = await _orderService.GetPaginatedOrdersAsync(query);
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 
-       
     }
 }

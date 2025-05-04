@@ -10,7 +10,7 @@ namespace TalanLunch.Application.Interfaces
         //Task<List<OrderDayDto>> GetAllOrdersAsync();
 
         //Task<bool> UpdateOrderStatusAsync(UpdateOrderStatusDto dto);
-        Task<PagedResult<OrderDayDto>> GetPaginatedOrdersAsync(PaginationQuery query);
+        //Task<PagedResult<OrderDayDto>> GetPaginatedOrdersAsync(PaginationQuery query);
 
 
     }
