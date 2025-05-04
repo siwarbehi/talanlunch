@@ -25,7 +25,7 @@ namespace TalanLunch.Application.Services
             _mapper = mapper;
 
         }
-        public async Task<Order> CreateOrderAsync(OrderRequestDto request)
+        /*public async Task<Order> CreateOrderAsync(OrderRequestDto request)
         {
             var user = await _userRepository.GetUserByIdAsync(request.UserId);
             if (user == null)
@@ -75,19 +75,19 @@ namespace TalanLunch.Application.Services
 
 
             return await _orderRepository.AddOrderAsync(newOrder);
-        }
+        }*/
 
 
-        public async Task<List<OrderDayDto>> GetAllOrdersAsync()
+      /*  public async Task<List<OrderDayDto>> GetAllOrdersAsync()
         {
             var orders = await _orderRepository.GetAllOrdersAsync();
             var orderDtos = _mapper.Map<List<OrderDayDto>>(orders); 
             return orderDtos;
         }
+*/
 
 
-
-        public async Task<bool> UpdateOrderStatusAsync(UpdateOrderStatusDto dto)
+       /* public async Task<bool> UpdateOrderStatusAsync(UpdateOrderStatusDto dto)
         {
             // Récupération de la commande par ID
             var order = await _orderRepository.GetOrderByIdAsync(dto.OrderId);
@@ -140,7 +140,7 @@ namespace TalanLunch.Application.Services
             return true; // Retourne true si la mise à jour a réussi
         }
     
-    
+    */
 
         public async Task<PagedResult<OrderDayDto>> GetPaginatedOrdersAsync(PaginationQuery query)
         {
