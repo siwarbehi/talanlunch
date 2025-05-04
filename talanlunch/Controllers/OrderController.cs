@@ -89,6 +89,7 @@ namespace talanlunch.API.Controllers
                 return Ok("Notification envoyée avec succès.");
             return BadRequest("Échec de la mise à jour de la commande.");
         }
+
         [HttpGet("unpaid")]
         public async Task<IActionResult> GetPaginatedOrders([FromQuery] PaginationQuery query)
         {

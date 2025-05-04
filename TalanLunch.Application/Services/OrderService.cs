@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using TalanLunch.Application.Interfaces;
-using TalanLunch.Domain.Entities;
-using talanlunch.Application.Hubs;
-using TalanLunch.Application.Dtos.Order;
 using TalanLunch.Application.Dtos.Menu;
-using AutoMapper;
+using TalanLunch.Application.Dtos.Order;
+using TalanLunch.Application.Interfaces;
 
 namespace TalanLunch.Application.Services
 {
@@ -14,14 +11,14 @@ namespace TalanLunch.Application.Services
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IUserRepository _userRepository;
-        private readonly IHubContext<NotificationHub> _hubContext;
+        //private readonly IHubContext<NotificationHub> _hubContext;
         private readonly IMapper _mapper;
 
-        public OrderService(IOrderRepository orderRepository, IUserRepository userRepository, IHubContext<NotificationHub> hubContext  ,IMapper mapper)
+        public OrderService(IOrderRepository orderRepository, IUserRepository userRepository ,IMapper mapper)
         {
             _orderRepository = orderRepository;
             _userRepository = userRepository;
-            _hubContext = hubContext;
+           // _hubContext = hubContext;
             _mapper = mapper;
 
         }

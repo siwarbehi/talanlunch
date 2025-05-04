@@ -21,7 +21,7 @@
     <ProjectReference Include="..\TalanLunch.Application\TalanLunch.Application.csproj" />
     <ProjectReference Include="..\TalanLunch.Domain\TalanLunch.Domain.csproj" />
     <ProjectReference Include="..\TalanLunch.Infrastructure\TalanLunch.Infrastructure.csproj" />
-    <ProjectReference Include="..\talanlunch\talanlunch.API.csproj" />
+    <ProjectReference Include="..\talanlunch\Talanlunch.API.csproj" />
   </ItemGroup>
 
 	<ItemGroup>

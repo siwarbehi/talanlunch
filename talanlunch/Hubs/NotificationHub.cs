@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿// Application/Hubs/NotificationHub.cs
+using Microsoft.AspNetCore.SignalR;
 
-namespace talanlunch.Application.Hubs
+namespace TalanLunch.API.Hubs
 {
     public class NotificationHub : Hub
     {
@@ -11,7 +12,6 @@ namespace talanlunch.Application.Hubs
 
             if (!string.IsNullOrEmpty(userId))
             {
-                // Ajouter ce client dans un "groupe" spécifique basé sur son UserId
                 await Groups.AddToGroupAsync(Context.ConnectionId, userId);
             }
 
@@ -31,4 +31,4 @@ namespace talanlunch.Application.Hubs
             await base.OnDisconnectedAsync(exception);
         }
     }
-    }
+}

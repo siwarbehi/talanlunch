@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Quartz;
 using System.Text;
-using talanlunch.Application.Hubs;
 using TalanLunch.Application.Configurations;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Application.Jobs;
 using TalanLunch.Application.Services;
 using TalanLunch.Infrastructure.Data;
 using TalanLunch.Infrastructure.Repos;
+using TalanLunch.API.Hubs;
 
 
 
@@ -155,7 +155,8 @@ namespace TalanLunch
             app.MapControllers();
 
             // AJOUT : MapHub pour SignalR
-            app.MapHub<NotificationHub>("/notificationHub"); // <--- à adapter selon ton Hub (ex: NotificationHub)
+            app.MapHub<NotificationHub>("/notificationHub");
+            // <--- à adapter selon ton Hub (ex: NotificationHub)
 
             app.Run();
         }

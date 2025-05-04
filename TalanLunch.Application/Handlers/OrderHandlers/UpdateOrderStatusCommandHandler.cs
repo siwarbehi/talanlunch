@@ -1,13 +1,8 @@
 ﻿// Application/Handlers/OrderHandlers/UpdateOrderStatusCommandHandler.cs
 using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using TalanLunch.Application.Commands.Order;
-using TalanLunch.Application.Dtos.Order;
 using TalanLunch.Application.Interfaces;
-using Microsoft.AspNetCore.SignalR;
-using TalanLunch.Application.Hubs;
+using TalanLunch.Application.Notifications;
 
 namespace TalanLunch.Application.Handlers.OrderHandlers
 {
@@ -15,19 +10,15 @@ namespace TalanLunch.Application.Handlers.OrderHandlers
         : IRequestHandler<UpdateOrderStatusCommand, bool>
     {
         private readonly IOrderRepository _orderRepository;
-        private readonly IHubContext<NotificationHub> _hubContext;
+        private readonly IMediator _mediator;
 
-        public UpdateOrderStatusCommandHandler(
-            IOrderRepository orderRepository,
-            IHubContext<NotificationHub> hubContext)
+        public UpdateOrderStatusCommandHandler(IOrderRepository orderRepository, IMediator mediator)
         {
             _orderRepository = orderRepository;
-            _hubContext = hubContext;
+            _mediator = mediator;
         }
 
-        public async Task<bool> Handle(
-            UpdateOrderStatusCommand request,
-            CancellationToken cancellationToken)
+        public async Task<bool> Handle(UpdateOrderStatusCommand request, CancellationToken cancellationToken)
         {
             var dto = request.Dto;
             var order = await _orderRepository.GetOrderByIdAsync(dto.OrderId);
@@ -47,15 +38,12 @@ namespace TalanLunch.Application.Handlers.OrderHandlers
                 if (paidChanged) msg += "Votre commande a été payée avec succès.\n";
                 if (servedChanged) msg += "Votre commande a été servie ! Bon appétit !\n";
 
-                await _hubContext.Clients
-                    .Group(order.UserId.ToString())
-                    .SendAsync("ReceiveNotification", new
-                    {
-                        OrderId = order.OrderId,
-                        Message = msg.Trim(),
-                        Type = "status-update",
-                        Timestamp = DateTime.UtcNow
-                    }, cancellationToken);
+                await _mediator.Publish(new OrderStatusUpdatedNotification
+                {
+                    OrderId = order.OrderId,
+                    UserId = order.UserId,
+                    Message = msg.Trim()
+                }, cancellationToken);
             }
 
             return true;
