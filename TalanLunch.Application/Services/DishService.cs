@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using TalanLunch.Application.Dtos.Dish;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
@@ -15,13 +17,17 @@ namespace TalanLunch.Application.Services
         private readonly IMapper _mapper;
 
 
+
+
+
         public DishService(IDishRepository dishRepository, IMapper mapper)
         {
             _dishRepository = dishRepository;
             _uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
             _mapper = mapper;
+           
         }
-         //creation plat
+        /* //creation plat
         public async Task<Dish> AddDishAsync(DishDto dishDto)
         {
             if (dishDto == null)
@@ -64,22 +70,23 @@ namespace TalanLunch.Application.Services
 
             return uniqueFileName;
         }
+*/
 
 
-
-        // Obtenir tous les plats
+      /*  // Obtenir tous les plats
         public async Task<IEnumerable<Dish>> GetAllDishesAsync()
         {
             return await _dishRepository.GetAllDishesAsync();
-        }
-    
-        // Obtenir un plat par ID
-        public async Task<Dish?> GetDishByIdAsync(int id)
+        }*/
+      /*  // GET: api/dish/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Dish>> GetDishById(int id)
         {
-            return await _dishRepository.GetDishByIdAsync(id);
-        }
+            var dish = await _dishService.GetDishByIdAsync(id);
+            return dish == null ? NotFound() : Ok(dish);
+        }*/
 
-        public async Task<Dish> UpdateDishAsync(Dish existingDish, DishUpdateDto updatedDish, IFormFile? dishPhoto)
+       /* public async Task<Dish> UpdateDishAsync(Dish existingDish, DishUpdateDto updatedDish, IFormFile? dishPhoto)
         {
             _mapper.Map(updatedDish, existingDish);
 
@@ -101,9 +108,9 @@ namespace TalanLunch.Application.Services
             }
 
             return await _dishRepository.UpdateDishAsync(existingDish);
-        }
+        }*/
 
-        // Supprimer un plat
+       /* // Supprimer un plat
         public async Task DeleteDishAsync(int id)
         {
             var dish = await _dishRepository.GetDishByIdAsync(id);
@@ -111,7 +118,7 @@ namespace TalanLunch.Application.Services
                 throw new KeyNotFoundException($"Dish with ID {id} not found.");
 
             await _dishRepository.DeleteDishAsync(id);
-        }
+        }*/
        
 
     }
