@@ -9,18 +9,18 @@ using TalanLunch.Application.Orders.Queries;
 
 namespace TalanLunch.Application.Orders.Handlers
 {
-    public class GetPaginatedOrdersHandler : IRequestHandler<GetPaginatedOrdersQuery, PagedResult<OrderDayDto>>
+    public class UnpaidOrdersHandler : IRequestHandler<UnpaidOrdersQuery, PagedResult<OrderDayDto>>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
 
-        public GetPaginatedOrdersHandler(IOrderRepository orderRepository, IMapper mapper)
+        public UnpaidOrdersHandler(IOrderRepository orderRepository, IMapper mapper)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
         }
 
-        public async Task<PagedResult<OrderDayDto>> Handle(GetPaginatedOrdersQuery query, CancellationToken cancellationToken)
+        public async Task<PagedResult<OrderDayDto>> Handle(UnpaidOrdersQuery query, CancellationToken cancellationToken)
         {
             // Étape 1 : Récupération de la requête de base
             var ordersQuery = _orderRepository.GetAllOrdersQuery();
@@ -34,15 +34,18 @@ namespace TalanLunch.Application.Orders.Handlers
                 .ThenInclude(od => od.Dish);
 
             // Étape 3 : Application des filtres de recherche
-            if (!string.IsNullOrEmpty(query.FirstName))
+            if (!string.IsNullOrWhiteSpace(query.FirstName))
             {
-                ordersQuery = ordersQuery.Where(o => o.User.FirstName.Contains(query.FirstName));
+                var firstNameLower = query.FirstName.ToLower();
+                ordersQuery = ordersQuery.Where(o => o.User.FirstName.ToLower().StartsWith(firstNameLower));
             }
 
-            if (!string.IsNullOrEmpty(query.LastName))
+            if (!string.IsNullOrWhiteSpace(query.LastName))
             {
-                ordersQuery = ordersQuery.Where(o => o.User.LastName.Contains(query.LastName));
+                var lastNameLower = query.LastName.ToLower();
+                ordersQuery = ordersQuery.Where(o => o.User.LastName.ToLower().StartsWith(lastNameLower));
             }
+
 
             // Étape 4 : Tri par date
             var orderedQuery = ordersQuery.OrderByDescending(o => o.OrderDate);

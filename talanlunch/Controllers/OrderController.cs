@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TalanLunch.Application.Commands.Order;
+using TalanLunch.Application.Dtos.Menu;
 using TalanLunch.Application.Dtos.Order;
 using TalanLunch.Application.Interfaces;
-using TalanLunch.Application.Queries.Order;
 using TalanLunch.Application.Orders.Queries;
 
 
@@ -63,12 +63,33 @@ namespace talanlunch.API.Controllers
           }*/
 
         // GET api/order
+        /*        [HttpGet]
+                public async Task<ActionResult<IEnumerable<OrderDayDto>>> GetAllOrders()
+                {
+                    var orders = await _mediator.Send(new GetAllOrdersQuery());
+                    return Ok(orders);
+                }*/
+        /*
+                [HttpGet]
+                public async Task<ActionResult<IEnumerable<OrderDayDto>>> GetAllOrders(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] bool onlyUnpaid = false,
+            [FromQuery] bool onlyPaidAndServed = false)
+                {
+                    var query = new GetAllOrdersQuery(pageNumber, pageSize, onlyUnpaid, onlyPaidAndServed);
+                    var result = await _mediator.Send(query);
+                    return Ok(result);
+                }
+        */
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderDayDto>>> GetAllOrders()
+        public async Task<ActionResult<PagedResult<OrderDayDto>>> GetAllOrders([FromQuery] GetAllOrdersQuery query)
         {
-            var orders = await _mediator.Send(new GetAllOrdersQuery());
-            return Ok(orders);
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
+
+
 
         /*//paid & served
         [HttpPost("update-order-status")]
@@ -99,7 +120,7 @@ namespace talanlunch.API.Controllers
           }*/
 
         [HttpGet("unpaid")]
-        public async Task<IActionResult> GetPaginatedOrders([FromQuery] GetPaginatedOrdersQuery query)
+        public async Task<IActionResult> UnpaidOrders([FromQuery] UnpaidOrdersQuery query)
         {
             var result = await _mediator.Send(query);
             return Ok(result);

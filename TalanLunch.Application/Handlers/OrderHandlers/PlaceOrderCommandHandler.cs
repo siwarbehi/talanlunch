@@ -1,19 +1,12 @@
-﻿// Application/Handlers/OrderHandlers/PlaceOrderCommandHandler.cs
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using TalanLunch.Application.Commands.Order;
-using TalanLunch.Application.Dtos.Order;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
 
 namespace TalanLunch.Application.Handlers.OrderHandlers
 {
-   
+
     public class PlaceOrderCommandHandler : IRequestHandler<PlaceOrderCommand, Order>
     {
         private readonly IUserRepository _userRepository;
@@ -34,6 +27,11 @@ namespace TalanLunch.Application.Handlers.OrderHandlers
             PlaceOrderCommand request,
             CancellationToken cancellationToken)
         {
+            if (request.Request == null)
+            {
+                throw new ArgumentNullException(nameof(request.Request), "Les données de commande sont nulles.");
+            }
+
             var dto = request.Request;
 
             // 1. Valide l'utilisateur

@@ -24,7 +24,7 @@ namespace TalanLunch.Application.Services
             }
         }
 
-        public async Task<User> UpdateUserProfileAsync(int userId, UserDto userDto)
+       /* public async Task<User> UpdateUserProfileAsync(int userId, UserDto userDto)
         {
             var user = await _userRepository.GetUserByIdAsync(userId);
             if (user == null)
@@ -99,9 +99,9 @@ namespace TalanLunch.Application.Services
             {
                 return false;
             }
-        }
+        }*/
 
-        public async Task<User> GetUserByIdAsync(int userId)
+       /* public async Task<User> GetUserByIdAsync(int userId)
         {
             var user = await _userRepository.GetUserByIdAsync(userId);
             if (user == null)
@@ -109,9 +109,9 @@ namespace TalanLunch.Application.Services
                 throw new ArgumentException("Utilisateur non trouvé");
             }
             return user;
-        }
+        }*/
 
-        private async Task<string> SaveProfileImageAsync(IFormFile profilePicture)
+  /*      private async Task<string> SaveProfileImageAsync(IFormFile profilePicture)
         {
             // Obtenez le répertoire wwwroot/uploads
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
@@ -134,9 +134,9 @@ namespace TalanLunch.Application.Services
 
             // Retourner le nom du fichier unique pour l'enregistrement
             return uniqueFileName;
-        }
+        }*/
 
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        public async Task<IEnumerable<Domain.Entities.User>> GetAllUsersAsync()
         {
             return await _userRepository.GetAllUsersAsync();
         }
@@ -146,7 +146,7 @@ namespace TalanLunch.Application.Services
         {
             await _userRepository.DeleteUserAsync(userId);
         }
-        public async Task<IEnumerable<User>> GetUsersByRoleAsync(UserRole role)
+        public async Task<IEnumerable<Domain.Entities.User>> GetUsersByRoleAsync(UserRole role)
         {
             return await _userRepository.GetUsersByRoleAsync(role);
         }

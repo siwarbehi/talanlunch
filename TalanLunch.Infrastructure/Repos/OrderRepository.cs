@@ -26,25 +26,53 @@ namespace TalanLunch.Infrastructure.Repos
                 .Where(d => dishIds.Contains(d.DishId))
                 .ToListAsync();
         }
-        /* public async Task<List<Order>> GetOrdersByDateAsync(DateTime date)
-         {
-             return await _context.Orders
-                 .Include(o => o.User)
-                 .Include(o => o.OrderDishes)
-                     .ThenInclude(od => od.Dish)
-                 .Where(o => o.OrderDate.Date == date.Date)
-                 .ToListAsync();
-         }
-        */
-        public async Task<List<Order>> GetAllOrdersAsync()
+       
+
+        public async Task<(List<Order> Orders, int TotalItems)> GetAllOrdersAsync(int pageNumber, int pageSize, bool? isPaid, bool? isServed)
         {
-            return await _context.Orders
+            var query = _context.Orders
                 .AsNoTracking()
                 .Include(o => o.User)
                 .Include(o => o.OrderDishes)
                     .ThenInclude(od => od.Dish)
+                .AsQueryable();
+
+            if (!isPaid.HasValue && !isServed.HasValue)
+            {
+                query = query.Where(o => !o.Paid && !o.Served);
+            }
+            else if (!isPaid.HasValue && isServed == false)
+            {
+                query = query.Where(o => !o.Served);
+            }
+            else if (isPaid == false && isServed == true)
+            {
+                query = query.Where(o => !o.Paid && o.Served);
+            }
+            else if (isPaid == true && isServed == true)
+            {
+                query = query.Where(o => o.Paid && o.Served);
+            }
+            else
+            {
+                if (isPaid.HasValue)
+                    query = query.Where(o => o.Paid == isPaid.Value);
+                if (isServed.HasValue)
+                    query = query.Where(o => o.Served == isServed.Value);
+            }
+
+            var totalItems = await query.CountAsync();
+
+            var orders = await query
+                .OrderByDescending(o => o.OrderDate)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
+            return (orders, totalItems);
         }
+
+
 
         public async Task<Order?> GetOrderByIdAsync(int orderId)
         {

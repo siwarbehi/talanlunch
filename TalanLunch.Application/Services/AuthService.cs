@@ -27,7 +27,7 @@ namespace TalanLunch.Application.Services
             _mailService = mailService;
         }
 
-        public async Task<string> RegisterUserAsync(RegisterUserDto registerUserDto, bool isCaterer)
+       /* public async Task<string> RegisterUserAsync(RegisterUserDto registerUserDto, bool isCaterer)
         {
             var existingUser = await _userRepository.GetUserByEmailAsync(registerUserDto.EmailAddress);
             if (existingUser != null)
@@ -35,7 +35,7 @@ namespace TalanLunch.Application.Services
                 return "Cet email est déjà utilisé.";
             }
 
-            var user = new User
+            var user = new Domain.Entities.User
             {
                 FirstName = registerUserDto.FirstName,
                 LastName = registerUserDto.LastName,
@@ -62,14 +62,14 @@ namespace TalanLunch.Application.Services
 
             return "Inscription réussie.";
         }
-
-        public static string HashPassword(string password)
+*/
+       /* public static string HashPassword(string password)
         {
-            var passwordHasher = new PasswordHasher<User>();
+            var passwordHasher = new PasswordHasher<Domain.Entities.User>();
             return passwordHasher.HashPassword(null, password); 
-        }
+        }*/
 
-        public async Task<TokenResponseDto?> LoginAsync(LoginDto request)
+        /*public async Task<TokenResponseDto?> LoginAsync(LoginDto request)
         {
             var user = await _userRepository.GetUserByEmailAsync(request.EmailAddress);
             if (user is null)
@@ -77,7 +77,7 @@ namespace TalanLunch.Application.Services
                 return null;
             }
 
-            if (new PasswordHasher<User>().VerifyHashedPassword(user, user.HashedPassword, request.Password)
+            if (new PasswordHasher<Domain.Entities.User>().VerifyHashedPassword(user, user.HashedPassword, request.Password)
                 == PasswordVerificationResult.Failed)
             {
                 return null;
@@ -89,11 +89,11 @@ namespace TalanLunch.Application.Services
             tokenResponse.IsApproved = user.IsApproved;
 
             return tokenResponse;
-        }
+        }*/
 
 
-        // Méthode pour créer un TokenResponse contenant le token d'accès et le refresh token
-        private async Task<TokenResponseDto> CreateTokenResponse(User? user)
+       /* // Méthode pour créer un TokenResponse contenant le token d'accès et le refresh token
+        private async Task<TokenResponseDto> CreateTokenResponse(Domain.Entities.User? user)
         {
             if (user == null)
             {
@@ -108,7 +108,7 @@ namespace TalanLunch.Application.Services
         }
 
         // Méthode pour générer et sauvegarder un refresh token
-        private async Task<string> GenerateAndSaveRefreshTokenAsync(User user)
+        private async Task<string> GenerateAndSaveRefreshTokenAsync(Domain.Entities.User user)
         {
             var refreshToken = GenerateRefreshToken();
             user.RefreshToken = refreshToken;
@@ -126,7 +126,7 @@ namespace TalanLunch.Application.Services
         }
 
         // Méthode pour créer un token JWT d'accès
-        private string CreateToken(User user)
+        private string CreateToken(Domain.Entities.User user)
         {
             var claims = new List<Claim>
             {
@@ -162,7 +162,7 @@ namespace TalanLunch.Application.Services
         }
 
         // Méthode pour valider un refresh token
-        private async Task<User?> ValidateRefreshTokenAsync(int userId, string refreshToken)
+        private async Task<Domain.Entities.User?> ValidateRefreshTokenAsync(int userId, string refreshToken)
         {
             var user = await _userRepository.GetUserByIdAsync(userId);
             if (user is null || user.RefreshToken != refreshToken
@@ -172,9 +172,9 @@ namespace TalanLunch.Application.Services
             }
 
             return user;
-        }
+        }*/
 
-        public async Task<bool> LogoutAsync(string refreshToken)
+       /* public async Task<bool> LogoutAsync(string refreshToken)
         {
             // Récupérer l'utilisateur via son RefreshToken
             var user = await _userRepository.GetUserByRefreshTokenAsync(refreshToken);
@@ -184,9 +184,9 @@ namespace TalanLunch.Application.Services
             // Supprimer le RefreshToken et sa date d'expiration
             await _userRepository.DeleteRefreshTokenAsync(user);
             return true;
-        }
+        }*/
 
-        public async Task<bool> ForgotPasswordAsync(string email)
+     /*   public async Task<bool> ForgotPasswordAsync(string email)
         {
             var user = await _userRepository.GetUserByEmailAsync(email);
             if (user == null)
@@ -203,9 +203,9 @@ namespace TalanLunch.Application.Services
             // Envoyer l'email via MailService
             await _mailService.SendPasswordResetEmailAsync(user, resetToken);
             return true;
-        }
+        }*/
 
-        public async Task<bool> ResetPasswordAsync(string token, string newPassword)
+      /*  public async Task<bool> ResetPasswordAsync(string token, string newPassword)
         {
             var user = await _userRepository.GetByResetTokenAsync(token);
 
@@ -223,6 +223,6 @@ namespace TalanLunch.Application.Services
 
             await _userRepository.UpdateUserAsync(user);
             return true; // Mot de passe réinitialisé avec succès
-        }
+        }*/
     }
 }

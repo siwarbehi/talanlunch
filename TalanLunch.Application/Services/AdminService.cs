@@ -15,7 +15,7 @@ namespace TalanLunch.Application.Services
         }
 
         // Récupérer tous les traiteurs en attente
-        public async Task<List<User>> GetPendingCaterersAsync()
+        public async Task<List<Domain.Entities.User>> GetPendingCaterersAsync()
         {
             return await _userRepository.GetPendingCaterersAsync();
         }

@@ -4,7 +4,7 @@ using TalanLunch.Application.Dtos.Menu;
 
 namespace TalanLunch.Application.Orders.Queries
 {
-    public class GetPaginatedOrdersQuery : IRequest<PagedResult<OrderDayDto>>
+    public class UnpaidOrdersQuery : IRequest<PagedResult<OrderDayDto>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }

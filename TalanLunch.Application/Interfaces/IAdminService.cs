@@ -4,7 +4,7 @@ namespace TalanLunch.Application.Interfaces
 {
     public interface IAdminService
     {
-        Task<List<User>> GetPendingCaterersAsync();
+        Task<List<Domain.Entities.User>> GetPendingCaterersAsync();
         Task<bool> ApproveCatererAsync(int id);
       
 

@@ -96,7 +96,7 @@ namespace TalanLunch.Application.Services
             await SendMailAsync(message);
         }
 
-        public MailDataDto CreateMailDataForApproval(User caterer)
+        public MailDataDto CreateMailDataForApproval(Domain.Entities.User caterer)
         {
             return new MailDataDto
             {
@@ -106,7 +106,7 @@ namespace TalanLunch.Application.Services
             };
         }
 
-        public async Task SendPasswordResetEmailAsync(User user, string resetToken)
+        public async Task SendPasswordResetEmailAsync(Domain.Entities.User user, string resetToken)
         {
             string port = user.UserRole switch
             {

@@ -10,6 +10,7 @@ using TalanLunch.Application.Services;
 using TalanLunch.Infrastructure.Data;
 using TalanLunch.Infrastructure.Repos;
 using TalanLunch.API.Hubs;
+using TalanLunch.Application.Common;
 
 
 
@@ -69,6 +70,8 @@ namespace TalanLunch
             builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<AuthCommon>();
+
 
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 

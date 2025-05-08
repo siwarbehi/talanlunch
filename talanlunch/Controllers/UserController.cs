@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using TalanLunch.Application.Dtos.User;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Enums;
+using TalanLunch.Application.User.Queries;
+using TalanLunch.Application.User.Commands;
+
 
 namespace talanlunch.Controllers
 {
@@ -10,18 +14,35 @@ namespace talanlunch.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IMediator _mediator;
 
-        public UserController(IUserService userService)
+
+        public UserController(IUserService userService, IMediator mediator)
         {
             _userService = userService;
+            _mediator = mediator;
+
         }
 
+        /*    [HttpGet("{userId}")]
+            public async Task<IActionResult> GetUserById(int userId)
+            {
+                try
+                {
+                    var user = await _userService.GetUserByIdAsync(userId);
+                    return Ok(user);
+                }
+                catch (ArgumentException ex)
+                {
+                    return NotFound(ex.Message);
+                }
+            }*/
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserById(int userId)
         {
             try
             {
-                var user = await _userService.GetUserByIdAsync(userId);
+                var user = await _mediator.Send(new GetUserByIdQuery(userId));
                 return Ok(user);
             }
             catch (ArgumentException ex)
@@ -30,12 +51,25 @@ namespace talanlunch.Controllers
             }
         }
 
+        /* [HttpPatch("{userId}")]
+         public async Task<IActionResult> UpdateUserProfile(int userId, [FromForm] UserDto userDto)
+         {
+             try
+             {
+                 var updatedUser = await _userService.UpdateUserProfileAsync(userId, userDto);
+                 return Ok(updatedUser);
+             }
+             catch (ArgumentException ex)
+             {
+                 return NotFound(ex.Message);
+             }
+         }*/
         [HttpPatch("{userId}")]
         public async Task<IActionResult> UpdateUserProfile(int userId, [FromForm] UserDto userDto)
         {
             try
             {
-                var updatedUser = await _userService.UpdateUserProfileAsync(userId, userDto);
+                var updatedUser = await _mediator.Send(new UpdateUserProfileCommand(userId, userDto));
                 return Ok(updatedUser);
             }
             catch (ArgumentException ex)
@@ -43,7 +77,7 @@ namespace talanlunch.Controllers
                 return NotFound(ex.Message);
             }
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> GetUsersByRole([FromQuery] string role = null )
         {
