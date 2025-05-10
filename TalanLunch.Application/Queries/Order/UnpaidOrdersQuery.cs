@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿/*using MediatR;
 using TalanLunch.Application.Dtos.Order;
 using TalanLunch.Application.Dtos.Menu;
 
@@ -12,3 +12,4 @@ namespace TalanLunch.Application.Orders.Queries
         public string? LastName { get; set; }
     }
 }
+*/

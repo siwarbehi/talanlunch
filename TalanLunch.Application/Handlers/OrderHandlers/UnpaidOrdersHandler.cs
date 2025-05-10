@@ -1,8 +1,8 @@
-﻿using AutoMapper;
+﻿/*using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using TalanLunch.Application.Dtos.Menu;
+using TalanLunch.Application.Dtos;
 using TalanLunch.Application.Dtos.Order;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Application.Orders.Queries;
@@ -70,3 +70,4 @@ namespace TalanLunch.Application.Orders.Handlers
         }
     }
 }
+*/

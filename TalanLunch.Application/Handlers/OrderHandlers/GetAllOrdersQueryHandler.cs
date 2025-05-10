@@ -1,6 +1,6 @@
 ﻿/*using AutoMapper;
 using MediatR;
-using TalanLunch.Application.Dtos.Order;
+using TalanLunch.Application.Dtos;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Application.Queries.Order;
 
@@ -30,11 +30,11 @@ namespace TalanLunch.Application.Handlers.OrderHandlers
         }
     }
 }
-*/
+*//*
 using AutoMapper;
 using MediatR;
-using TalanLunch.Application.Dtos.Menu;
-using TalanLunch.Application.Dtos.Order;
+
+using TalanLunch.Application.Dtos;
 using TalanLunch.Application.Interfaces;
 
 public class GetAllOrdersQueryHandler
@@ -69,3 +69,4 @@ public class GetAllOrdersQueryHandler
         };
     }
 }
+*/

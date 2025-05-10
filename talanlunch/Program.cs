@@ -61,22 +61,18 @@ namespace TalanLunch
 
             // Enregistrement des repositories et services
             builder.Services.AddScoped<IDishRepository, DishRepository>();
-            builder.Services.AddScoped<IDishService, DishService>();
-            builder.Services.AddScoped<IMenuService, MenuService>();
             builder.Services.AddScoped<IMenuRepository, MenuRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-            builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<AuthCommon>();
 
 
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
             // Enregistrement du service de mail
-            builder.Services.AddTransient<Application.Interfaces.IMailService, Application.Services.MailService>();
+            builder.Services.AddTransient<IMailService,MailService>();
 
             // Ajouter MailSettings à l'injection de dépendances
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
@@ -159,7 +155,6 @@ namespace TalanLunch
 
             // AJOUT : MapHub pour SignalR
             app.MapHub<NotificationHub>("/notificationHub");
-            // <--- à adapter selon ton Hub (ex: NotificationHub)
 
             app.Run();
         }

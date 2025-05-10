@@ -24,19 +24,6 @@ namespace talanlunch.Controllers
 
         }
 
-        /*    [HttpGet("{userId}")]
-            public async Task<IActionResult> GetUserById(int userId)
-            {
-                try
-                {
-                    var user = await _userService.GetUserByIdAsync(userId);
-                    return Ok(user);
-                }
-                catch (ArgumentException ex)
-                {
-                    return NotFound(ex.Message);
-                }
-            }*/
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserById(int userId)
         {
@@ -51,19 +38,6 @@ namespace talanlunch.Controllers
             }
         }
 
-        /* [HttpPatch("{userId}")]
-         public async Task<IActionResult> UpdateUserProfile(int userId, [FromForm] UserDto userDto)
-         {
-             try
-             {
-                 var updatedUser = await _userService.UpdateUserProfileAsync(userId, userDto);
-                 return Ok(updatedUser);
-             }
-             catch (ArgumentException ex)
-             {
-                 return NotFound(ex.Message);
-             }
-         }*/
         [HttpPatch("{userId}")]
         public async Task<IActionResult> UpdateUserProfile(int userId, [FromForm] UserDto userDto)
         {
@@ -94,8 +68,6 @@ namespace talanlunch.Controllers
 
             return Ok(users);
         }
-
-
 
         // Supprimer un user
         [HttpDelete("{id}")]

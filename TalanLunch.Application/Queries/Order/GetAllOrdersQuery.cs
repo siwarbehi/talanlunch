@@ -28,7 +28,7 @@ public class GetAllOrdersQuery : IRequest<IEnumerable<OrderDayDto>>
     }
 }
 
-*/
+*//*
 using MediatR;
 using TalanLunch.Application.Dtos.Menu;
 using TalanLunch.Application.Dtos.Order;
@@ -42,3 +42,4 @@ public class GetAllOrdersQuery : IRequest<PagedResult<OrderDayDto>>
 
     public GetAllOrdersQuery() { }
 }
+*/

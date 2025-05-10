@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TalanLunch.Application.Commands.Dish;
-using TalanLunch.Application.Dtos.Dish;
-using TalanLunch.Application.Interfaces;
-using TalanLunch.Application.Queries.Dish;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using TalanLunch.Application.Dishes.Commands;
+using TalanLunch.Application.Dishes.Commands.AddDish;
+using TalanLunch.Application.Dishes.Commands.UpdateDish;
+using TalanLunch.Application.Dishes.Queries.GetAllDishes;
+using TalanLunch.Application.Dishes.Queries.GetDishById;
 using TalanLunch.Domain.Entities;
-using MediatR;
 
 namespace talanlunch.Controllers
 {
@@ -12,79 +13,36 @@ namespace talanlunch.Controllers
     [Route("api/dish")]
     public class DishController : ControllerBase
     {
-        private readonly IDishService _dishService;
         private readonly IMediator _mediator;
 
 
-        public DishController(IDishService dishService, IMediator mediator)
+        public DishController(IMediator mediator)
         {
-            _dishService = dishService;
             _mediator = mediator;
 
         }
-        /*  //creation d un plat 
-          [HttpPost]
-          public async Task<IActionResult> AddDish(DishDto dishDto)
-          {
-              if (!ModelState.IsValid)
-              {
-                  return BadRequest(ModelState);
-              }
-
-              var createdDish = await _dishService.AddDishAsync(dishDto);
-
-              return CreatedAtAction(nameof(GetDishById), new { id = createdDish.DishId }, createdDish);
-          }*/
-        // POST api/dish
+        //creation d un plat 
+         
         [HttpPost]
-        public async Task<IActionResult> AddDish([FromForm] DishDto dishDto)
+        public async Task<IActionResult> AddDish([FromForm] AddDishCommand command)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var createdDish = await _mediator.Send(new AddDishCommand(dishDto));
-            return CreatedAtAction(nameof(GetDishById),
-                new { id = createdDish.DishId },
-                createdDish);
+            var createdDish = await _mediator.Send(command);
+
+            return CreatedAtAction(nameof(GetDishById),new { id = createdDish.DishId },createdDish);
         }
 
-        //modifier un plat 
-
-        /*  [HttpPatch("{id}")]
-          public async Task<IActionResult> PatchDish(int id, [FromForm] DishUpdateDto updatedDish, IFormFile? dishPhoto)
-          {
-              if (!ModelState.IsValid)
-              {
-                  return BadRequest(ModelState);
-              }
-
-              if (updatedDish == null)
-              {
-                  return BadRequest("Dish data is required.");
-              }
-
-              var existingDish = await _dishService.GetDishByIdAsync(id);
-              if (existingDish == null)
-              {
-                  return NotFound($"Dish with id {id} not found.");
-              }
-              var updatedDishEntity = await _dishService.UpdateDishAsync(existingDish, updatedDish, dishPhoto);
-
-              return Ok(updatedDishEntity);
-          }*/
-
-        // PATCH api/dish/{id}
         [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchDish(
-            int id,
-            [FromForm] DishUpdateDto updatedDish,
-            IFormFile? dishPhoto)
+        public async Task<IActionResult> PatchDish(int id, [FromForm] UpdateDishCommand command)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _mediator.Send(
-                new UpdateDishCommand(id, updatedDish, dishPhoto));
+            command.DishId = id;
+
+            var result = await _mediator.Send(command);
 
             if (result == null)
                 return NotFound($"Dish with id {id} not found.");
@@ -92,57 +50,34 @@ namespace talanlunch.Controllers
             return Ok(result);
         }
 
-        /* // GET: api/dish
-         [HttpGet]
-         public async Task<IActionResult> GetAllDishes()
-         {
-             var dishes = await _dishService.GetAllDishesAsync();
-             return Ok(dishes);  
-         }*/
+
+
         // GET api/dish
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Dish>>> GetAllDishes()
+        public async Task<ActionResult<IEnumerable<Dish>>> GetAllDishes([FromQuery] GetAllDishesQuery query)
         {
-            var dishes = await _mediator.Send(new GetAllDishesQuery());
+            var dishes = await _mediator.Send(query);
             return Ok(dishes);
         }
 
-        /*  // GET: api/dish/{id}
-          [HttpGet("{id}")]
-          public async Task<ActionResult<Dish>> GetDishById(int id)
-          {
-              var dish = await _dishService.GetDishByIdAsync(id);
-              return dish == null ? NotFound() : Ok(dish);
-          }*/
 
+
+
+ 
         // GET api/dish/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Dish>> GetDishById(int id)
+        public async Task<ActionResult<Dish>> GetDishById([FromRoute] int id)
         {
-            var dish = await _mediator.Send(new GetDishByIdQuery(id));
+            var query = new GetDishByIdQuery { DishId = id };
+            var dish = await _mediator.Send(query);
             if (dish == null)
                 return NotFound();
+
             return Ok(dish);
         }
-        /* // DELETE: api/dish/delete/{id}
-         [HttpDelete("{id}")]
-         public async Task<IActionResult> DeleteDish(int id)
-         {
-             try
-             {
-                 await _dishService.DeleteDishAsync(id);
-                 return NoContent(); 
-             }
-             catch (KeyNotFoundException)
-             {
-                 return NotFound($"Dish with ID {id} not found.");
-             }
-             catch (Exception ex)
-             {
 
-                 return StatusCode(500, $"Internal server error: {ex.Message}");
-             }
-         }*/
+
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDish(int id)
         {

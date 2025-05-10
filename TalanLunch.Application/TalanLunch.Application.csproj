@@ -31,6 +31,10 @@
     <ProjectReference Include="..\TalanLunch.Domain\TalanLunch.Domain.csproj" />
 
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Handlers\DishHandlers\" />
+    <Folder Include="Menus\Commands\NewFolder\" />
+  </ItemGroup>
 
  
 
