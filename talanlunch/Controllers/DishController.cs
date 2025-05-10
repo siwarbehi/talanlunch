@@ -15,14 +15,12 @@ namespace talanlunch.Controllers
     {
         private readonly IMediator _mediator;
 
-
         public DishController(IMediator mediator)
         {
             _mediator = mediator;
 
         }
-        //creation d un plat 
-         
+
         [HttpPost]
         public async Task<IActionResult> AddDish([FromForm] AddDishCommand command)
         {
@@ -50,21 +48,13 @@ namespace talanlunch.Controllers
             return Ok(result);
         }
 
-
-
-        // GET api/dish
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Dish>>> GetAllDishes([FromQuery] GetAllDishesQuery query)
         {
             var dishes = await _mediator.Send(query);
             return Ok(dishes);
         }
-
-
-
-
  
-        // GET api/dish/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Dish>> GetDishById([FromRoute] int id)
         {
@@ -75,8 +65,6 @@ namespace talanlunch.Controllers
 
             return Ok(dish);
         }
-
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDish(int id)
@@ -95,7 +83,5 @@ namespace talanlunch.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-
-
     }
 }

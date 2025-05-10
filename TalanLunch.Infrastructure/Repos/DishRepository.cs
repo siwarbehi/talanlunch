@@ -65,7 +65,5 @@ namespace TalanLunch.Infrastructure.Repos
                 .Where(d => dishIds.Contains(d.DishId))
                 .ToListAsync();
         }
-
-
     }
 }

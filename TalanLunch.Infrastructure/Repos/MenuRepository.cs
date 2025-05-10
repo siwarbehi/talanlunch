@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TalanLunch.Application.Dtos.Menu;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
 using TalanLunch.Infrastructure.Data;
 
 namespace TalanLunch.Infrastructure.Repos
 {
-       public class MenuRepository : IMenuRepository
+       public class MenuRepository : IMenuRepository 
 {
     private readonly TalanLunchDbContext _context;
 

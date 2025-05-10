@@ -37,8 +37,6 @@ namespace talanlunch.Controllers
             }
         }
 
-
-        // GET api/menu/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Menu>> GetMenu([FromRoute] int id)
         {
@@ -50,57 +48,34 @@ namespace talanlunch.Controllers
             return Ok(menu);
         }
 
-
-        [HttpPost("{menuId}")]
-        public async Task<ActionResult<AddDishToMenuResult>> AddDishToMenu(int menuId, [FromBody] AddDishToMenuDto dto, CancellationToken cancellationToken)
+        [HttpPut("{menuId}")]
+        public async Task<ActionResult<AddDishToMenuCommandResult>> AddDishToMenu(int menuId, [FromBody] AddDishToMenuCommand command, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _mediator.Send(new AddDishToMenuCommand(menuId, dto));
+            command.MenuId = menuId;
 
-            if (result == null)
-                return NotFound("Menu introuvable ou plat invalide.");
+            var result = await _mediator.Send(command, cancellationToken)
+                .ConfigureAwait(false);
 
-            if (result.DishAlreadyExists)
-                return BadRequest("Le plat existe déjà dans ce menu.");
+            if (!result.Succeeded)
+                return NotFound(result.Error);
 
-            return Ok(result);
+            return NoContent();
         }
 
+        //// Supprimer un plat du menu
+        //[HttpDelete("{menuId}/{dishId}")]
+        //public async Task<ActionResult<Menu>> RemoveDishFromMenu(int menuId, int dishId)
+        //{
+        //    var result = await _mediator.Send(new RemoveDishFromMenuCommand(menuId, dishId));
+        //    if (result == null)
+        //        return NotFound();
 
-        /*   [HttpPost("{menuId}")]
-           public async Task<ActionResult<AddDishToMenuResult>> AddDishToMenu(int menuId, [FromBody] AddDishToMenuCommand command)
-           {
-               if (!ModelState.IsValid)
-                   return BadRequest(ModelState);
+        //    return Ok(result);
+        //}
 
-               command.MenuId = menuId; 
-
-               var result = await _mediator.Send(command);
-
-               if (result == null)
-                   return NotFound("Menu introuvable ou plat invalide.");
-
-               if (result.DishAlreadyExists)
-                   return BadRequest(result);
-
-               return Ok(result);
-           }*/
-
-        /* 
-         // Supprimer un plat du menu
-         [HttpDelete("{menuId}/{dishId}")]
-         public async Task<ActionResult<Menu>> RemoveDishFromMenu(int menuId, int dishId)
-         {
-             var result = await _mediator.Send(new RemoveDishFromMenuCommand(menuId, dishId));
-             if (result == null)
-                 return NotFound();
-
-             return Ok(result);
-         }*/
-
-        // Supprimer un menu
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteMenu(int id)
         {
@@ -108,15 +83,12 @@ namespace talanlunch.Controllers
             return NoContent();
         }
 
-
-        // GET api/menu
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetAllMenusQueryResult>>> GetAllMenus([FromQuery] GetAllMenusQuery query)
         {
             var result = await _mediator.Send(query);
             return Ok(result);
         }
-
 
         /* // POST api/menu/setMenuOfTheDay/{menuId}
          [HttpPost("setMenuOfTheDay/{menuId}")]
