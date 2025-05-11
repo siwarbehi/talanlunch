@@ -103,7 +103,7 @@ namespace TalanLunch.Application.Users.Handlers
             string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
-            {B
+            {
                 await profilePicture.CopyToAsync(stream);
             }
 

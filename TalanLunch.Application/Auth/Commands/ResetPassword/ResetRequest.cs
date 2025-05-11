@@ -1,4 +1,4 @@
-﻿namespace TalanLunch.Application.Dtos.Auth
+﻿namespace TalanLunch.Application.Auth.Commands.ResetPassword
 {
     public class ResetRequest
     {

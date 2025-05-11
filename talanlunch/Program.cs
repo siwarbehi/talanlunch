@@ -62,9 +62,7 @@ namespace TalanLunch
             // Enregistrement des repositories et services
             builder.Services.AddScoped<IDishRepository, DishRepository>();
             builder.Services.AddScoped<IMenuRepository, MenuRepository>();
-            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<AuthCommon>();
 

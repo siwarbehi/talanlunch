@@ -1,8 +1,7 @@
 ﻿using MediatR;
-using TalanLunch.Application.Auth;
 using TalanLunch.Application.Interfaces;
 
-namespace TalanLunch.Application.Handlers.Auth
+namespace TalanLunch.Application.Auth.Commands.ForgotPassword
 {
     public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordCommand, bool>
     {

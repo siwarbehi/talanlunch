@@ -1,9 +1,10 @@
 ﻿using MediatR;
 using AutoMapper;
-using TalanLunch.Application.Interfaces;
-using TalanLunch.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using TalanLunch.Domain.Entities;
 using TalanLunch.Domain.Enums;
+using TalanLunch.Application.Interfaces;
+using TalanLunch.Application.Auth.Commands.RegisterUser;
 
 public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, string>
 {
@@ -18,27 +19,25 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, s
 
     public async Task<string> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var dto = request.RegisterUserDto;
-        var existingUser = await _userRepository.GetUserByEmailAsync(dto.EmailAddress);
+        var existingUser = await _userRepository.GetUserByEmailAsync(request.EmailAddress);
         if (existingUser != null)
         {
             return "Cet email est déjà utilisé.";
         }
 
-        var user = _mapper.Map<User>(dto);
+        var user = _mapper.Map<User>(request);
         user.UserRole = request.IsCaterer ? UserRole.CATERER : UserRole.COLLABORATOR;
         user.IsApproved = !request.IsCaterer;
 
         var passwordHasher = new PasswordHasher<User>();
-        user.HashedPassword = passwordHasher.HashPassword(null, dto.Password);
+        user.HashedPassword = passwordHasher.HashPassword(null, request.Password);
 
         var success = await _userRepository.AddUserAsync(user);
 
-        if (!success)
-            return "Une erreur s'est produite lors de l'enregistrement de l'utilisateur. Veuillez réessayer.";
-
-        return request.IsCaterer
-            ? "Votre demande d'inscription en tant que traiteur a été enregistrée. Un administrateur doit approuver votre compte."
-            : "Inscription réussie.";
+        return success
+            ? request.IsCaterer
+                ? "Votre demande d'inscription en tant que traiteur a été enregistrée. Un administrateur doit approuver votre compte."
+                : "Inscription réussie."
+            : "Une erreur s'est produite lors de l'enregistrement de l'utilisateur. Veuillez réessayer.";
     }
 }

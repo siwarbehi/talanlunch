@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using TalanLunch.Application.Dtos.Auth;
+using TalanLunch.Application.Auth;
 using TalanLunch.Application.Interfaces;
 
 namespace TalanLunch.Application.Common

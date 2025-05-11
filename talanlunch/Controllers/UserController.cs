@@ -54,30 +54,9 @@ namespace talanlunch.Controllers
         }
 
 
-        /* [HttpGet]
-         public async Task<IActionResult> GetUsersByRole([FromQuery] string role = null )
-         {
-             var users = role?.ToLower() switch
-             {
-                 null => await _userService.GetAllUsersAsync(),
-                 "collaborators" => await _userService.GetUsersByRoleAsync(UserRole.COLLABORATOR),
-                 "caterers" => await _userService.GetUsersByRoleAsync(UserRole.CATERER),
-                 _ => null
-             };
+     
 
-             if (users == null)
-                 return BadRequest("Rôle invalide. Utilisez 'collaborators' ou 'caterers'.");
-
-             return Ok(users);
-         }
-
-         // Supprimer un user
-         [HttpDelete("{id}")]
-         public async Task<ActionResult> DeleteUser(int id)
-         {
-             await _userService.DeleteUserAsync(id);
-             return NoContent();
-         }*/
+      
 
     }
 

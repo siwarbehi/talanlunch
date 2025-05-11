@@ -1,7 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TalanLunch.Application.Dtos.Auth;
 using TalanLunch.Application.Auth;
+using TalanLunch.Application.Auth.Commands.RegisterUser;
+using TalanLunch.Application.Auth.Commands.LoginUser;
+using TalanLunch.Application.Auth.Commands.Logout;
+using TalanLunch.Application.Auth.Commands.ForgotPassword;
+using TalanLunch.Application.Auth.Commands.ResetPassword;
+using TalanLunch.Application.Auth.Commands.RefreshToken;
 
 namespace talanlunch.Controllers
 {
@@ -18,32 +23,37 @@ namespace talanlunch.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterUserDto registerUserDto, [FromQuery] bool isCaterer)
-        {
-            if (registerUserDto == null)
-                return BadRequest("Les données d'inscription sont manquantes.");
-
-            var command = new RegisterUserCommand(registerUserDto, isCaterer);
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
-        [HttpPost("login")]
-        public async Task<ActionResult<TokenResponseDto>> Login([FromBody] LoginDto request)
+        public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _mediator.Send(new LoginCommand(request));
+            var result = await _mediator.Send(command);
+
+            return Ok(new { message = result });
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<TokenResponseDto>> Login([FromBody] LoginUserCommand command)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _mediator.Send(command);
+
             if (result is null)
-                return BadRequest("Invalid username or password.");
+                return BadRequest("Invalid email or password.");
 
             return Ok(result);
         }
 
+
+
         [HttpPost("refresh-token")]
-        public async Task<ActionResult<TokenResponseDto>> RefreshToken([FromBody] RefreshTokenRequestDto request)
+        public async Task<ActionResult<TokenResponseDto>> RefreshToken([FromBody] RefreshTokenCommand command)
         {
-            var result = await _mediator.Send(new RefreshTokenCommand(request));
+            // Appeler le handler avec le RefreshTokenCommand
+            var result = await _mediator.Send(command);
 
             if (result is null || string.IsNullOrEmpty(result.AccessToken) || string.IsNullOrEmpty(result.RefreshToken))
             {
@@ -54,14 +64,14 @@ namespace talanlunch.Controllers
         }
 
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout([FromBody] LogoutRequestDto logoutRequest)
+        public async Task<IActionResult> Logout([FromBody] LogoutCommand command)
         {
-            if (logoutRequest == null || string.IsNullOrEmpty(logoutRequest.RefreshToken))
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Refresh token manquant.");
+                return BadRequest(ModelState);
             }
 
-            var result = await _mediator.Send(new LogoutCommand(logoutRequest.RefreshToken));
+            var result = await _mediator.Send(command);
 
             if (!result)
             {
@@ -72,13 +82,13 @@ namespace talanlunch.Controllers
         }
 
 
-        [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto request)
-        {
-            if (string.IsNullOrEmpty(request.Email))
-                return BadRequest("L'email est requis.");
 
-            var command = new ForgotPasswordCommand(request.Email);
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordCommand command)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var result = await _mediator.Send(command);
 
             if (!result)
@@ -88,12 +98,13 @@ namespace talanlunch.Controllers
         }
 
         [HttpPost("reset-password/{token}")]
-        public async Task<IActionResult> ResetPassword([FromRoute] string token, [FromBody] ResetRequest request)
+        public async Task<IActionResult> ResetPassword([FromRoute] string token, [FromBody] ResetPasswordCommand command)
         {
-            if (string.IsNullOrEmpty(request.NewPassword))
-                return BadRequest(new { Message = "Le mot de passe ne peut pas être vide." });
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            var command = new ResetPasswordCommand(token, request.NewPassword);
+            command.Token = token;
+
             var result = await _mediator.Send(command);
 
             if (result)

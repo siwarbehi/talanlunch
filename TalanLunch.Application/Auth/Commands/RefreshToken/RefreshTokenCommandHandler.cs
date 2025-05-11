@@ -1,10 +1,8 @@
 ﻿using MediatR;
-using TalanLunch.Application.Auth;
 using TalanLunch.Application.Common;
-using TalanLunch.Application.Dtos.Auth;
 using TalanLunch.Application.Interfaces;
 
-namespace TalanLunch.Application.Features.Auth.Handlers
+namespace TalanLunch.Application.Auth.Commands.RefreshToken
 {
     public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, TokenResponseDto?>
     {
@@ -19,10 +17,8 @@ namespace TalanLunch.Application.Features.Auth.Handlers
 
         public async Task<TokenResponseDto?> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
-            var dto = request.Request;
-
-            var user = await _userRepository.GetUserByIdAsync(dto.UserId);
-            if (user == null || user.RefreshToken != dto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+            var user = await _userRepository.GetUserByIdAsync(request.UserId);
+            if (user == null || user.RefreshToken != request.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
                 return null;
             }

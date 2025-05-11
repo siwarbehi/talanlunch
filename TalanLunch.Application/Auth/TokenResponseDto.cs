@@ -1,4 +1,4 @@
-﻿namespace TalanLunch.Application.Dtos.Auth
+﻿namespace TalanLunch.Application.Auth
 {
     public class TokenResponseDto
     {

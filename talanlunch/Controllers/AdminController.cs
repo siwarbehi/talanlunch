@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TalanLunch.Application.Dtos.Admin;
-using TalanLunch.Application.Interfaces;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using TalanLunch.Application.Admin.Commands.ApproveCaterer;
+using TalanLunch.Application.Admin.Commands.DeleteUser;
+using TalanLunch.Application.Admin.Queries.GetPendingCaterersQuery;
 
 namespace talanlunch.Controllers
 {
@@ -8,15 +10,19 @@ namespace talanlunch.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        private readonly IAdminService _adminService;
-        public AdminController(IAdminService adminService)
+        private readonly IMediator _mediator;
+
+        public AdminController(IMediator mediator)
         {
-            _adminService = adminService;
-        }// Récupérer tous les traiteurs en attente
-        [HttpGet("pending-caterers")]
-        public async Task<IActionResult> GetPendingCaterers()
+            _mediator = mediator;
+        }
+        
+        // Récupérer tous les traiteurs en attente
+        [HttpGet]
+        public async Task<IActionResult> GetPendingCaterers([FromQuery] GetPendingCaterersQuery query)
         {
-            var result = await _adminService.GetPendingCaterersAsync();
+            var result = await _mediator.Send(query);
+
             if (result == null || !result.Any())
             {
                 return NotFound("Aucun traiteur en attente.");
@@ -24,12 +30,13 @@ namespace talanlunch.Controllers
 
             return Ok(result);
         }
+
         // Approuve un traiteur
-        
-        [HttpPut("approve-caterer")]
-        public async Task<IActionResult> ApproveCaterer([FromBody] ApproveCatererDto approveCatererDto)
+        [HttpPut]
+        public async Task<IActionResult> ApproveCaterer([FromBody] ApproveCatererCommand command)
         {
-            bool success = await _adminService.ApproveCatererAsync(approveCatererDto.UserId);
+            var success = await _mediator.Send(command);
+
             if (!success)
             {
                 return BadRequest("Impossible d'approuver le traiteur.");
@@ -38,6 +45,11 @@ namespace talanlunch.Controllers
             return Ok("Le traiteur a été approuvé.");
         }
 
-       
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            await _mediator.Send(new DeleteUserCommand(id));
+            return NoContent();
+        }
     }
 }
