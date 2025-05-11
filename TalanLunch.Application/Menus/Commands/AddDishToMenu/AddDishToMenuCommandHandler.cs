@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿/*using AutoMapper;
 using MediatR;
 using TalanLunch.Application.Menus.Commands.AddDishToMenu;
 
@@ -62,7 +62,7 @@ namespace TalanLunch.Application.Menus.MenuHandlers
     }
 }
 
-/*using AutoMapper;
+*//*using AutoMapper;
 using MediatR;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;

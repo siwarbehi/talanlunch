@@ -39,22 +39,6 @@ public class MenuProfile : Profile
 
 
     }
-
-    /*
-
-            CreateMap<Menu, GetAllMenusDto>()
-                .ForMember(dest => dest.Dishes, opt => opt.MapFrom(src => src.MenuDishes));
-
-            CreateMap<MenuDish, DishMenuAllDto>()
-                .ForMember(dest => dest.DishId, opt => opt.MapFrom(src => src.Dish.DishId))
-                .ForMember(dest => dest.DishQuantity, opt => opt.MapFrom(src => src.DishQuantity))
-                .ForMember(dest => dest.DishName, opt => opt.MapFrom(src => src.Dish.DishName))
-                .ForMember(dest => dest.DishPrice, opt => opt.MapFrom(src => src.Dish.DishPrice))
-                .ForMember(dest => dest.DishPhoto, opt => opt.MapFrom(src => src.Dish.DishPhoto))
-                .ForMember(dest => dest.DishDescription, opt => opt.MapFrom(src => src.Dish.DishDescription));
-
-           */ 
-
 }
 
 

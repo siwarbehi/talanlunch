@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿/*using MediatR;
 using TalanLunch.Application.Dtos;
 
 namespace TalanLunch.Application.Menus.Commands.AddDishToMenu
@@ -16,7 +16,7 @@ namespace TalanLunch.Application.Menus.Commands.AddDishToMenu
     }
 }
 
-/*using MediatR;
+*//*using MediatR;
 
 
 namespace TalanLunch.Application.Menus.Commands.AddDishToMenu

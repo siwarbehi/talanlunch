@@ -1,7 +1,8 @@
-﻿/*using MediatR;
+﻿using MediatR;
 using TalanLunch.Application.Interfaces;
+using TalanLunch.Domain.Entities;
 
-namespace TalanLunch.Application.Menus.MenuHandlers
+namespace TalanLunch.Application.Menus.Commands.RemoveDishFromMenu
 {
     public class RemoveDishFromMenuCommandHandler : IRequestHandler<RemoveDishFromMenuCommand, Menu?>
     {
@@ -31,4 +32,3 @@ namespace TalanLunch.Application.Menus.MenuHandlers
         }
     }
 }
-*/

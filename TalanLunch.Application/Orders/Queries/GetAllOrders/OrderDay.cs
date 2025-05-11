@@ -1,6 +1,6 @@
-﻿namespace TalanLunch.Application.Dtos.Order
+﻿namespace TalanLunch.Application.Orders.Queries.GetAllOrders
 {
-    public class OrderDayDto
+    public class OrderDay
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
@@ -12,6 +12,6 @@
         public bool Paid { get; set; }
         public bool Served { get; set; }
         public DateTime OrderDate { get; set; }
-        public List<DishOrderDto> Dishes { get; set; } = new();
+        public List<DishOrderQuantity> Dishes { get; set; } = new();
     }
 }

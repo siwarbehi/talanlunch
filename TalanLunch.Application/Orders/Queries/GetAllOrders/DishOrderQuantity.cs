@@ -1,6 +1,6 @@
-﻿namespace TalanLunch.Application.Dtos.Order
+﻿namespace TalanLunch.Application.Orders.Queries.GetAllOrders
 {
-    public class DishOrderDto
+    public class DishOrderQuantity
     {
         public string DishName { get; set; } = string.Empty;
 
