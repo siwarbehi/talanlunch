@@ -1,7 +1,7 @@
 ﻿using MediatR;
+using TalanLunch.Application.Auth;
 using TalanLunch.Application.Common;
 using TalanLunch.Application.Dtos.Auth;
-using TalanLunch.Application.Features.Auth.Commands;
 using TalanLunch.Application.Interfaces;
 
 namespace TalanLunch.Application.Features.Auth.Handlers

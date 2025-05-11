@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using TalanLunch.Domain.Entities;
-using TalanLunch.Application.Dtos.User;
+using TalanLunch.Application.Users.Commands;
 
 namespace TalanLunch.Application.Profiles
 {
@@ -8,10 +8,8 @@ namespace TalanLunch.Application.Profiles
     {
         public UserProfile()
         {
-            // Mapper de User vers UserDto
-            CreateMap<Domain.Entities.User, UserDto>()
-                .ForMember(dest => dest.ProfilePicture, opt => opt.Ignore()) // Ignore le champ ProfilePicture si nécessaire
-                .ForMember(dest => dest.UpdatedPassword, opt => opt.Ignore());
+            CreateMap<User, UpdateUserProfileCommandResult>();
         }
     }
+
 }

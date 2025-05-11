@@ -1,9 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TalanLunch.Application.Commands.Auth;
 using TalanLunch.Application.Dtos.Auth;
-using TalanLunch.Application.Features.Auth.Commands;
-
+using TalanLunch.Application.Auth;
 
 namespace talanlunch.Controllers
 {

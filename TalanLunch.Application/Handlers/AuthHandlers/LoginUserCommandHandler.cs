@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using TalanLunch.Application.Dtos.Auth;
-using TalanLunch.Application.Features.Auth.Commands;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Application.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using TalanLunch.Application.Auth;
 
 namespace TalanLunch.Application.Features.Auth.Handlers
 {

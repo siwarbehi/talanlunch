@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using TalanLunch.Application.Dtos.User;
-using TalanLunch.Application.Interfaces;
-using TalanLunch.Domain.Entities;
+﻿using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Enums;
 
 namespace TalanLunch.Application.Services

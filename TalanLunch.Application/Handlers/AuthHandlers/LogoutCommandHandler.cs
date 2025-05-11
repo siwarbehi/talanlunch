@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using TalanLunch.Application.Commands.Auth;
+using TalanLunch.Application.Auth;
 using TalanLunch.Application.Interfaces;
 
 namespace TalanLunch.Application.Handlers.Auth

@@ -1,10 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TalanLunch.Application.Dtos.User;
-using TalanLunch.Application.Interfaces;
-using TalanLunch.Domain.Enums;
-using TalanLunch.Application.User.Queries;
-using TalanLunch.Application.User.Commands;
+using TalanLunch.Application.Users.Commands;
+using TalanLunch.Application.Users.Queries.GetUserById;
 
 
 namespace talanlunch.Controllers
@@ -13,23 +10,21 @@ namespace talanlunch.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _userService;
         private readonly IMediator _mediator;
 
 
-        public UserController(IUserService userService, IMediator mediator)
+        public UserController(IMediator mediator)
         {
-            _userService = userService;
             _mediator = mediator;
 
         }
 
         [HttpGet("{userId}")]
-        public async Task<IActionResult> GetUserById(int userId)
+        public async Task<IActionResult> GetUserById([FromRoute] GetUserByIdQuery query)
         {
             try
             {
-                var user = await _mediator.Send(new GetUserByIdQuery(userId));
+                var user = await _mediator.Send(query);
                 return Ok(user);
             }
             catch (ArgumentException ex)
@@ -38,12 +33,18 @@ namespace talanlunch.Controllers
             }
         }
 
+
         [HttpPatch("{userId}")]
-        public async Task<IActionResult> UpdateUserProfile(int userId, [FromForm] UserDto userDto)
+        public async Task<IActionResult> UpdateUserProfile(int userId, [FromForm] UpdateUserProfileCommand command)
         {
+            if (userId != command.UserId)
+            {
+                return BadRequest("ID utilisateur non cohérent.");
+            }
+
             try
             {
-                var updatedUser = await _mediator.Send(new UpdateUserProfileCommand(userId, userDto));
+                var updatedUser = await _mediator.Send(command);
                 return Ok(updatedUser);
             }
             catch (ArgumentException ex)
@@ -52,30 +53,31 @@ namespace talanlunch.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetUsersByRole([FromQuery] string role = null )
-        {
-            var users = role?.ToLower() switch
-            {
-                null => await _userService.GetAllUsersAsync(),
-                "collaborators" => await _userService.GetUsersByRoleAsync(UserRole.COLLABORATOR),
-                "caterers" => await _userService.GetUsersByRoleAsync(UserRole.CATERER),
-                _ => null
-            };
 
-            if (users == null)
-                return BadRequest("Rôle invalide. Utilisez 'collaborators' ou 'caterers'.");
+        /* [HttpGet]
+         public async Task<IActionResult> GetUsersByRole([FromQuery] string role = null )
+         {
+             var users = role?.ToLower() switch
+             {
+                 null => await _userService.GetAllUsersAsync(),
+                 "collaborators" => await _userService.GetUsersByRoleAsync(UserRole.COLLABORATOR),
+                 "caterers" => await _userService.GetUsersByRoleAsync(UserRole.CATERER),
+                 _ => null
+             };
 
-            return Ok(users);
-        }
+             if (users == null)
+                 return BadRequest("Rôle invalide. Utilisez 'collaborators' ou 'caterers'.");
 
-        // Supprimer un user
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteUser(int id)
-        {
-            await _userService.DeleteUserAsync(id);
-            return NoContent();
-        }
+             return Ok(users);
+         }
+
+         // Supprimer un user
+         [HttpDelete("{id}")]
+         public async Task<ActionResult> DeleteUser(int id)
+         {
+             await _userService.DeleteUserAsync(id);
+             return NoContent();
+         }*/
 
     }
 

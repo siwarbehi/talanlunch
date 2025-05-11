@@ -1,8 +1,8 @@
 ﻿// File: Application/Handlers/Auth/ResetPasswordCommandHandler.cs
 using MediatR;
-using TalanLunch.Application.Commands.Auth;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Application.Common;
+using TalanLunch.Application.Auth;
 
 
 namespace TalanLunch.Application.Handlers.Auth

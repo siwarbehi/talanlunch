@@ -1,6 +1,4 @@
-﻿using TalanLunch.Application.Dtos.User;
-using TalanLunch.Domain.Entities;
-using TalanLunch.Domain.Enums;
+﻿using TalanLunch.Domain.Enums;
 
 namespace TalanLunch.Application.Interfaces
 {
