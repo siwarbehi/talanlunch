@@ -22,11 +22,7 @@ namespace TalanLunch.Infrastructure.Repos
             return await _context.Users.FirstOrDefaultAsync(u => u.EmailAddress == email);
         }
 
-     
-        public async Task<bool> UserExistsAsync(string email)
-        {
-            return await _context.Users.AnyAsync(u => u.EmailAddress == email);
-        }
+  
         public async Task<bool> AddUserAsync(User user)
         {
             try
@@ -60,12 +56,7 @@ namespace TalanLunch.Infrastructure.Repos
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<IEnumerable<User>> GetUsersByRoleAsync(UserRole role)
-        {
-            return await _context.Users
-                                 .Where(user => user.UserRole == role)
-                                 .ToListAsync();
-        }
+      
 
         public async Task DeleteUserAsync(int userId)
         {

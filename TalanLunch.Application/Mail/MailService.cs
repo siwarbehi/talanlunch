@@ -1,13 +1,11 @@
 ﻿using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using TalanLunch.Application.Configurations;
-using TalanLunch.Application.Dtos.Mail;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
 using TalanLunch.Domain.Enums;
 
-namespace TalanLunch.Application.Services
+namespace TalanLunch.Application.Mail
 {
     public class MailService : IMailService
     {
@@ -96,7 +94,7 @@ namespace TalanLunch.Application.Services
             await SendMailAsync(message);
         }
 
-        public MailDataDto CreateMailDataForApproval(Domain.Entities.User caterer)
+        public MailDataDto CreateMailDataForApproval(User caterer)
         {
             return new MailDataDto
             {
@@ -106,7 +104,7 @@ namespace TalanLunch.Application.Services
             };
         }
 
-        public async Task SendPasswordResetEmailAsync(Domain.Entities.User user, string resetToken)
+        public async Task SendPasswordResetEmailAsync(User user, string resetToken)
         {
             string port = user.UserRole switch
             {

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using TalanLunch.Application.Common;
+using TalanLunch.Application.Auth.Common;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Application.Users.Commands;
 

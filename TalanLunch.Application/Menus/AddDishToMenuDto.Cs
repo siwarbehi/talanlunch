@@ -1,4 +1,4 @@
-﻿namespace TalanLunch.Application.Dtos
+﻿namespace TalanLunch.Application.Menus
 {
     public class AddDishToMenuDto
     {

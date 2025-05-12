@@ -1,4 +1,4 @@
-﻿using TalanLunch.Application.Dtos.Mail;
+﻿using TalanLunch.Application.Mail;
 using TalanLunch.Domain.Entities;
 
 namespace TalanLunch.Application.Interfaces
@@ -7,7 +7,7 @@ namespace TalanLunch.Application.Interfaces
     {
 
         Task SendEmailAsync(MailDataDto mailData);
-        MailDataDto CreateMailDataForApproval(Domain.Entities.User caterer);
-        Task SendPasswordResetEmailAsync(Domain.Entities.User user, string resetToken);
+        MailDataDto CreateMailDataForApproval(User caterer);
+        Task SendPasswordResetEmailAsync(User user, string resetToken);
     }
 }

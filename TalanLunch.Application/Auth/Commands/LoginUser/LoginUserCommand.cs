@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using System.ComponentModel.DataAnnotations;
+using TalanLunch.Application.Auth.Common;
 
 namespace TalanLunch.Application.Auth.Commands.LoginUser
 {

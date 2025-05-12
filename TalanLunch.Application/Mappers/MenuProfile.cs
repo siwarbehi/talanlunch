@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using TalanLunch.Application.Dtos;
+using TalanLunch.Application.Menus;
 using TalanLunch.Application.Menus.Commands.AddMenu;
 using TalanLunch.Application.Menus.Queries.GetAllMenus;
 using TalanLunch.Domain.Entities;

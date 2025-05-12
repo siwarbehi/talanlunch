@@ -3,14 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Quartz;
 using System.Text;
-using TalanLunch.Application.Configurations;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Application.Jobs;
-using TalanLunch.Application.Services;
 using TalanLunch.Infrastructure.Data;
 using TalanLunch.Infrastructure.Repos;
 using TalanLunch.API.Hubs;
-using TalanLunch.Application.Common;
+using TalanLunch.Application.Auth.Common;
+using TalanLunch.Application.Mail;
 
 
 

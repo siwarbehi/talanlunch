@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using TalanLunch.Application.Interfaces;
-using TalanLunch.Application.Common;
+using TalanLunch.Application.Auth.Common;
 
 namespace TalanLunch.Application.Auth.Commands.ResetPassword
 {

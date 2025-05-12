@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using TalanLunch.Application.Interfaces;
-using TalanLunch.Application.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using TalanLunch.Domain.Entities;
+using TalanLunch.Application.Auth.Common;
 
 namespace TalanLunch.Application.Auth.Commands.LoginUser
 {

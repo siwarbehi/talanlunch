@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TalanLunch.Application.Dtos.Menu;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
 using TalanLunch.Infrastructure.Data;

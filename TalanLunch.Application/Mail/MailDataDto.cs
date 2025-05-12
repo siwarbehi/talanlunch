@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TalanLunch.Application.Dtos.Mail
+namespace TalanLunch.Application.Mail
 {
     public class MailDataDto
     {

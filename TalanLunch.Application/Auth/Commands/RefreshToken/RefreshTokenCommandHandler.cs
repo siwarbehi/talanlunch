@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using TalanLunch.Application.Common;
+using TalanLunch.Application.Auth.Common;
 using TalanLunch.Application.Interfaces;
 
 namespace TalanLunch.Application.Auth.Commands.RefreshToken
