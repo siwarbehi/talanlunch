@@ -5,7 +5,7 @@ using TalanLunch.Infrastructure.Data;
 
 namespace TalanLunch.Infrastructure.Repos
 {
-       public class MenuRepository : IMenuRepository
+       public class MenuRepository : IMenuRepository 
 {
     private readonly TalanLunchDbContext _context;
 

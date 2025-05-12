@@ -51,13 +51,7 @@ namespace talanlunch.Controllers
             {
                 return NotFound(ex.Message);
             }
-        }
-
-
-     
-
-      
-
+        }      
     }
 
 }

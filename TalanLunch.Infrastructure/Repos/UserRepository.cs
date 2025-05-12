@@ -121,9 +121,9 @@ namespace TalanLunch.Infrastructure.Repos
             await _context.SaveChangesAsync();
         }
         // Recherche un utilisateur par son token de réinitialisation
-        public async Task<User> GetByResetTokenAsync(string token)
+        public async Task<User?> GetByResetTokenAsync(string token)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.ResetToken == token); // Cherche un utilisateur avec le token spécifié
+            return await _context.Users.FirstOrDefaultAsync(u => u.ResetToken == token);
         }
 
     }

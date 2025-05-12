@@ -5,6 +5,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Handlers\DishHandlers\**" />
+    <Compile Remove="Menus\Commands\NewFolder\**" />
+    <EmbeddedResource Remove="Handlers\DishHandlers\**" />
+    <EmbeddedResource Remove="Menus\Commands\NewFolder\**" />
+    <None Remove="Handlers\DishHandlers\**" />
+    <None Remove="Menus\Commands\NewFolder\**" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="MailKit" Version="4.11.0" />

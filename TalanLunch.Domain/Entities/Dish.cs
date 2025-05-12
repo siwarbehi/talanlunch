@@ -5,7 +5,7 @@ namespace TalanLunch.Domain.Entities
 {
     public class Dish
     {
-        [Key]
+        [Key] 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int DishId { get; set; }
 

@@ -55,13 +55,13 @@ namespace TalanLunch.Infrastructure.Repos
                 .AsNoTracking()
                 .Include(o => o.User)
                 .Include(o => o.OrderDishes)
-                    .ThenInclude(od => od.Dish)
+                .ThenInclude(od => od.Dish)
                 .AsQueryable();
 
             bool hasFirstName = !string.IsNullOrEmpty(query.FirstName);
             bool hasLastName = !string.IsNullOrEmpty(query.LastName);
 
-            // 👉 Filtrage par FirstName si fourni
+            // Filtrage par FirstName si fourni
             if (hasFirstName)
             {
                 var firstNameLower = query.FirstName.ToLower();
@@ -69,7 +69,7 @@ namespace TalanLunch.Infrastructure.Repos
                     EF.Functions.Like(o.User.FirstName.ToLower(), $"{firstNameLower}%"));
             }
 
-            // 👉 Filtrage par LastName si fourni
+            // Filtrage par LastName si fourni
             if (hasLastName)
             {
                 var lastNameLower = query.LastName.ToLower();
@@ -77,14 +77,14 @@ namespace TalanLunch.Infrastructure.Repos
                     EF.Functions.Like(o.User.LastName.ToLower(), $"{lastNameLower}%"));
             }
 
-            // 🧠 Si aucun nom/prénom fourni ET aucun filtre paid/served => commandes impayées non servies
+            //  Si aucun nom/prénom fourni ET aucun filtre paid/served => commandes impayées non servies
             if (!hasFirstName && !hasLastName && !query.IsPaid.HasValue && !query.IsServed.HasValue)
             {
                 ordersQuery = ordersQuery.Where(o => !o.Paid);
             }
             else
             {
-                // ✅ Sinon, logique normale Paid + Served
+                // Sinon, logique normale Paid + Served
                 if (!query.IsPaid.HasValue && !query.IsServed.HasValue)
                 {
                     ordersQuery = ordersQuery.Where(o => !o.Paid && !o.Served);
@@ -110,10 +110,10 @@ namespace TalanLunch.Infrastructure.Repos
                 }
             }
 
-            // 🔃 Tri par date décroissante
+            //  Tri par date décroissante
             ordersQuery = ordersQuery.OrderByDescending(o => o.OrderDate);
 
-            // 📊 Résultat paginé
+            // Résultat paginé
             var totalItems = await CountOrdersAsync(ordersQuery, cancellationToken);
             var pagedItems = await GetPagedOrdersAsync(ordersQuery, query.PageNumber, query.PageSize, cancellationToken);
 

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using TalanLunch.Application.Menus;
+using TalanLunch.Application.Menus.Commands.AddDishToMenu;
 using TalanLunch.Application.Menus.Commands.AddMenu;
 using TalanLunch.Application.Menus.Queries.GetAllMenus;
 using TalanLunch.Domain.Entities;
@@ -27,7 +27,7 @@ public class MenuProfile : Profile
                             DishDescription = md.Dish.DishDescription
                         }).ToList()
                   ));
-        CreateMap<AddDishToMenuDto, MenuDish>()
+        CreateMap<AddDishToMenuCommand, MenuDish>()
         .ForMember(dest => dest.DishId, opt => opt.MapFrom(src => src.DishId))
         .ForMember(dest => dest.DishQuantity, opt => opt.MapFrom(src => src.Quantity))
         .ForMember(dest => dest.Menu, opt => opt.Ignore())

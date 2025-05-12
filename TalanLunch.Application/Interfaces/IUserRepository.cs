@@ -36,7 +36,6 @@ namespace TalanLunch.Application.Interfaces
         Task UpdateUserDataAsync(User user);
         Task<User?> GetUserByRefreshTokenAsync(string refreshToken);
         Task DeleteRefreshTokenAsync(User user);
-        Task<User> GetByResetTokenAsync(string token);
-
+        Task<User?> GetByResetTokenAsync(string token);
     }
 }
