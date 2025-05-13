@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TalanLunch.Application.Interfaces;
-using TalanLunch.Application.Mail;
 
 namespace talanlunch.Controllers
 {

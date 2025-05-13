@@ -3,13 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Quartz;
 using System.Text;
-using TalanLunch.Application.Interfaces;
-using TalanLunch.Application.Jobs;
-using TalanLunch.Infrastructure.Data;
-using TalanLunch.Infrastructure.Repos;
 using TalanLunch.API.Hubs;
 using TalanLunch.Application.Auth.Common;
-using TalanLunch.Application.Mail;
+using TalanLunch.Application.Interfaces;
+using TalanLunch.Infrastructure.Data;
+using TalanLunch.Infrastructure.Interfaces;
+using TalanLunch.Infrastructure.Jobs;
+using TalanLunch.Infrastructure.Mail;
+using TalanLunch.Infrastructure.Repos;
 
 
 
@@ -69,7 +70,7 @@ namespace TalanLunch
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
             // Enregistrement du service de mail
-            builder.Services.AddTransient<IMailService,MailService>();
+            builder.Services.AddTransient<IMailService, MailService>();
 
             // Ajouter MailSettings à l'injection de dépendances
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
@@ -100,7 +101,7 @@ namespace TalanLunch
                         ValidateIssuerSigningKey = true
                     };
 
-                  
+
                 });
 
             // Quartz
@@ -118,7 +119,7 @@ namespace TalanLunch
             });
             builder.Services.AddQuartzHostedService();
 
-          
+
             builder.Services.AddSignalR();
 
             // Création de l'application
@@ -126,7 +127,7 @@ namespace TalanLunch
 
 
 
-         //app.Use...Ajouter des middlewares 
+            //app.Use...Ajouter des middlewares 
 
             // CORS
             app.UseCors("AllowReactApp");
@@ -143,7 +144,7 @@ namespace TalanLunch
             //redirige les requête vers https
             app.UseHttpsRedirection();
 
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 

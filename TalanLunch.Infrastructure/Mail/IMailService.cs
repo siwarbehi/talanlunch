@@ -1,5 +1,4 @@
-﻿using TalanLunch.Application.Mail;
-using TalanLunch.Domain.Entities;
+﻿using TalanLunch.Domain.Entities;
 
 namespace TalanLunch.Application.Interfaces
 {

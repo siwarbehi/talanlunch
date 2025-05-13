@@ -3,7 +3,7 @@ using Quartz;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Infrastructure.Data;
 
-namespace TalanLunch.Application.Jobs
+namespace TalanLunch.Infrastructure.Jobs
 {
     public class ResetMenuOfTheDayJob : IJob
     {

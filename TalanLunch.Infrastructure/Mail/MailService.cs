@@ -5,7 +5,7 @@ using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
 using TalanLunch.Domain.Enums;
 
-namespace TalanLunch.Application.Mail
+namespace TalanLunch.Infrastructure.Mail
 {
     public class MailService : IMailService
     {
