@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
 using TalanLunch.Infrastructure.Data;
 namespace TalanLunch.Infrastructure.Repos

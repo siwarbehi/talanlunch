@@ -7,7 +7,6 @@ using TalanLunch.API.Hubs;
 using TalanLunch.Application.Auth.Common;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Infrastructure.Data;
-using TalanLunch.Infrastructure.Interfaces;
 using TalanLunch.Infrastructure.Jobs;
 using TalanLunch.Infrastructure.Mail;
 using TalanLunch.Infrastructure.Repos;
@@ -23,10 +22,6 @@ namespace TalanLunch
             // creation de l app
             var builder = WebApplication.CreateBuilder(args);
 
-            // Création du répertoire pour les téléchargements
-            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-            Directory.CreateDirectory(uploadsFolder);
-
             // Ajout des services CORS
             builder.Services.AddCors(options =>
             {
@@ -35,10 +30,10 @@ namespace TalanLunch
                     policy.WithOrigins(
                             "http://localhost:5173",
                             "http://localhost:5174"
-                        )
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
+                    )
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
                 });
             });
             builder.Services.AddSignalR();

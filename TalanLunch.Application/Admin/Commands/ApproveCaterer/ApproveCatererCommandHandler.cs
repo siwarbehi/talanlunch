@@ -27,8 +27,9 @@ namespace TalanLunch.Application.Admin.Commands.ApproveCaterer
             if (!updateSuccess)
                 return false;
 
-            var mailData = _mailService.CreateMailDataForApproval(caterer);
-            await _mailService.SendEmailAsync(mailData);
+            // todo : send email to caterer
+            //var mailData = _mailService.CreateMailDataForApproval(caterer);
+            //await _mailService.SendEmailAsync(mailData);
 
             return true;
         }

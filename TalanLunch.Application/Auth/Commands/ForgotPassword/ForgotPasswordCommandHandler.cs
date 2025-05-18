@@ -24,7 +24,8 @@ namespace TalanLunch.Application.Auth.Commands.ForgotPassword
             user.ResetTokenExpiry = DateTime.UtcNow.AddHours(1);
             await _userRepository.UpdateUserAsync(user);
 
-            await _mailService.SendPasswordResetEmailAsync(user, resetToken);
+            // todo : send email to user
+            //await _mailService.SendPasswordResetEmailAsync(user, resetToken);
             return true;
         }
     }
