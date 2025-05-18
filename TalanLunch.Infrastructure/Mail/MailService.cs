@@ -12,7 +12,8 @@ namespace TalanLunch.Infrastructure.Mail
             _mailSettings = mailSettings.Value;
         }
 
-        public Task SendEmailAsync()
+
+        public Task SendEmailAsync(string EmailToId, string EmailToName, string EmailSubject, string EmailBody, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

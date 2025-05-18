@@ -5,9 +5,10 @@ using TalanLunch.Domain.Entities;
 namespace TalanLunch.Application.Mapping
 {
     public class AdminProfile : Profile
-    { public AdminProfile()
+    {
+        public AdminProfile()
         {
-        CreateMap<User, GetCatererQueryResult>();
-            }
+            CreateMap<User, GetCatererQueryResult>();
+        }
     }
 }
