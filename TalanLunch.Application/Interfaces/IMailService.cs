@@ -2,10 +2,10 @@
 {
     public interface IMailService
     {
-        public Task SendEmailAsync(string EmailToId,
+        public Task SendEmailAsync(string to,
                                    string EmailToName,
-                                   string EmailSubject,
-                                   string EmailBody,
+                                   string subject,
+                                   string body,
                                    CancellationToken cancellationToken = default);
     }
 }
