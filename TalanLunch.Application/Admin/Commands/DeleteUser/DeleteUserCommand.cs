@@ -2,13 +2,8 @@
 
 namespace TalanLunch.Application.Admin.Commands.DeleteUser
 {
-    public class DeleteUserCommand : IRequest<Unit>
+    public class DeleteUserCommand(int userId) : IRequest
     {
-        public int UserId { get; set; }
-
-        public DeleteUserCommand(int userId)
-        {
-            UserId = userId;
-        }
+        public int UserId { get; set; } = userId;
     }
 }
