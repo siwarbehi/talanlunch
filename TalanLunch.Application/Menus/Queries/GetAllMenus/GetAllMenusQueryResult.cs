@@ -10,7 +10,7 @@
 
     public class DishMenuAll
     {
-        public int DishId { get; set; }
+        public int? DishId { get; set; }
         public int DishQuantity { get; set; }
         public string DishName { get; set; }
         public decimal DishPrice { get; set; }

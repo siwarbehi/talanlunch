@@ -17,7 +17,6 @@ namespace TalanLunch.Application.Menus.Commands.AddMenu
             _dishRepository = dishRepository;
             _mapper = mapper;
         }
-
         public async Task<Menu> Handle(AddMenuCommand request, CancellationToken cancellationToken)
         {
             if (request.Dishes == null || !request.Dishes.Any())
@@ -32,11 +31,9 @@ namespace TalanLunch.Application.Menus.Commands.AddMenu
             if (invalidDishIds.Any())
                 throw new ArgumentException($"Plats invalides : {string.Join(", ", invalidDishIds)}");
 
-            // Map basic menu (sans les MenuDishes)
             var newMenu = _mapper.Map<Menu>(request);
             newMenu.MenuDate = DateTime.Now;
 
-            // Ajouter les MenuDishes après validation des Dish
             newMenu.MenuDishes = request.Dishes
                 .Where(d => dishesById.ContainsKey(d.DishId))
                 .Select(d =>

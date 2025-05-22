@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿/*using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using TalanLunch.Application.Interfaces;
@@ -35,7 +35,51 @@ namespace TalanLunch.Application.Dishes.Commands.AddDish
                 using var stream = new FileStream(filePath, FileMode.Create);
                 await photo.CopyToAsync(stream, cancellationToken);
 
-                dish.DishPhoto = uniqueFileName;
+               dish.DishPhoto = uniqueFileName;
+            }
+
+            // Valeurs par défaut
+            dish.OrderDate = DateTime.UtcNow;
+            dish.ReviewCount = 0;
+            dish.CurrentRating = 0;
+
+            return await _dishRepository.AddDishAsync(dish);
+        }
+    }
+}
+*/
+using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Http;
+using TalanLunch.Application.Interfaces;
+using TalanLunch.Domain.Entities;
+
+namespace TalanLunch.Application.Dishes.Commands.AddDish
+{
+    public class AddDishCommandHandler : IRequestHandler<AddDishCommand, Dish>
+    {
+        private readonly IDishRepository _dishRepository;
+        private readonly IMapper _mapper;
+        private readonly IBlobStorageService _blobStorageService;
+
+        public AddDishCommandHandler(IDishRepository dishRepository, IMapper mapper, IBlobStorageService blobStorageService)
+        {
+            _dishRepository = dishRepository;
+            _mapper = mapper;
+            _blobStorageService = blobStorageService;
+        }
+
+        public async Task<Dish> Handle(AddDishCommand request, CancellationToken cancellationToken)
+        {
+            // Mapper la commande vers l'entité Dish
+            var dish = _mapper.Map<Dish>(request);
+
+            // Upload de l’image si fournie
+            if (request.DishPhoto is IFormFile photo && photo.Length > 0)
+            {
+                string containerName = "dishimages"; // Nom dynamique du container
+                string imageUrl = await _blobStorageService.UploadFileAsync(photo, containerName);
+                dish.DishPhoto = imageUrl;
             }
 
             // Valeurs par défaut

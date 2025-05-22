@@ -28,19 +28,6 @@ namespace TalanLunch.Application.Menus.MenuHandlers
                 return new AddDishToMenuCommandResult { Succeeded = false, Error = $"Menu with ID {request.MenuId} not found." };
             }
 
-            var dish = await _dishRepository.GetDishByIdAsync(request.DishId)
-                .ConfigureAwait(false);
-
-            if (dish == null)
-            {
-                return new AddDishToMenuCommandResult { Succeeded = false, Error = $"Dish with ID {request.DishId} not found." };
-            }
-
-            if (!string.IsNullOrWhiteSpace(request.Description))
-            {
-                menu.MenuDescription = request.Description;
-            }
-
             bool dishExistsInMenu = menu.MenuDishes.Any(md => md.DishId == request.DishId);
 
             if (dishExistsInMenu)
@@ -48,7 +35,24 @@ namespace TalanLunch.Application.Menus.MenuHandlers
                 return new AddDishToMenuCommandResult { Succeeded = false, Error = $"Dish with ID {request.DishId} already exists in the menu." };
             }
 
-            menu.MenuDishes.Add(new MenuDish { DishId = request.DishId, MenuId = request.MenuId });
+            if (request.DishId != null)
+            {
+                var dish = await _dishRepository.GetDishByIdAsync(request.DishId)
+                    .ConfigureAwait(false);
+
+                if (dish == null)
+                {
+                    return new AddDishToMenuCommandResult { Succeeded = false, Error = $"Dish with ID {request.DishId} not found." };
+                }
+
+                menu.MenuDishes.Add(new MenuDish { DishId = request.DishId, MenuId = request.MenuId });
+
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.Description))
+            {
+                menu.MenuDescription = request.Description;
+            }
 
             await _menuRepository.UpdateMenuAsync(menu)
                 .ConfigureAwait(false);

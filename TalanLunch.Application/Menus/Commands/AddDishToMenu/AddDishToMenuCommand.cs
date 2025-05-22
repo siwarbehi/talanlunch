@@ -7,7 +7,7 @@ namespace TalanLunch.Application.Menus.Commands.AddDishToMenu
     {
         [JsonIgnore]
         public int MenuId { get; set; } 
-        public int DishId { get; set; }
+        public int? DishId { get; set; }
         public string Description { get; set; } = string.Empty;
         public int Quantity { get; set; }
     }

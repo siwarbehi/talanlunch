@@ -11,7 +11,8 @@ namespace TalanLunch.Application.Users.Commands
         public string? PhoneNumber { get; set; }
         public string? EmailAddress { get; set; }
 
-        public string? ProfilePicture { get; set; }
+        public string? ProfilePicture { get; set; }// ici c’est l'URL Azure
+
 
     }
 }

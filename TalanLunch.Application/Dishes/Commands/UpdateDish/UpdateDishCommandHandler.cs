@@ -7,16 +7,17 @@ using TalanLunch.Application.Dishes.Commands.UpdateDish;
 
 namespace TalanLunch.Application.Handlers.DishHandlers
 {
-
     public class UpdateDishCommandHandler : IRequestHandler<UpdateDishCommand, Dish?>
     {
         private readonly IDishRepository _dishRepository;
         private readonly IMapper _mapper;
+        private readonly IBlobStorageService _blobStorageService;
 
-        public UpdateDishCommandHandler(IDishRepository dishRepository, IMapper mapper)
+        public UpdateDishCommandHandler(IDishRepository dishRepository, IMapper mapper, IBlobStorageService blobStorageService)
         {
             _dishRepository = dishRepository;
             _mapper = mapper;
+            _blobStorageService = blobStorageService;
         }
 
         public async Task<Dish?> Handle(UpdateDishCommand request, CancellationToken cancellationToken)
@@ -30,28 +31,20 @@ namespace TalanLunch.Application.Handlers.DishHandlers
             {
                 float oldRating = existing.CurrentRating;
                 int oldCount = existing.ReviewCount;
-                float newRating = ((oldRating * oldCount) + request.Rating.Value)
-                                   / (oldCount + 1);
+                float newRating = ((oldRating * oldCount) + request.Rating.Value) / (oldCount + 1);
+
                 existing.CurrentRating = newRating;
                 existing.ReviewCount++;
             }
 
             if (request.Photo is IFormFile photo && photo.Length > 0)
             {
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "dishes");
-                if (!Directory.Exists(uploadsFolder))
-                    Directory.CreateDirectory(uploadsFolder);
-
-                string uniqueFileName = $"{Guid.NewGuid()}_{photo.FileName}";
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                await using var stream = new FileStream(filePath, FileMode.Create);
-                await photo.CopyToAsync(stream, cancellationToken);
-
-                existing.DishPhoto = uniqueFileName;
+                string containerName = "dishimages";
+                string imageUrl = await _blobStorageService.UploadFileAsync(photo, containerName);
+                existing.DishPhoto = imageUrl;
             }
 
             return await _dishRepository.UpdateDishAsync(existing);
         }
-
     }
 }

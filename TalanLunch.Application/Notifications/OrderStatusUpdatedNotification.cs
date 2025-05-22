@@ -1,5 +1,4 @@
-﻿// Application/Notifications/OrderStatusUpdatedNotification.cs
-using MediatR;
+﻿using MediatR;
 
 namespace TalanLunch.Application.Notifications
 {

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Threading;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
 using TalanLunch.Infrastructure.Data;
@@ -22,8 +21,10 @@ namespace TalanLunch.Infrastructure.Repos
             return dish;
         }
 
-        public async Task<Dish?> GetDishByIdAsync(int dishId)
+        public async Task<Dish?> GetDishByIdAsync(int? dishId)
         {
+            if (dishId == null) return null;
+
             var dish = await _context.Dishes.FindAsync(dishId);
            
             return dish;

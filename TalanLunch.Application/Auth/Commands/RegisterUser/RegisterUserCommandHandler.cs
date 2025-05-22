@@ -5,13 +5,17 @@ using TalanLunch.Domain.Entities;
 using TalanLunch.Domain.Enums;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Application.Auth.Commands.RegisterUser;
+using System.Threading;
+using System.Threading.Tasks;
 
 public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, string>
 {
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
 
-    public RegisterUserCommandHandler(IUserRepository userRepository, IMapper mapper)
+    public RegisterUserCommandHandler(
+        IUserRepository userRepository,
+        IMapper mapper)
     {
         _userRepository = userRepository;
         _mapper = mapper;
@@ -26,8 +30,8 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, s
         }
 
         var user = _mapper.Map<User>(request);
-        user.UserRole = request.IsCaterer ? UserRole.CATERER : UserRole.COLLABORATOR;
-        user.IsApproved = !request.IsCaterer;
+        user.UserRole = request.UserRole;
+        user.IsApproved = request.UserRole != UserRole.CATERER; // Seuls les traiteurs doivent être approuvés manuellement
 
         var passwordHasher = new PasswordHasher<User>();
         user.HashedPassword = passwordHasher.HashPassword(null, request.Password);
@@ -35,7 +39,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, s
         var success = await _userRepository.AddUserAsync(user);
 
         return success
-            ? request.IsCaterer
+            ? request.UserRole == UserRole.CATERER
                 ? "Votre demande d'inscription en tant que traiteur a été enregistrée. Un administrateur doit approuver votre compte."
                 : "Inscription réussie."
             : "Une erreur s'est produite lors de l'enregistrement de l'utilisateur. Veuillez réessayer.";

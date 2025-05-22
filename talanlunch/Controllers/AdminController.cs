@@ -25,7 +25,7 @@ namespace talanlunch.Controllers
 
             if (result == null || !result.Any())
             {
-                return NotFound("Aucun traiteur en attente.");
+                return NotFound(new { message = "Aucun traiteur en attente." });
             }
 
             return Ok(result);

@@ -3,13 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Quartz;
 using System.Text;
-using TalanLunch.Application.Interfaces;
-using TalanLunch.Application.Jobs;
-using TalanLunch.Infrastructure.Data;
-using TalanLunch.Infrastructure.Repos;
+using System.Text.Json.Serialization;
 using TalanLunch.API.Hubs;
 using TalanLunch.Application.Auth.Common;
+using TalanLunch.Application.Interfaces;
+using TalanLunch.Application.Jobs;
 using TalanLunch.Application.Mail;
+using TalanLunch.Infrastructure.Data;
+using TalanLunch.Infrastructure.Repos;
 
 
 
@@ -20,11 +21,8 @@ namespace TalanLunch
         public static void Main(string[] args)
         {
             // creation de l app
-            var builder = WebApplication.CreateBuilder(args);
 
-            // Création du répertoire pour les téléchargements
-            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-            Directory.CreateDirectory(uploadsFolder);
+            var builder = WebApplication.CreateBuilder(args);
 
             // Ajout des services CORS
             builder.Services.AddCors(options =>
@@ -33,20 +31,22 @@ namespace TalanLunch
                 {
                     policy.WithOrigins(
                             "http://localhost:5173",
-                            "http://localhost:5174"
+                            "http://localhost:5174",
+                            "http://localhost:5176"
                         )
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
                 });
             });
+
+
             builder.Services.AddSignalR();
-            // Ajouter les services à l'injection de dépendances
-            builder.Services.AddControllers();
+         
 
             // Enregistre MediatR
             builder.Services.AddMediatR(cfg =>
-     cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
+            cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
 
 
 
@@ -63,21 +63,24 @@ namespace TalanLunch
             builder.Services.AddScoped<IMenuRepository, MenuRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
+
             builder.Services.AddScoped<AuthCommon>();
 
 
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
             // Enregistrement du service de mail
-            builder.Services.AddTransient<IMailService,MailService>();
+            builder.Services.AddTransient<IMailService, MailService>();
 
-            // Ajouter MailSettings à l'injection de dépendances
+            // Ajouter  IOptions<MailSettings>  à l'injection de dépendances
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
             // Configuration des options JSON
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
                 options.JsonSerializerOptions.WriteIndented = true;
             });
 
@@ -100,7 +103,7 @@ namespace TalanLunch
                         ValidateIssuerSigningKey = true
                     };
 
-                  
+
                 });
 
             // Quartz
@@ -116,23 +119,23 @@ namespace TalanLunch
                     .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(00, 24))
                 );
             });
+            //permettre à Quartz.NET de démarrer automatiquement en arrière-plan
             builder.Services.AddQuartzHostedService();
 
-          
-            builder.Services.AddSignalR();
 
+            builder.Services.AddSignalR();
+            
             // Création de l'application
             var app = builder.Build();
 
 
 
-         //app.Use...Ajouter des middlewares 
+            //app.Use...Ajouter des middlewares 
 
             // CORS
             app.UseCors("AllowReactApp");
 
-            //fichiers statiques
-            app.UseStaticFiles();
+
 
             // Swagger doc && swaggerUI
             if (app.Environment.IsDevelopment())
@@ -143,7 +146,7 @@ namespace TalanLunch
             //redirige les requête vers https
             app.UseHttpsRedirection();
 
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 

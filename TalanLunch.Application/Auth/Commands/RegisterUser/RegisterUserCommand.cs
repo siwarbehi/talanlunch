@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using System.ComponentModel.DataAnnotations;
+using TalanLunch.Domain.Enums;
 
 namespace TalanLunch.Application.Auth.Commands.RegisterUser
 {
@@ -25,18 +26,18 @@ namespace TalanLunch.Application.Auth.Commands.RegisterUser
         [RegularExpression(@"^\d+$", ErrorMessage = "Le numéro de téléphone doit contenir uniquement des chiffres.")]
         public string PhoneNumber { get; set; } = string.Empty;
 
-        public bool IsCaterer { get; set; }
+        public UserRole UserRole { get; set; }
 
         public RegisterUserCommand() { }
 
-        public RegisterUserCommand(string firstName, string lastName, string email, string password, string phone, bool isCaterer)
+        public RegisterUserCommand(string firstName, string lastName, string email, string password, string phone, UserRole userRole)
         {
             FirstName = firstName;
             LastName = lastName;
             EmailAddress = email;
             Password = password;
             PhoneNumber = phone;
-            IsCaterer = isCaterer;
+            UserRole = userRole;
         }
     }
 }

@@ -1,9 +1,6 @@
 ﻿using MediatR;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace TalanLunch.Application.Users.Queries.GetUserById
 {
