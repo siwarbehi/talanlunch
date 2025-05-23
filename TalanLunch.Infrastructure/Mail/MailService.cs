@@ -45,14 +45,10 @@ namespace TalanLunch.Infrastructure.Mail
                 }
                 catch (Exception ex)
                 {
-                    // Vous pouvez remplacer par un mécanisme de log plus robuste ici
                     Console.WriteLine($"Erreur lors de l'envoi de l'e-mail: {ex.Message}");
                 }
             }
         }
-
-        //Todo mailling service must be called by a controller rather by a handler when performing an action 
-        //Todo mailing service must be reusable and have a generic method to send email
 
         private string BuildEmailBody(string bodyContent, string subject)
         {
@@ -91,44 +87,5 @@ namespace TalanLunch.Infrastructure.Mail
                 </html>";
         }
 
-        //public MailDataDto CreateMailDataForApproval(User caterer)
-        //{
-        //    return new MailDataDto
-        //    {
-        //        EmailToId = caterer.EmailAddress,
-        //        EmailToName = $"{caterer.FirstName} {caterer.LastName}",
-        //        EmailSubject = "Confirmation d'Approbation de Traiteur",
-        //    };
-        //}
-
-        //public async Task SendPasswordResetEmailAsync(User user, string resetToken)
-        //{
-        //    string port = user.UserRole switch
-        //    {
-        //        UserRole.CATERER => "5173",
-        //        UserRole.COLLABORATOR => "5174",
-        //        _ => "5173"
-        //    };
-
-        //    string resetLink = $"http://localhost:{port}/reset-password?token={resetToken}";
-
-        //    var message = new MimeMessage();
-        //    message.From.Add(new MailboxAddress(_mailSettings.SenderName, _mailSettings.SenderEmail));
-        //    message.To.Add(new MailboxAddress($"{user.FirstName} {user.LastName}", user.EmailAddress));
-        //    message.Subject = "🔒 Réinitialisation de votre mot de passe - Action requise";
-
-        //    string bodyContent = $@"
-        //        <p>Bonjour {user.FirstName},</p>
-        //        <p>Nous avons reçu une demande de réinitialisation de votre mot de passe.</p>
-        //        <p>Veuillez cliquer sur le bouton ci-dessous pour procéder :</p>
-        //        <a class='button' href='{resetLink}'>Réinitialiser mon mot de passe</a>
-        //        <p>Ou copiez ce lien dans votre navigateur :</p>
-        //        <p><strong>{resetLink}</strong></p>
-        //        <p>⚠️ Ce lien est valable pendant <strong>60 minutes</strong>.</p>";
-
-        //    message.Body = new TextPart("html") { Text = BuildEmailBody(bodyContent, message.Subject) };
-
-        //    await SendMailAsync(message);
-        //}
     }
 }

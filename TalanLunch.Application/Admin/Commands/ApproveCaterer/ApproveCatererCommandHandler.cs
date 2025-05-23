@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using TalanLunch.Application.Interfaces;
+using TalanLunch.Application.Helpers;
 
 namespace TalanLunch.Application.Admin.Commands.ApproveCaterer
 {
@@ -27,9 +28,9 @@ namespace TalanLunch.Application.Admin.Commands.ApproveCaterer
             if (!updateSuccess)
                 return false;
 
-            // todo : send email to caterer
-            //var mailData = _mailService.CreateMailDataForApproval(caterer);
-            //await _mailService.SendEmailAsync(mailData);
+            string bodyContent = MailHelpers.ApprouveEmailFactory(caterer.FirstName);
+
+            await _mailService.SendEmailAsync(caterer.EmailAddress, $"{caterer.FirstName} {caterer.LastName}", "Confirmation d'Approbation de Traiteur", bodyContent, cancellationToken);
 
             return true;
         }

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using TalanLunch.Application.Helpers;
 using TalanLunch.Application.Interfaces;
 
 namespace TalanLunch.Application.Auth.Commands.ForgotPassword
@@ -24,8 +25,12 @@ namespace TalanLunch.Application.Auth.Commands.ForgotPassword
             user.ResetTokenExpiry = DateTime.UtcNow.AddHours(1);
             await _userRepository.UpdateUserAsync(user);
 
-            // todo : send email to user
-            //await _mailService.SendPasswordResetEmailAsync(user, resetToken);
+            string bodyContent = MailHelpers.ResetPasswordEmailFactory(user);
+            string subject = "🔒 Réinitialisation de votre mot de passe - Action requise";
+
+            await _mailService.SendEmailAsync(user.EmailAddress, user.FirstName, subject, bodyContent, cancellationToken)
+                .ConfigureAwait(false);
+
             return true;
         }
     }

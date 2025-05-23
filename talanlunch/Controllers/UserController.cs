@@ -20,10 +20,11 @@ namespace talanlunch.Controllers
         }
 
         [HttpGet("{userId}")]
-        public async Task<IActionResult> GetUserById([FromRoute] GetUserByIdQuery query)
+        public async Task<IActionResult> GetUserById([FromRoute] int userId)
         {
             try
             {
+                var query = new GetUserByIdQuery(userId);
                 var user = await _mediator.Send(query);
                 return Ok(user);
             }
@@ -32,6 +33,7 @@ namespace talanlunch.Controllers
                 return NotFound(ex.Message);
             }
         }
+
 
 
         [HttpPatch("{userId}")]
