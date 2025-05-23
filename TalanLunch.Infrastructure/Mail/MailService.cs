@@ -2,10 +2,8 @@
 using Microsoft.Extensions.Options;
 using MimeKit;
 using TalanLunch.Application.Interfaces;
-using TalanLunch.Domain.Entities;
-using TalanLunch.Domain.Enums;
 
-namespace TalanLunch.Application.Mail
+namespace TalanLunch.Infrastructure.Mail
 {
     public class MailService : IMailService
     {
@@ -16,8 +14,26 @@ namespace TalanLunch.Application.Mail
             _mailSettings = mailSettings.Value;
         }
 
-        private async Task SendMailAsync(MimeMessage message)
+
+        public async Task SendEmailAsync(string toEmail, string toName, string subject, string body, CancellationToken cancellationToken = default)
         {
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress(_mailSettings.SenderName, _mailSettings.SenderEmail));
+            message.To.Add(new MailboxAddress(toName, toEmail));
+            message.Subject = subject;
+
+            string bodyContent = $@"
+                    Bonjour {toName.Split(' ')[0]},<br/><br/>
+                    Votre demande d'inscription en tant que traiteur a été approuvée avec succès. <br/>
+                    Bienvenue sur notre plateforme.<br/><br/>
+                    <div class='motif'>
+                        Pour toute question, veuillez contacter notre équipe via <a href='mailto:talantunsie@gmail.com' class='button'>Support</a>.
+                    </div>
+                    <br/>Cordialement,<br/>
+                    L'équipe Talan";
+
+            message.Body = new TextPart("html") { Text = BuildEmailBody(bodyContent, subject) };
+
             using (var client = new SmtpClient())
             {
                 try
@@ -29,7 +45,6 @@ namespace TalanLunch.Application.Mail
                 }
                 catch (Exception ex)
                 {
-                    // Vous pouvez remplacer par un mécanisme de log plus robuste ici
                     Console.WriteLine($"Erreur lors de l'envoi de l'e-mail: {ex.Message}");
                 }
             }
@@ -72,66 +87,5 @@ namespace TalanLunch.Application.Mail
                 </html>";
         }
 
-        public async Task SendEmailAsync(MailDataDto mailData)
-        {
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(_mailSettings.SenderName, _mailSettings.SenderEmail));
-            message.To.Add(new MailboxAddress(mailData.EmailToName, mailData.EmailToId));
-            message.Subject = mailData.EmailSubject;
-
-            string bodyContent = $@"
-                Bonjour {mailData.EmailToName.Split(' ')[0]},<br/><br/>
-                Votre demande d'inscription en tant que traiteur a été approuvée avec succès. <br/>
-                Bienvenue sur notre plateforme.<br/><br/>
-                <div class='motif'>
-                    Pour toute question, veuillez contacter notre équipe via <a href='mailto:talantunsie@gmail.com' class='button'>Support</a>.
-                </div>
-                <br/>Cordialement,<br/>
-                L'équipe Talan";
-
-            message.Body = new TextPart("html") { Text = BuildEmailBody(bodyContent, mailData.EmailSubject) };
-
-            await SendMailAsync(message);
-        }
-
-        public MailDataDto CreateMailDataForApproval(User caterer)
-        {
-            return new MailDataDto
-            {
-                EmailToId = caterer.EmailAddress,
-                EmailToName = $"{caterer.FirstName} {caterer.LastName}",
-                EmailSubject = "Confirmation d'Approbation de Traiteur",
-            };
-        }
-
-        public async Task SendPasswordResetEmailAsync(User user, string resetToken)
-        {
-            string port = user.UserRole switch
-            {
-                UserRole.CATERER => "5173",
-                UserRole.COLLABORATOR => "5174",
-                _ => "5173"
-            };
-
-            string resetLink = $"http://localhost:{port}/reset-password?token={resetToken}";
-
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(_mailSettings.SenderName, _mailSettings.SenderEmail));
-            message.To.Add(new MailboxAddress($"{user.FirstName} {user.LastName}", user.EmailAddress));
-            message.Subject = "🔒 Réinitialisation de votre mot de passe - Action requise";
-
-            string bodyContent = $@"
-                <p>Bonjour {user.FirstName},</p>
-                <p>Nous avons reçu une demande de réinitialisation de votre mot de passe.</p>
-                <p>Veuillez cliquer sur le bouton ci-dessous pour procéder :</p>
-                <a class='button' href='{resetLink}'>Réinitialiser mon mot de passe</a>
-                <p>Ou copiez ce lien dans votre navigateur :</p>
-                <p><strong>{resetLink}</strong></p>
-                <p>⚠️ Ce lien est valable pendant <strong>60 minutes</strong>.</p>";
-
-            message.Body = new TextPart("html") { Text = BuildEmailBody(bodyContent, message.Subject) };
-
-            await SendMailAsync(message);
-        }
     }
 }

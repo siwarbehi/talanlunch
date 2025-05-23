@@ -41,6 +41,15 @@
     <ProjectReference Include="..\TalanLunch.Domain\TalanLunch.Domain.csproj" />
 
   </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Remove="C:\Users\oussama\AppData\Roaming\SonarLint for Visual Studio\.global\csharp\SonarLint.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Remove="C:\Users\oussama\AppData\Roaming\SonarLint for Visual Studio\.global\csharp\SonarLint.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Remove="C:\Users\oussama\AppData\Roaming\SonarLint for Visual Studio\.global\csharp\SonarLint.xml" />
+  </ItemGroup>
 
  
 

@@ -15,9 +15,14 @@ namespace TalanLunch.Application.Users.Queries.GetUserById
 
         public async Task<User> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            if (request == null || request.UserId <= 0)
+            if (request == null)
             {
-                throw new ArgumentException("Requête invalide : l'ID utilisateur est requis et doit être supérieur à zéro.");
+                throw new ArgumentException("La requête ne peut pas être null.");
+            }
+
+            if (request.UserId <= 0)
+            {
+                throw new ArgumentException("L'ID utilisateur doit être supérieur à zéro.");
             }
 
             var user = await _userRepository.GetUserByIdAsync(request.UserId);

@@ -31,7 +31,6 @@ namespace talanlunch.Controllers
             return Ok(result);
         }
 
-        // Approuve un traiteur
         [HttpPut]
         public async Task<IActionResult> ApproveCaterer([FromBody] ApproveCatererCommand command)
         {

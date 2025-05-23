@@ -7,9 +7,9 @@ using System.Text.Json.Serialization;
 using TalanLunch.API.Hubs;
 using TalanLunch.Application.Auth.Common;
 using TalanLunch.Application.Interfaces;
-using TalanLunch.Application.Jobs;
-using TalanLunch.Application.Mail;
 using TalanLunch.Infrastructure.Data;
+using TalanLunch.Infrastructure.Jobs;
+using TalanLunch.Infrastructure.Mail;
 using TalanLunch.Infrastructure.Repos;
 
 
@@ -42,7 +42,7 @@ namespace TalanLunch
 
 
             builder.Services.AddSignalR();
-         
+
 
             // Enregistre MediatR
             builder.Services.AddMediatR(cfg =>
@@ -124,7 +124,7 @@ namespace TalanLunch
 
 
             builder.Services.AddSignalR();
-            
+
             // Création de l'application
             var app = builder.Build();
 

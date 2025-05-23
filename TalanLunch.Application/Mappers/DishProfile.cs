@@ -15,9 +15,9 @@ namespace TalanLunch.Application.Mapping
                 .ForMember(dest => dest.ReviewCount, opt => opt.Ignore())
                 .ForMember(dest => dest.CurrentRating, opt => opt.Ignore());
 
-            
+
             CreateMap<UpdateDishCommand, Dish>()
-     .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
         }
     }

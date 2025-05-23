@@ -36,8 +36,6 @@ public class MenuProfile : Profile
         /*  CreateMap<AddDishToMenuCommand, MenuDish>()
      .ForMember(dest => dest.DishQuantity, opt => opt.MapFrom(src => src.Quantity))
      .ForMember(dest => dest.DishId, opt => opt.MapFrom(src => src.DishId));*/
-
-
     }
 }
 
