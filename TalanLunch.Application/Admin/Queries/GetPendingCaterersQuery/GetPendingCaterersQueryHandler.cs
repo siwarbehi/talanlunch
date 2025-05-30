@@ -8,7 +8,6 @@ namespace TalanLunch.Application.Admin.Queries.GetPendingCaterersQuery
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-
         public GetPendingCaterersHandler(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;

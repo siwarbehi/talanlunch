@@ -22,17 +22,7 @@ namespace TalanLunch.Infrastructure.Mail
             message.To.Add(new MailboxAddress(toName, toEmail));
             message.Subject = subject;
 
-            string bodyContent = $@"
-                    Bonjour {toName.Split(' ')[0]},<br/><br/>
-                    Votre demande d'inscription en tant que traiteur a été approuvée avec succès. <br/>
-                    Bienvenue sur notre plateforme.<br/><br/>
-                    <div class='motif'>
-                        Pour toute question, veuillez contacter notre équipe via <a href='mailto:talantunsie@gmail.com' class='button'>Support</a>.
-                    </div>
-                    <br/>Cordialement,<br/>
-                    L'équipe Talan";
-
-            message.Body = new TextPart("html") { Text = BuildEmailBody(bodyContent, subject) };
+            message.Body = new TextPart("html") { Text = BuildEmailBody(body, subject) };
 
             using (var client = new SmtpClient())
             {

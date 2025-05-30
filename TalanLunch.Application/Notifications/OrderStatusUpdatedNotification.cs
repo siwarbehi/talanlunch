@@ -9,3 +9,4 @@ namespace TalanLunch.Application.Notifications
         public string Message { get; set; }
     }
 }
+//Marque une classe comme un événement

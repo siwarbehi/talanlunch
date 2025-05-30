@@ -1,5 +1,4 @@
-﻿// Application/Hubs/NotificationHub.cs
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 
 namespace TalanLunch.API.Hubs
 {
@@ -12,10 +11,10 @@ namespace TalanLunch.API.Hubs
 
             if (!string.IsNullOrEmpty(userId))
             {
-                await Groups.AddToGroupAsync(Context.ConnectionId, userId);
+                await Groups.AddToGroupAsync(Context.ConnectionId, userId).ConfigureAwait(false);
             }
 
-            await base.OnConnectedAsync();
+            await base.OnConnectedAsync().ConfigureAwait(false);
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
@@ -25,10 +24,10 @@ namespace TalanLunch.API.Hubs
 
             if (!string.IsNullOrEmpty(userId))
             {
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, userId);
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, userId).ConfigureAwait(false);
             }
 
-            await base.OnDisconnectedAsync(exception);
+            await base.OnDisconnectedAsync(exception).ConfigureAwait(false);
         }
     }
 }

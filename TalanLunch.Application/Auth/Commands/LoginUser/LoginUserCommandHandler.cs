@@ -32,6 +32,8 @@ namespace TalanLunch.Application.Auth.Commands.LoginUser
 
             var tokenResponse = await _authCommon.CreateTokenResponseAsync(user);
             tokenResponse.IsApproved = user.IsApproved;
+            tokenResponse.UserRole = user.UserRole;
+
 
             return tokenResponse;
         }

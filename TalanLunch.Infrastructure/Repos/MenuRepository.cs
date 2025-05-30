@@ -62,5 +62,10 @@ namespace TalanLunch.Infrastructure.Repos
         {
             return await _context.Menus.ToListAsync();
         }
+        public async Task<Menu> GetMenuOfTheDayAsync()
+        {
+            return await _context.Menus.FirstOrDefaultAsync(menu => menu.IsMenuOfTheDay);
+        }
+
     }
 }

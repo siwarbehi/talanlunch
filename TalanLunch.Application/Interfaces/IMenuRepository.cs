@@ -11,9 +11,7 @@ namespace TalanLunch.Application.Interfaces
         Task<Menu?> GetMenuByIdAsync(int id);
         Task<IEnumerable<Menu>> GetAllMenusAsync();
         Task<IEnumerable<Menu>> GetAllMenus();
-
-
-
+        Task<Menu> GetMenuOfTheDayAsync();
 
     }
 }

@@ -1,12 +1,10 @@
-﻿using MediatR;
-using AutoMapper;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
+using TalanLunch.Application.Auth.Commands.RegisterUser;
+using TalanLunch.Application.Interfaces;
 using TalanLunch.Domain.Entities;
 using TalanLunch.Domain.Enums;
-using TalanLunch.Application.Interfaces;
-using TalanLunch.Application.Auth.Commands.RegisterUser;
-using System.Threading;
-using System.Threading.Tasks;
 
 public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, string>
 {
@@ -44,4 +42,6 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, s
                 : "Inscription réussie."
             : "Une erreur s'est produite lors de l'enregistrement de l'utilisateur. Veuillez réessayer.";
     }
+
+
 }

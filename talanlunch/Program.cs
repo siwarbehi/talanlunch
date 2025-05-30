@@ -4,14 +4,15 @@ using Microsoft.IdentityModel.Tokens;
 using Quartz;
 using System.Text;
 using System.Text.Json.Serialization;
-using TalanLunch.API.Hubs;
+using TalanLunch.API.Notifications;
 using TalanLunch.Application.Auth.Common;
 using TalanLunch.Application.Interfaces;
 using TalanLunch.Infrastructure.Data;
 using TalanLunch.Infrastructure.Jobs;
 using TalanLunch.Infrastructure.Mail;
 using TalanLunch.Infrastructure.Repos;
-
+using TalanLunch.API.Hubs;
+using System.Security.Claims;
 
 
 namespace TalanLunch
@@ -67,6 +68,7 @@ namespace TalanLunch
 
             builder.Services.AddScoped<AuthCommon>();
 
+            builder.Services.AddScoped<INotificationSender, SignalRNotificationSender>();
 
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
@@ -89,22 +91,22 @@ namespace TalanLunch
 
             // Configuration de l'authentification JWT
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = builder.Configuration["AppSettings:Issuer"],
-                        ValidateAudience = true,
-                        ValidAudience = builder.Configuration["AppSettings:Audience"],
-                        ValidateLifetime = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Token"]!)),
-                        ValidateIssuerSigningKey = true
-                    };
+       .AddJwtBearer(options =>
+       {
+           options.TokenValidationParameters = new TokenValidationParameters
+           {
+               ValidateIssuer = true,
+               ValidIssuer = builder.Configuration["AppSettings:Issuer"],
+               ValidateAudience = true,
+               ValidAudience = builder.Configuration["AppSettings:Audience"],
+               ValidateLifetime = true,
+               ValidateIssuerSigningKey = true,
+               IssuerSigningKey = new SymmetricSecurityKey(
+                   Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Token"]!)),
+               RoleClaimType = ClaimTypes.Role
+           };
+       });
 
-
-                });
 
             // Quartz
             builder.Services.AddQuartz(q =>
@@ -124,6 +126,8 @@ namespace TalanLunch
 
 
             builder.Services.AddSignalR();
+
+
 
             // Création de l'application
             var app = builder.Build();

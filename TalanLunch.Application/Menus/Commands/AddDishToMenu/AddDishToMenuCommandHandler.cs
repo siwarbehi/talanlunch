@@ -45,7 +45,7 @@ namespace TalanLunch.Application.Menus.MenuHandlers
                     return new AddDishToMenuCommandResult { Succeeded = false, Error = $"Dish with ID {request.DishId} not found." };
                 }
 
-                menu.MenuDishes.Add(new MenuDish { DishId = request.DishId, MenuId = request.MenuId });
+                menu.MenuDishes.Add(new MenuDish { DishId = request.DishId, MenuId = request.MenuId, DishQuantity = request.Quantity });
 
             }
 
